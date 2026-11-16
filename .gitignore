@@ -1,0 +1,10 @@
+# Aucun fichier Excel dans le dépôt, sauf la copie de développement anonymisée
+*.xlsx
+*.xls
+*.xlsm
+!reference/CardioScope_RC_copie_dev_sans_confidentiel.xlsx
+# Fichiers temporaires
+~$*
+.DS_Store
+Thumbs.db
+node_modules/
