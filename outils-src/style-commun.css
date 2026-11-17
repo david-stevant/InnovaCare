@@ -1,0 +1,80 @@
+/* Style commun à tous les outils locaux.
+   Les couleurs sont des « variables » : elles seront pilotées par parametres.json
+   à partir de l'étape 1.3. Valeurs par défaut = palette du projet. */
+:root {
+  --turquoise: #00bac6;
+  --turquoise-fonce: #00727a; /* turquoise assombri : texte lisible sur fond blanc */
+  --or: #fab316;
+  --rose: #ef4d89;
+  --vert: #23cd4b;
+  --encre: #17313a;
+  --encre-douce: #51666d;
+  --fond: #f4f8f9;
+  --carte: #ffffff;
+  --trait: #d5e1e4;
+  --ok-fond: #e5f8ea;
+  --ok-texte: #12662a;
+  --alerte-fond: #fff3d6;
+  --alerte-texte: #7a5200;
+  --echec-fond: #fde6ee;
+  --echec-texte: #a3184d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--encre);
+  font-family: "DM Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.page { max-width: 860px; margin: 0 auto; padding: 24px 16px 64px; }
+
+header.entete { border-left: 8px solid var(--turquoise); padding: 4px 0 4px 16px; margin-bottom: 24px; }
+header.entete h1 { margin: 0; font-size: 28px; }
+header.entete p { margin: 4px 0 0; color: var(--encre-douce); }
+
+section.carte {
+  background: var(--carte);
+  border: 1px solid var(--trait);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+section.carte h2 { margin: 0 0 8px; font-size: 21px; }
+section.carte h2 .numero {
+  display: inline-block; width: 32px; height: 32px; line-height: 32px; margin-right: 8px;
+  border-radius: 50%; background: var(--turquoise); color: #fff; text-align: center; font-size: 17px;
+}
+section.carte p { margin: 8px 0; }
+
+button {
+  font: inherit; font-weight: 600; cursor: pointer;
+  padding: 10px 18px; border-radius: 8px;
+  border: 2px solid var(--turquoise-fonce); background: var(--turquoise-fonce); color: #fff;
+}
+button:hover { filter: brightness(1.1); }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--or); outline-offset: 2px; }
+button.secondaire { background: #fff; color: var(--turquoise-fonce); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+
+input[type="text"] { font: inherit; padding: 8px 10px; border: 1px solid var(--trait); border-radius: 6px; width: 100%; max-width: 360px; }
+label { font-weight: 600; display: block; margin-top: 8px; }
+
+ul.resultats { list-style: none; padding: 0; margin: 12px 0 0; }
+ul.resultats li { padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; background: var(--fond); overflow-wrap: anywhere; }
+ul.resultats li.ok { background: var(--ok-fond); color: var(--ok-texte); }
+ul.resultats li.alerte { background: var(--alerte-fond); color: var(--alerte-texte); }
+ul.resultats li.echec { background: var(--echec-fond); color: var(--echec-texte); }
+ul.resultats li strong { font-weight: 700; }
+
+textarea {
+  width: 100%; min-height: 260px; padding: 12px; border: 1px solid var(--trait); border-radius: 8px;
+  font-family: Consolas, "Courier New", monospace; font-size: 14px; line-height: 1.4; color: var(--encre);
+}
+
+.note { color: var(--encre-douce); font-size: 15px; }
+.rangee { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }

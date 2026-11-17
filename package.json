@@ -1,0 +1,12 @@
+{
+  "name": "innovacare",
+  "version": "0.1.0",
+  "private": true,
+  "description": "InnovaCare : outils de recrutement en recherche clinique (aucune dépendance à installer pour l'instant)",
+  "type": "module",
+  "license": "UNLICENSED",
+  "scripts": {
+    "construire": "node outils-src/construire.mjs",
+    "test": "node --test"
+  }
+}
