@@ -33,6 +33,7 @@ Sommaire
 7. Basculer vers l'Excel harmonisé (une seule fois)
 8. Gestes courants dans l'Excel
 9. Ce qui est publié, et ce qui ne l'est jamais
+10. Consulter les études : l'outil interne (eCardioScope)
 
 ---
 
@@ -51,6 +52,11 @@ Word. Sur GitHub, il ne s'affiche que sous forme de code : c'est normal.
 **Savoir si un outil est à jour** : son numéro de version est écrit tout en bas de sa page. Le Publieur
 affiche, dans sa dernière section, les numéros des versions en ligne. S'ils diffèrent, refaire les étapes
 1 à 4 pour cet outil.
+
+**Faut-il retélécharger les outils après chaque publication ?** Non. Une publication ne change que les
+données du site, jamais les outils. Un outil n'est à retélécharger que lorsque son **code** a changé,
+c'est-à-dire après la fusion d'une de mes pull requests : sa description dit quels outils sont concernés,
+et la section « Versions des outils » du Publieur le signale.
 
 ## 2. Activer le site public (une seule fois — déjà fait)
 
@@ -95,6 +101,11 @@ Ne jamais envoyer ce jeton par e-mail ni le coller dans une conversation.
    n'empêchent pas de publier.
 4. Section 3, **Changements** : études ajoutées, modifiées ou retirées, et, si vous les avez changés avec
    l'outil Paramètres, « Réglages modifiés… ils seront publiés aussi ».
+   - Le bouton **« Déposer le protocoles.json actuel »** n'apparaît que si le Publieur n'a pas pu lire la
+     version en ligne (message « Version en ligne inaccessible… », par exemple GitHub momentanément
+     injoignable). Il sert seulement à comparer et à garder les bonnes dates de mise à jour. Le fichier
+     à déposer : sur github.com, `site/donnees/protocoles.json`, bouton « Download raw file ». En temps
+     normal, il n'y a rien à déposer.
 5. Section 4 : cliquer sur **Publier** (le jeton n'est demandé que la première fois). Le site est à jour
    en 1 à 2 minutes.
 
@@ -188,3 +199,23 @@ Je n'ai plus besoin d'intervenir pour ces changements.
 - **Jamais publié**, quels que soient les réglages : synopsis, critères d'exclusion, autres critères
   d'inclusion, critère de jugement principal, NSN, nombre de centres, recrutés et objectif, remarques,
   mise en avant, DECT, co-investigateurs. Un test automatique le vérifie avant chaque mise en ligne.
+
+## 10. Consulter les études : l'outil interne (eCardioScope)
+
+`eCardioScope.html` se pose dans le dossier « Innovacoeur - outils », à côté de l'Excel. Il sert aux
+médecins du service ; il ne publie rien et ne fait **aucun appel réseau** : il peut donc contenir les
+informations internes (critères d'exclusion, DECT, recrutement).
+
+1. Double-clic sur `eCardioScope.html`, puis **« Ouvrir l'Excel des études »** et choisir
+   `InnovaCoeur_ETUDES.xlsx` (les fois suivantes : « Recharger »). Chaque médecin le fait une fois dans
+   son propre navigateur.
+2. **Catalogue** : les études « ouvert » s'affichent d'abord ; les puces de statut, les listes (pôle,
+   pathologie, ARC) et la recherche (nom, molécule, critère, ARC… sans se soucier des accents) affinent.
+   « Tableau » donne une vue en lignes, triable en cliquant sur un titre de colonne.
+3. Les études dont « Afficher dans l'outil interne » vaut « non » sont cachées ; la case « inclure les
+   études non affichées » les montre.
+4. Clic sur une étude : **fiche complète** (tous les champs remplis, contacts avec DECT et e-mail).
+   Les informations internes portent la mention « interne ». « Imprimer cette fiche » tient sur une page.
+5. L'outil lit l'Excel au moment où on l'ouvre : après une modification par un ARC, cliquer sur
+   « Recharger ».
+

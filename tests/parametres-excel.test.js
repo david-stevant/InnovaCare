@@ -150,7 +150,7 @@ test('versions des outils : outils/versions.json à jour, chaque outil affiche s
 });
 
 test('règle 5 : aucun nom d\'instance écrit en dur dans les sources des outils', () => {
-  for (const nom of ['Publieur.html', 'Parametres.html', 'publieur-ui.js', 'parametres-ui.js', 'migration-ui.js']) {
+  for (const nom of ['Publieur.html', 'Parametres.html', 'eCardioScope.html', 'publieur-ui.js', 'parametres-ui.js', 'migration-ui.js', 'ecardioscope-ui.js']) {
     assert.ok(!/InnovaCoeur/.test(readFileSync(join(RACINE, 'outils-src', nom), 'utf8')), nom);
   }
 });

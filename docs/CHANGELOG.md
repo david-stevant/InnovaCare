@@ -2,6 +2,26 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.7.0 — 19 novembre 2026 — Phase 2.1 : outil interne, catalogue des études
+
+- **Nouvel outil `outils/eCardioScope.html`** (nom affiché tiré des paramètres) : le catalogue des études,
+  version « présentable » de l'Excel, pour les médecins du service.
+  - Cartes ou tableau triable ; recherche plein texte sans accents ni majuscules ; filtres par statut
+    (« ouvert » par défaut), pôle (y compris « autre pôle concerné »), pathologie et ARC.
+  - Fiche détaillée : tous les champs remplis, critères d'exclusion compris (mention « interne »),
+    contacts avec DECT et e-mail tirés de l'annuaire, jauge recrutés / objectif. Impression sur une page.
+  - Les études « non affichées dans l'outil interne » sont cachées par défaut (case pour les montrer) ;
+    les colonnes à ressaisir après migration sont signalées.
+  - Lit les réglages rangés dans l'Excel ; mémorise le fichier comme le Publieur et l'outil Paramètres.
+  - **Aucun appel réseau, aucune donnée gardée dans le navigateur** ; un test le vérifie. Jamais publié.
+- **Compléments de l'étape 1.5** (arrivés après la fusion de la PR n° 6) : brouillon automatique de
+  l'outil Paramètres, `parametres.json` téléchargé avec un nom daté, sauvegarde nommée
+  `ANCIENNE_VERSION_…` (voir 0.6.0).
+- **Guide** : quand utiliser « Déposer le protocoles.json actuel » ; quand retélécharger les outils
+  (seulement quand leur code change) ; mode d'emploi de l'outil interne.
+- **Tests** : 112 tests (catalogue sur études fictives et sur la copie de développement, confidentialité
+  de l'outil interne).
+
 ## Version 0.6.0 — 19 novembre 2026 — Étape 1.5 : simplification pour le porteur du projet
 
 - **Les réglages sont rangés dans l'Excel des études**, dans un onglet invisible (« très masqué » : les ARC
