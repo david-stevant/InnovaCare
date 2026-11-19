@@ -302,7 +302,7 @@
     });
     const couleur = { corriger: ROUGE_SUSPECT, verifier: 'FFFFF1D1' };
     lignes.forEach((r, i) => {
-      const valeurs = ['', { corriger: 'à corriger', verifier: 'à vérifier', info: 'information' }[r.gravite] || r.gravite, r.pole || '', r.etude || '', r.champ || '', r.message || ''];
+      const valeurs = [r.fait || '', { corriger: 'à corriger', verifier: 'à vérifier', info: 'information' }[r.gravite] || r.gravite, r.pole || '', r.etude || '', r.champ || '', r.message || ''];
       valeurs.forEach((v, j) => {
         const c = f.getCell(i + 2, j + 1);
         c.value = v;

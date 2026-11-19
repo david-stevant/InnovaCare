@@ -28,7 +28,7 @@ test('onglet sain : chaque valeur va dans son champ, sans rien inventer', () => 
   assert.equal(alpha.afficher_innovacteur, 'oui');
   assert.equal(alpha.afficher_innovaction, 'non');
   assert.equal(alpha.phrase_patient, 'Une phrase patient fictive.', 'phrase patient reprise mot pour mot');
-  assert.equal(alpha.vignette_1, 'Essoufflement');
+  assert.equal(alpha.vignette_1, 'Hypertension artérielle', 'tag reconnu par son synonyme');
   // Rien d'inventé : ces champs n'existaient pas dans l'ancien Excel.
   for (const id of ['titre', 'promoteur', 'phase', 'intervention', 'registre', 'centres', 'fin_recrutement', 'recrutes', 'objectif', 'remarques']) {
     assert.equal(alpha[id], undefined, id + ' doit rester vide');

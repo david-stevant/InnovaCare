@@ -123,10 +123,13 @@ test('aller-retour : aucun texte d\'origine perdu (retrouvé dans un champ ou en
       for (const [champ, liste] of Object.entries(e.champs)) {
         if (natures[champ] !== 'texte' && champ !== 'titre') continue;
         for (const v of liste) {
-          const morceaux = champ === 'tag_ecs' ? N.enTexte(v.valeur).split('+').map((x) => x.trim()) : [texteDe(v.valeur)];
+          const tag = { tag_ecs: parametres().pathologies, tag_innovacoeur: parametres().vignettes }[champ];
+          const morceaux = tag ? N.enTexte(v.valeur).split('+').map((x) => x.trim()) : [texteDe(v.valeur)];
           for (const m of morceaux.filter(Boolean)) {
             verifies++;
-            assert.ok(tout.includes(m), e.nom + ' : « ' + m.slice(0, 60) + ' » (' + v.adresse + ') introuvable');
+            // Un tag reconnu devient la valeur de la liste ; un tag non reconnu reste lisible en Remarques.
+            const attendu = tag && IC.migration.correspondre(m, tag) ? IC.migration.correspondre(m, tag).nom : m;
+            assert.ok(tout.includes(attendu), e.nom + ' : « ' + attendu.slice(0, 60) + ' » (' + v.adresse + ') introuvable');
           }
         }
       }

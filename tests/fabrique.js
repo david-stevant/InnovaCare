@@ -39,7 +39,7 @@ export function ongletSain(nom = 'Valves') {
     ['Faire apparaître dans e-Cardioscope (1=oui; 0=non)', 1, 0],
     ['Filtre âge', '18-80', null],
     ['Filtre FEVG', '≥ 40', null],
-    ['Tag InnovaCoeur', 'Essoufflement', null],
+    ['Tag InnovaCoeur', 'Hypertension artérielle', null],
     ['Faire apparaître dans InnovaCoeur (1=oui; 0=non)', 1, 0],
     ['Phrase', 'Une phrase patient fictive.', null],
     ['Filtre âge', '18-80', null],

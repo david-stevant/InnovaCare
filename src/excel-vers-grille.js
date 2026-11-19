@@ -79,7 +79,14 @@
       const zone = onglet._merges[cle].model || onglet._merges[cle];
       return { premiereLigne: zone.top - 1, premiereColonne: zone.left - 1, derniereLigne: zone.bottom - 1, derniereColonne: zone.right - 1 };
     });
-    return { nom: onglet.name, cellules, fusions };
+    // Notes (commentaires) de cellule : { "B1": "texte" }
+    const notes = {};
+    onglet.eachRow((ligne) => ligne.eachCell((cellule) => {
+      const note = cellule.note;
+      if (!note) return;
+      notes[cellule.address] = typeof note === 'string' ? note : (note.texts || []).map((t) => t.text).join('');
+    }));
+    return { nom: onglet.name, cellules, fusions, notes };
   }
 
   /**

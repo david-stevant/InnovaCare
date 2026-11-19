@@ -41,6 +41,10 @@
         if (ligneDe[champ.id] === undefined) resultat.anomalies.push({ type: 'libelle_absent', onglet: grille.nom, message: 'Ligne « ' + champ.libelle + ' » absente.' });
       }
       if (ligneDe.nom === undefined) continue;
+      const lignesInconnues = [];
+      grille.cellules.forEach((ligne, l) => {
+        if (!N.estVide(ligne[0]) && !parLibelle.get(N.texteSimple(ligne[0]))) lignesInconnues.push(l);
+      });
       const largeur = Math.max(...grille.cellules.map((l) => l.length));
       for (let c = PREMIERE_COLONNE_ETUDE - 1; c < largeur; c++) {
         const nom = grille.cellules[ligneDe.nom][c];
@@ -52,7 +56,12 @@
           const valeur = grille.cellules[l] ? grille.cellules[l][c] : null;
           if (!N.estVide(valeur)) valeurs[champ.id] = typeof valeur === 'string' ? valeur.trim() : valeur;
         }
-        resultat.etudes.push({ pole: pole.id, onglet: grille.nom, colonne: InnovaCare.excel.lettreColonne(c), id: N.identifiant(valeurs.nom), valeurs });
+        // Valeurs de lignes que le schéma ne connaît plus (ex. filtre retiré des paramètres) : gardées à part.
+        const horsSchema = lignesInconnues
+          .filter((l) => !N.estVide(grille.cellules[l][c]))
+          .map((l) => ({ libelle: N.enTexte(grille.cellules[l][0]), valeur: grille.cellules[l][c] }));
+        const note = (grille.notes || {})[InnovaCare.excel.adresse(ligneDe.nom, c)] || null;
+        resultat.etudes.push({ pole: pole.id, onglet: grille.nom, colonne: InnovaCare.excel.lettreColonne(c), id: N.identifiant(valeurs.nom), valeurs, horsSchema, note });
       }
     }
 
@@ -71,8 +80,46 @@
         }
       }
     }
+    // Onglet « Rapport de migration », s'il existe encore : repris tel quel.
+    const rapport = trouver(NOMS_ONGLETS.rapport);
+    if (rapport) {
+      const gravite = { 'à corriger': 'corriger', 'à vérifier': 'verifier', information: 'info' };
+      resultat.rapport = rapport.cellules.slice(1).filter((l) => l.some((v) => !N.estVide(v))).map((l) => ({
+        fait: N.enTexte(l[0]), gravite: gravite[N.enTexte(l[1])] || N.enTexte(l[1]), pole: N.enTexte(l[2]),
+        etude: N.enTexte(l[3]), champ: N.enTexte(l[4]), message: N.enTexte(l[5]),
+      }));
+    }
     return resultat;
   }
 
-  InnovaCare.lecture = { lireGabarit };
+  /**
+   * Prépare le contenu à réécrire (gabarit.creerClasseur) à partir d'un Excel harmonisé relu :
+   * sert à « mettre à jour l'Excel » quand les paramètres changent (listes, filtres…).
+   * Rien n'est perdu : une valeur dont la ligne n'existe plus est recopiée en Remarques,
+   * et une étude dont le pôle n'existe plus est placée dans le premier pôle (signalé).
+   */
+  function versContenu(lu, parametres) {
+    const fichesParPole = {};
+    const signalements = [];
+    const poles = (parametres.poles || []).map((p) => p.id);
+    for (const e of lu.etudes) {
+      const valeurs = Object.assign({}, e.valeurs);
+      if (e.horsSchema.length) {
+        const ajout = e.horsSchema.map((h) => '[mise à jour] Ligne « ' + h.libelle + ' » supprimée du gabarit, valeur : « ' + N.enTexte(h.valeur) + ' ».');
+        valeurs.remarques = [valeurs.remarques].concat(ajout).filter(Boolean).join('\n');
+        signalements.push({ gravite: 'verifier', etude: valeurs.nom, message: e.horsSchema.length + ' valeur(s) d\'une ligne supprimée, gardée(s) en Remarques.' });
+      }
+      const pole = poles.includes(e.pole) ? e.pole : poles[0];
+      if (pole !== e.pole) signalements.push({ gravite: 'verifier', etude: valeurs.nom, message: 'Pôle « ' + e.onglet + ' » disparu des paramètres : étude placée dans le premier pôle.' });
+      (fichesParPole[pole] || (fichesParPole[pole] = [])).push({
+        valeurs, note: e.note, suspecte: !!(e.note && /d[ée]cal/i.test(e.note)),
+      });
+    }
+    const annuaire = lu.annuaire.map((p) => Object.assign({}, p));
+    const contenu = { fichesParPole, annuaire };
+    if (lu.rapport) contenu.rapport = lu.rapport;
+    return { contenu, signalements };
+  }
+
+  InnovaCare.lecture = { lireGabarit, versContenu };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
