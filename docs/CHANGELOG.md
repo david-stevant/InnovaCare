@@ -2,6 +2,34 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.6.0 — 19 novembre 2026 — Étape 1.5 : simplification pour le porteur du projet
+
+- **Les réglages sont rangés dans l'Excel des études**, dans un onglet invisible (« très masqué » : les ARC
+  ne le voient pas). L'Excel devient la source unique : études, annuaire et réglages.
+- **Outil Paramètres** : « Ouvrir l'Excel », modifier, puis **« Enregistrer dans l'Excel »**.
+  - Le fichier est réécrit à sa place, après le téléchargement automatique d'une copie de sauvegarde.
+  - Si l'Excel est ouvert ailleurs, l'enregistrement est refusé sans rien abîmer.
+  - Si le navigateur ne sait pas écrire dans le fichier, l'outil télécharge le fichier mis à jour.
+  - Les problèmes qui bloqueraient la publication (DECT, nom de l'établissement…) sont signalés dès la saisie.
+- **Publieur** :
+  - il lit les réglages dans l'Excel ;
+  - s'ils ont changé, il publie aussi `parametres.json`, après contrôle, et **avant** les études ;
+  - sa dernière section affiche les versions en ligne des outils, avec un lien de téléchargement.
+- **Plus besoin de moi pour ajouter une pathologie** ou changer un texte. Je ne reconstruis les outils que
+  si leur code change.
+- **Noms de fichiers sans ambiguïté** :
+  - la migration produit `InnovaCoeur_ETUDES.xlsx` (nom tiré du nom de l'instance) ;
+  - le gabarit vierge s'appelle `…_ETUDES_gabarit_vierge.xlsx`, la sauvegarde `…_sauvegarde_AAAA-MM-JJ.xlsx` ;
+  - chaque outil affiche son numéro de version en bas de page ; la liste est dans `outils/versions.json`.
+- **Guide du porteur réécrit** : tableau « quel fichier, où, pour quoi faire », récupération d'un outil
+  (bouton « Download raw file »), ajout d'une pathologie clic par clic, colonnes rouges de la migration.
+- **Tests** : 100 tests.
+  - Les tests utilisent une copie figée des réglages (`tests/donnees/parametres-test.json`) : un réglage
+    publié par le porteur ne peut plus bloquer la mise en ligne.
+  - Sur les réglages en ligne, seules des règles sont vérifiées.
+  - Nouveaux tests : aller-retour des réglages dans l'Excel, ajout d'une pathologie, pôle renommé, contrôles
+    avant publication, écriture du fichier, syntaxe de chaque outil.
+
 ## Version 0.5.0 — 19 novembre 2026 — Étape 1.4 : Publieur, site public minimal, GitHub Pages
 
 - **Nouvel outil `outils/Publieur.html`** :

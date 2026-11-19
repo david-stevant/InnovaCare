@@ -18,11 +18,18 @@
 //       .json  → données placées dans une balise <script type="application/json">
 //   Les chemins sont donnés depuis la racine du dépôt.
 //
+// Numéro de version : le texte @@VERSION_OUTIL@@ d'un gabarit est remplacé par une
+//   « empreinte » de 8 caractères calculée sur le contenu du fichier (hors paramètres de
+//   départ). Elle change dès que le code de l'outil change, et seulement dans ce cas.
+//   La liste des versions est écrite dans outils/versions.json : le Publieur la lit en
+//   ligne pour signaler qu'un outil a une nouvelle version.
+//
 // Qui le lance ?  Claude, à chaque modification (commande : npm run construire).
 //                 David n'a jamais à le faire.
 // =============================================================================
 
 import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join, basename, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -62,12 +69,27 @@ function morceauHtml(chemin, nomPolice) {
   throw new Error('Extension non prise en charge pour une inclusion : ' + chemin);
 }
 
+const VERSION = '@@VERSION_OUTIL@@';
+const BLOC_PARAMETRES = /<script type="application\/json" id="donnees-parametres">[\s\S]*?<\/script>/;
+
+/** Empreinte du contenu (hors paramètres de départ, qui peuvent changer sans que le code change). */
+export function empreinte(html) {
+  return createHash('sha256').update(html.replace(BLOC_PARAMETRES, '')).digest('hex').slice(0, 8);
+}
+
 /** Assemble un gabarit : renvoie le texte complet du fichier HTML autonome. */
 export function assembler(texteGabarit) {
   const corps = texteGabarit.replace(MARQUEUR, (ligne, chemin, nomPolice) => morceauHtml(chemin, nomPolice));
   // Le bandeau se place juste après la première ligne (<!DOCTYPE html>).
   const finPremiereLigne = corps.indexOf('\n') + 1;
-  return corps.slice(0, finPremiereLigne) + BANDEAU + corps.slice(finPremiereLigne);
+  const complet = corps.slice(0, finPremiereLigne) + BANDEAU + corps.slice(finPremiereLigne);
+  return complet.split(VERSION).join(empreinte(complet));
+}
+
+/** Version d'un outil assemblé (lue dans son pied de page), ou null. */
+export function versionDe(html) {
+  const m = /data-version="([0-9a-f]{8})"/.exec(html);
+  return m ? m[1] : null;
 }
 
 /** Liste des gabarits : tous les fichiers .html de outils-src/. */
@@ -87,8 +109,12 @@ export function construireTout() {
 // Lancement direct (« node outils-src/construire.mjs ») : on écrit les fichiers.
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   mkdirSync(DOSSIER_SORTIE, { recursive: true });
+  const versions = {};
   for (const [nom, contenu] of Object.entries(construireTout())) {
     writeFileSync(join(DOSSIER_SORTIE, nom), contenu);
-    console.log('✔ outils/' + nom + ' (' + Math.round(contenu.length / 1024) + ' Ko)');
+    versions[nom] = versionDe(contenu);
+    console.log('✔ outils/' + nom + ' (' + Math.round(contenu.length / 1024) + ' Ko, version ' + versions[nom] + ')');
   }
+  writeFileSync(join(DOSSIER_SORTIE, 'versions.json'), JSON.stringify(versions, null, 2) + '\n');
+  console.log('✔ outils/versions.json');
 }

@@ -131,6 +131,8 @@ ul.liste-tags { margin: 0; padding-left: 20px; }
   section.carte { border: none; padding: 0; break-inside: auto; }
   table { font-size: 11px; }
 }
+/* Pied de page : nom et version de l'outil (à comparer avec la liste affichée par le Publieur). */
+footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douce); text-align: center; }
 </style>
 </head>
 <body>
@@ -141,6 +143,8 @@ ul.liste-tags { margin: 0; padding-left: 20px; }
     <p>Transforme l'Excel actuel des études en un nouveau fichier, avec la même structure dans tous les onglets.
        <strong>L'ancien fichier n'est pas modifié.</strong> Rien n'est envoyé : le nouveau fichier est fabriqué
        dans cette page et téléchargé sur votre ordinateur.</p>
+    <p class="etat-echec">À n'utiliser qu'une fois. Après la bascule vers le nouvel Excel, ne plus jamais relancer la migration :
+       elle repartirait de l'ancien fichier et effacerait les corrections. Cet outil n'a pas sa place dans le dossier des outils.</p>
   </header>
 
   <section class="carte sans-impression" aria-labelledby="titre-vierge">
@@ -181,6 +185,8 @@ ul.liste-tags { margin: 0; padding-left: 20px; }
       <div class="defilement"><table id="table-rapport"></table></div>
     </section>
   </div>
+
+  <footer class="pied-outil" data-version="b7103f0a">Migration vers l'Excel harmonisé — version b7103f0a</footer>
 
 </div>
 <script type="application/json" id="donnees-parametres">
@@ -2889,7 +2895,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 //   - le fichier MIGRÉ (études et annuaire remplis par src/migration.js).
 //
 // Onglets : Lisez-moi · un onglet par pôle (tous identiques) · Annuaire · Listes
-//           · Rapport de migration (fichier migré seulement).
+//           · Rapport de migration (fichier migré seulement)
+//           · Paramètres (très masqué : invisible pour les ARC ; contient parametres.json).
 // Dans un onglet de pôle : colonne A = libellés, colonne B = exemple fictif,
 // colonnes C et suivantes = une étude par colonne ; ligne 1 = nom de l'étude.
 // =============================================================================
@@ -2897,11 +2904,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   'use strict';
   const InnovaCare = racine.InnovaCare || (racine.InnovaCare = {});
 
-  const VERSION_GABARIT = 1;
+  const VERSION_GABARIT = 2; // 2 : ajout de l'onglet masqué « Paramètres » (étape 1.5)
   const PREMIERE_COLONNE_ETUDE = 3; // colonne C
   const COLONNES_ETUDE_MIN = 25;
   const LIGNES_ANNUAIRE_MIN = 200;
-  const NOMS_ONGLETS = { lisezMoi: 'Lisez-moi', annuaire: 'Annuaire', listes: 'Listes', rapport: 'Rapport de migration' };
+  const NOMS_ONGLETS = { lisezMoi: 'Lisez-moi', annuaire: 'Annuaire', listes: 'Listes', rapport: 'Rapport de migration', parametres: 'Paramètres' };
+  // Une cellule Excel contient au plus 32 767 caractères : parametres.json est découpé en morceaux.
+  const TAILLE_MORCEAU = 30000;
 
   // Couleurs (format ARGB d'Excel). Bandes de blocs : teintes très claires, lisibles.
   const COULEURS_BLOCS = ['FFDDF5F7', 'FFFFF1D1', 'FFFDE2EC', 'FFDFF7E5', 'FFE6EEF8', 'FFF1E6F8', 'FFEFF3D9', 'FFEDEDED'];
@@ -3032,6 +3041,24 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     f.getCell(1, colVersion).value = 'version_gabarit';
     f.getCell(2, colVersion).value = VERSION_GABARIT;
     f.getColumn(colVersion).width = 16;
+    return f;
+  }
+
+  /**
+   * Onglet « Paramètres » : le parametres.json complet, découpé en morceaux (colonne A, à partir de A2).
+   * Très masqué (« veryHidden ») : il n'apparaît pas dans Excel, même avec « Afficher ». Protégé.
+   * C'est lui qui rend l'Excel autonome : les outils y lisent les listes, filtres et textes.
+   */
+  function ongletParametres(classeur, parametres) {
+    const f = classeur.addWorksheet(NOMS_ONGLETS.parametres, { state: 'veryHidden' });
+    const texte = JSON.stringify(parametres);
+    f.getCell(1, 1).value = 'parametres_json';
+    f.getCell(1, 2).value = 'morceaux';
+    const morceaux = [];
+    for (let i = 0; i < texte.length; i += TAILLE_MORCEAU) morceaux.push(texte.slice(i, i + TAILLE_MORCEAU));
+    f.getCell(2, 2).value = morceaux.length;
+    morceaux.forEach((m, i) => { f.getCell(i + 2, 1).value = m; });
+    f.protect('', { selectLockedCells: false, selectUnlockedCells: false });
     return f;
   }
 
@@ -3216,10 +3243,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     ongletAnnuaire(classeur, parametres, listes, personnes);
     ongletListes(classeur, listes);
     if (donnees.rapport) ongletRapport(classeur, donnees.rapport);
+    ongletParametres(classeur, parametres);
     return classeur;
   }
 
-  InnovaCare.gabarit = { VERSION_GABARIT, NOMS_ONGLETS, PREMIERE_COLONNE_ETUDE, creerClasseur, listesDeValeurs, validation };
+  InnovaCare.gabarit = { VERSION_GABARIT, NOMS_ONGLETS, TAILLE_MORCEAU, PREMIERE_COLONNE_ETUDE, creerClasseur, listesDeValeurs, validation };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 </script>
 <script>
@@ -3597,6 +3625,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 // navigateur : à la réouverture de l'outil, un bouton « Recharger » relit le même
 // fichier après un clic d'autorisation. Validé par le diagnostic du 19/11/2026.
 // Si le navigateur ne sait pas faire, on revient au sélecteur de fichier classique.
+// L'outil Paramètres peut aussi réécrire le fichier à sa place (après autorisation).
 // Rien ne quitte l'ordinateur.
 // =============================================================================
 (function (racine) {
@@ -3648,7 +3677,40 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     return permission === 'granted' ? poignee.getFile() : null;
   }
 
-  InnovaCare.memoireFichier = { disponible, choisir, memoriser, retrouver, oublier, relire };
+  /**
+   * Demande le droit d'ÉCRIRE dans le fichier (étape 1.5 : « Enregistrer dans l'Excel »).
+   * À appeler tout de suite après le clic, avant tout long calcul : le navigateur n'accepte
+   * la demande que juste après un geste de l'utilisateur. Renvoie true si l'écriture est permise.
+   */
+  async function autoriserEcriture(poignee) {
+    if (!poignee || typeof poignee.createWritable !== 'function') return false;
+    let permission = await poignee.queryPermission({ mode: 'readwrite' });
+    if (permission !== 'granted') permission = await poignee.requestPermission({ mode: 'readwrite' });
+    return permission === 'granted';
+  }
+
+  /**
+   * Remplace le contenu du fichier, à sa place. Renvoie { ok: true } ou { ok: false, raison }.
+   * raison = 'verrouille' quand le fichier est ouvert ailleurs (dans Excel, par un ARC…),
+   * sinon 'autre' (message technique dans « detail »). En cas d'échec, le fichier n'est pas modifié :
+   * le navigateur écrit d'abord dans un fichier temporaire, puis remplace l'original à la fin.
+   */
+  async function ecrire(poignee, donnees) {
+    let flux = null;
+    try {
+      flux = await poignee.createWritable();
+      await flux.write(donnees);
+      await flux.close();
+      return { ok: true };
+    } catch (erreur) {
+      try { if (flux) await flux.abort(); } catch (e) { /* déjà fermé */ }
+      const nom = (erreur && erreur.name) || '';
+      const verrou = ['NoModificationAllowedError', 'InvalidStateError', 'NotReadableError'].includes(nom);
+      return { ok: false, raison: verrou ? 'verrouille' : 'autre', detail: nom + ' ' + ((erreur && erreur.message) || '') };
+    }
+  }
+
+  InnovaCare.memoireFichier = { disponible, choisir, memoriser, retrouver, oublier, relire, autoriserEcriture, ecrire };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
 </script>
 <script>
@@ -3692,7 +3754,6 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('etat').className = 'note' + (gravite ? ' etat-' + gravite : '');
   }
 
-  const aujourdhui = () => new Date().toISOString().slice(0, 10);
 
   /** Propose le téléchargement d'un classeur ExcelJS. */
   async function telecharger(classeur, nomFichier) {
@@ -3739,7 +3800,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     if (!derniere) return;
     $('message').textContent = 'Fabrication du fichier…';
     try {
-      await telecharger(IC.gabarit.creerClasseur(window.ExcelJS, PARAMETRES, derniere), INSTANCE + '_etudes_harmonise_' + aujourdhui() + '.xlsx');
+      await telecharger(IC.gabarit.creerClasseur(window.ExcelJS, PARAMETRES, derniere), INSTANCE + '_ETUDES.xlsx');
       $('message').textContent = 'Fichier téléchargé (dossier « Téléchargements »). Déposez-le sur le disque partagé à côté de l\'ancien.';
     } catch (erreur) {
       console.error(erreur);
@@ -3749,7 +3810,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   async function telechargerVierge() {
     try {
-      await telecharger(IC.gabarit.creerClasseur(window.ExcelJS, PARAMETRES), INSTANCE + '_gabarit_vierge.xlsx');
+      await telecharger(IC.gabarit.creerClasseur(window.ExcelJS, PARAMETRES), INSTANCE + '_ETUDES_gabarit_vierge.xlsx');
     } catch (erreur) {
       console.error(erreur);
       etat('Échec de la fabrication du gabarit vierge (' + erreur.message + ').', 'echec');

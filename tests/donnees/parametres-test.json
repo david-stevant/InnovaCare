@@ -1,0 +1,991 @@
+{
+  "version": 2,
+  "a_lire": "Paramètres de l'instance InnovaCoeur (étape 1.3). Sources : e-CardioScope v4 (contextes cliniques), InnovaCoeur v2 (vignettes, questions et textes patient, repris mot pour mot), mémos CardioScope v3 (en-tête, sections). Les mentions de l'établissement ont été retirées (règle 3). Les éléments marqués a_confirmer=true restent à valider par le porteur du projet. Ce fichier est public : il ne contient aucune donnée interne.",
+  "specialite": {
+    "nom": "Cardiologie",
+    "instance": "InnovaCoeur"
+  },
+  "modules": {
+    "interne": "eCardioScope",
+    "patient": "InnovActeur",
+    "professionnel": "InnovAction",
+    "plateforme": "InnovaCare"
+  },
+  "couleurs": {
+    "turquoise": "#00bac6",
+    "or": "#fab316",
+    "rose": "#ef4d89",
+    "vert": "#23cd4b"
+  },
+  "poles": [
+    {
+      "id": "ic",
+      "nom": "Insuffisance cardiaque"
+    },
+    {
+      "id": "cardiomyopathies",
+      "nom": "Cardiomyopathies-Amyloses"
+    },
+    {
+      "id": "valves",
+      "nom": "Valves"
+    },
+    {
+      "id": "rythmologie",
+      "nom": "Rythmologie"
+    },
+    {
+      "id": "hemodynamique",
+      "nom": "Hémodynamique"
+    },
+    {
+      "id": "usic",
+      "nom": "USIC"
+    },
+    {
+      "id": "hta",
+      "nom": "HTA"
+    },
+    {
+      "id": "endocardites",
+      "nom": "Endocardites"
+    },
+    {
+      "id": "transversales",
+      "nom": "Transversales"
+    }
+  ],
+  "listes": {
+    "phase": [
+      "I",
+      "II",
+      "III",
+      "IV",
+      "étude observationnelle",
+      "registre",
+      "dispositif médical"
+    ],
+    "statut": [
+      "à venir",
+      "ouvert",
+      "suspendu",
+      "clos aux inclusions (suivi)",
+      "terminé"
+    ],
+    "oui_non": [
+      "oui",
+      "non"
+    ],
+    "requis_exclu": [
+      "requis",
+      "exclu",
+      "indifférent"
+    ],
+    "fonction": [
+      "investigateur",
+      "ARC",
+      "autre"
+    ],
+    "statut_note": "Une étude annulée prend le statut « terminé » (décision du 19/11/2026) ; la mention d'origine est gardée en Remarques."
+  },
+  "annuaire": {
+    "format_email": "prenom.nom@chu-nantes.fr",
+    "format_mssante": "prenom.nom@chu-nantes.mssante.fr"
+  },
+  "pathologies": [
+    {
+      "id": "ic",
+      "nom": "Insuffisance cardiaque",
+      "groupe": "ic_cmp",
+      "emoji": "🫀",
+      "synonymes": [
+        "Insuffisance cardiaque",
+        "IC",
+        "ICFEP",
+        "ICFER",
+        "FEVG altérée"
+      ]
+    },
+    {
+      "id": "cmh",
+      "nom": "CMH",
+      "groupe": "ic_cmp",
+      "emoji": "🧬",
+      "synonymes": [
+        "CMH",
+        "CMH obstructive",
+        "CMH non obstructive",
+        "Cardiomyopathie hypertrophique"
+      ]
+    },
+    {
+      "id": "davd",
+      "nom": "DAVD / CAVD",
+      "groupe": "ic_cmp",
+      "emoji": "🧬",
+      "synonymes": [
+        "DAVD",
+        "CAVD",
+        "DAVD / CAVG"
+      ]
+    },
+    {
+      "id": "amylose",
+      "nom": "Amylose cardiaque",
+      "groupe": "ic_cmp",
+      "emoji": "🔬",
+      "synonymes": [
+        "Amylose",
+        "Amylose cardiaque"
+      ]
+    },
+    {
+      "id": "fa",
+      "nom": "Fibrillation atriale",
+      "groupe": "rythmo",
+      "emoji": "〰️",
+      "synonymes": [
+        "FA",
+        "FA permanente",
+        "Fibrillation atriale"
+      ]
+    },
+    {
+      "id": "flutter",
+      "nom": "Flutter atrial / Pré-excitation",
+      "groupe": "rythmo",
+      "emoji": "〰️",
+      "synonymes": [
+        "Flutter",
+        "Flutter atrial",
+        "Flutter atrial commun",
+        "Pré-excitation"
+      ]
+    },
+    {
+      "id": "tv",
+      "nom": "Tachycardie ventriculaire",
+      "groupe": "rythmo",
+      "emoji": "⚡",
+      "synonymes": [
+        "TV",
+        "TV catécholergique",
+        "Tachycardie ventriculaire"
+      ]
+    },
+    {
+      "id": "esv",
+      "nom": "ESV fréquentes",
+      "groupe": "rythmo",
+      "emoji": "⚡",
+      "synonymes": [
+        "ESV",
+        "ESV fréquentes"
+      ]
+    },
+    {
+      "id": "acr",
+      "nom": "ACR / Mort subite",
+      "groupe": "rythmo",
+      "emoji": "⚡",
+      "synonymes": [
+        "ACR",
+        "Mort subite",
+        "ACR / Mort subite"
+      ]
+    },
+    {
+      "id": "dai",
+      "nom": "DAI prévention primaire",
+      "groupe": "rythmo",
+      "emoji": "🔋",
+      "synonymes": [
+        "DAI prévention primaire",
+        "DAI"
+      ]
+    },
+    {
+      "id": "tavi",
+      "nom": "Post-TAVI",
+      "groupe": "rythmo",
+      "emoji": "🔧",
+      "synonymes": [
+        "TAVI",
+        "Post-TAVI"
+      ]
+    },
+    {
+      "id": "sca",
+      "nom": "SCA / Coronaire",
+      "groupe": "usic",
+      "emoji": "🚑",
+      "synonymes": [
+        "SCA",
+        "Coronaropathie",
+        "SCA / Coronaire"
+      ]
+    },
+    {
+      "id": "choc",
+      "nom": "Choc cardiogénique",
+      "groupe": "usic",
+      "emoji": "🚨",
+      "synonymes": [
+        "Choc cardiogénique",
+        "Choc"
+      ]
+    },
+    {
+      "id": "myocardite",
+      "nom": "Myocardite / Péricardite",
+      "groupe": "usic",
+      "emoji": "🔬",
+      "synonymes": [
+        "Myocardite",
+        "Péricardite"
+      ]
+    },
+    {
+      "id": "avc",
+      "nom": "AVC / FOP",
+      "groupe": "usic",
+      "emoji": "🧠",
+      "synonymes": [
+        "AVC",
+        "FOP",
+        "AVC / FOP"
+      ]
+    },
+    {
+      "id": "valvulopathie",
+      "nom": "Valvulopathie",
+      "groupe": "usic",
+      "emoji": "🔧",
+      "synonymes": [
+        "Valvulopathie",
+        "Polyvalvulopathie"
+      ]
+    },
+    {
+      "id": "endocardite",
+      "nom": "Endocardite",
+      "groupe": "usic",
+      "emoji": "🦠",
+      "synonymes": [
+        "Endocardite"
+      ],
+      "a_confirmer": true,
+      "source": "tag de l'Excel (étude DDAY), absent d'e-CardioScope v4"
+    },
+    {
+      "id": "obesite",
+      "nom": "Obésité / Surpoids",
+      "groupe": "comorbidites",
+      "emoji": "⚖️",
+      "synonymes": [
+        "Obésité",
+        "Surpoids",
+        "Obésité / Surpoids"
+      ]
+    },
+    {
+      "id": "hta",
+      "nom": "HTA",
+      "groupe": "comorbidites",
+      "emoji": "🩺",
+      "synonymes": [
+        "HTA",
+        "Hypertension artérielle"
+      ]
+    },
+    {
+      "id": "risque_cv",
+      "nom": "Risque cardiovasculaire",
+      "groupe": "comorbidites",
+      "emoji": "📊",
+      "synonymes": [
+        "Risque cardiovasculaire",
+        "Risque CV"
+      ]
+    },
+    {
+      "id": "diabete",
+      "nom": "Diabète",
+      "groupe": "comorbidites",
+      "emoji": "💊",
+      "synonymes": [
+        "Diabète",
+        "DT2"
+      ]
+    }
+  ],
+  "vignettes": [
+    {
+      "id": "ic",
+      "emoji": "❤️‍🩹",
+      "nom": "Antécédent d'insuffisance cardiaque ou essoufflement à l'effort",
+      "description": "Y compris si votre fonction cardiaque a pu se normaliser par la suite",
+      "synonymes": [
+        "\"Antécédent d'Insuffisance cardiaque\" ou \"essouflements à l'effort\"",
+        "Antécédent d'insuffisance cardiaque",
+        "Essoufflement à l'effort"
+      ]
+    },
+    {
+      "id": "amylose",
+      "emoji": "🔬",
+      "nom": "Amylose cardiaque",
+      "description": "Amylose ATTR (wild-type ou héréditaire) ou AL",
+      "synonymes": [
+        "Amylose cardiaque",
+        "Amylose"
+      ]
+    },
+    {
+      "id": "cmh",
+      "emoji": "💪",
+      "nom": "Cardiomyopathie hypertrophique",
+      "description": "CMH obstructive ou non obstructive",
+      "synonymes": [
+        "Cardiomyopathie hypertrophique",
+        "Cardiomyopathie hypertrophique (non obstructive)",
+        "Cardiomyopathie hypertrophique (obstructive)"
+      ]
+    },
+    {
+      "id": "davd",
+      "emoji": "⚡",
+      "nom": "Dysplasie arythmogène du ventricule droit",
+      "description": "Cardiopathie arythmogène du VD (DAVD/CAVD)",
+      "synonymes": [
+        "Dysplasie arythmogène du ventricule droit",
+        "Dysplasie arythmogène du ventricule droit (=Cardiopathie arythmogène VD)"
+      ]
+    },
+    {
+      "id": "arythmie",
+      "emoji": "💓",
+      "nom": "Arythmie cardiaque / fibrillation atriale",
+      "description": "Fibrillation atriale ancienne ou récente",
+      "synonymes": [
+        "Arythmie ancienne (= fibrillation atriale permanente sous anticoagulants)",
+        "Arythmie cardiaque",
+        "Fibrillation atriale"
+      ]
+    },
+    {
+      "id": "hta",
+      "emoji": "💊",
+      "nom": "Hypertension artérielle",
+      "description": "HTA traitée ou non contrôlée",
+      "synonymes": [
+        "Hypertension artérielle"
+      ]
+    },
+    {
+      "id": "acr",
+      "emoji": "🚨",
+      "nom": "Arrêt cardiaque récupéré (sportif jeune)",
+      "description": "Mort subite récupérée lors d'une pratique sportive",
+      "synonymes": [
+        "Arrêt cardiaque récupéré",
+        "Arrêt cardiaque récupéré (sportif jeune)"
+      ]
+    }
+  ],
+  "filtres": [
+    {
+      "id": "age",
+      "libelle": "Âge",
+      "type": "bornes",
+      "unite": "ans",
+      "valeur_min": 0,
+      "valeur_max": 120,
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "question_patient": "Votre âge",
+      "emoji": "🎂",
+      "aide_patient": "facultatif",
+      "unite_patient": "ans"
+    },
+    {
+      "id": "fevg",
+      "libelle": "FEVG",
+      "type": "bornes",
+      "unite": "%",
+      "valeur_min": 0,
+      "valeur_max": 100,
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "question_patient": "Votre force de contraction cardiaque est-elle normale ?",
+      "emoji": "🫀",
+      "aide_patient": "valeur FEVG > 40% sur votre dernière échographie",
+      "seuil_patient": 40,
+      "reponses_patient": [
+        {
+          "valeur": "oui",
+          "libelle": "Oui / normale"
+        },
+        {
+          "valeur": "non",
+          "libelle": "Non / diminuée"
+        },
+        {
+          "valeur": "nsp",
+          "libelle": "Je ne sais pas"
+        }
+      ]
+    },
+    {
+      "id": "dfg",
+      "libelle": "DFG",
+      "type": "bornes",
+      "unite": "mL/min/1,73 m²",
+      "valeur_min": 0,
+      "valeur_max": 200,
+      "visibilite": "professionnel",
+      "modules": [
+        "interne",
+        "professionnel"
+      ]
+    },
+    {
+      "id": "imc",
+      "libelle": "IMC",
+      "type": "bornes",
+      "unite": "kg/m²",
+      "valeur_min": 10,
+      "valeur_max": 80,
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "question_patient": "Taille et poids",
+      "emoji": "📏",
+      "aide_patient": "calcul auto de l'IMC",
+      "saisie_patient": "taille_poids"
+    },
+    {
+      "id": "ntprobnp",
+      "libelle": "NT-proBNP",
+      "type": "bornes",
+      "unite": "pg/mL",
+      "valeur_min": 0,
+      "valeur_max": 100000,
+      "visibilite": "professionnel",
+      "modules": [
+        "interne",
+        "professionnel"
+      ]
+    },
+    {
+      "id": "diabete",
+      "libelle": "Diabète",
+      "type": "requis",
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "question_patient": "Avez-vous un diabète ?",
+      "emoji": "🩸"
+    },
+    {
+      "id": "hta",
+      "libelle": "HTA",
+      "type": "requis",
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "question_patient": "Avez-vous de l'hypertension artérielle ?",
+      "emoji": "💊"
+    },
+    {
+      "id": "pm_dai",
+      "libelle": "Porteur de PM ou de DAI",
+      "type": "requis",
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "question_patient": null,
+      "a_rediger": true
+    },
+    {
+      "id": "hospit_ic",
+      "libelle": "Hospitalisation pour insuffisance cardiaque récente",
+      "type": "requis",
+      "avec_delai_mois": true,
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "question_patient": null,
+      "a_rediger": true
+    },
+    {
+      "id": "ttt_betabloquant",
+      "libelle": "Bêtabloquant",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [],
+      "noms_commerciaux": [],
+      "synonymes": [
+        "beta-bloquant",
+        "bêta-bloquant",
+        "betabloquant",
+        "bêtabloquant",
+        "BB"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "libelle_patient": "Bêta-bloquant"
+    },
+    {
+      "id": "ttt_arm",
+      "libelle": "Antagoniste des récepteurs minéralocorticoïdes",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "spironolactone",
+        "éplérénone"
+      ],
+      "noms_commerciaux": [
+        "Aldactone",
+        "Inspra"
+      ],
+      "synonymes": [
+        "MRA",
+        "ARM"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "libelle_patient": "spironolactone (Aldactone) ou éplérénone (Inspra)"
+    },
+    {
+      "id": "ttt_arni",
+      "libelle": "Sacubitril/valsartan",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "sacubitril/valsartan"
+      ],
+      "noms_commerciaux": [
+        "Entresto"
+      ],
+      "synonymes": [
+        "ARNI",
+        "sacubitril-valsartan"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "libelle_patient": "sacubitril/valsartan (Entresto)"
+    },
+    {
+      "id": "ttt_gliflozine",
+      "libelle": "Gliflozine",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "dapagliflozine",
+        "empagliflozine"
+      ],
+      "noms_commerciaux": [
+        "Forxiga",
+        "Jardiance"
+      ],
+      "synonymes": [
+        "gliflozine",
+        "iSGLT2",
+        "SGLT2"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "libelle_patient": "dapagliflozine (Forxiga) ou empagliflozine (Jardiance)"
+    },
+    {
+      "id": "ttt_diuretique_anse",
+      "libelle": "Diurétique de l'anse",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "furosémide"
+      ],
+      "noms_commerciaux": [
+        "Lasilix"
+      ],
+      "synonymes": [
+        "diurétique de l'anse"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "a_confirmer": true,
+      "libelle_patient": "furosémide (Lasilix)"
+    },
+    {
+      "id": "ttt_anticoagulant",
+      "libelle": "Anticoagulant",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "rivaroxaban"
+      ],
+      "noms_commerciaux": [
+        "Xarelto"
+      ],
+      "synonymes": [
+        "anticoagulant",
+        "AOD"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "a_confirmer": true,
+      "libelle_patient": "Anticoagulant"
+    },
+    {
+      "id": "ttt_iec_ara2",
+      "libelle": "IEC ou ARA2",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [],
+      "noms_commerciaux": [],
+      "synonymes": [
+        "IEC",
+        "ARA2"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "libelle_patient": null,
+      "a_rediger": true
+    },
+    {
+      "id": "ttt_inhib_myosine",
+      "libelle": "Inhibiteur de la myosine cardiaque",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "mavacamten"
+      ],
+      "noms_commerciaux": [
+        "Camzyos"
+      ],
+      "synonymes": [],
+      "visibilite": "professionnel",
+      "modules": [
+        "interne",
+        "professionnel"
+      ],
+      "libelle_patient": null
+    }
+  ],
+  "champs": {
+    "nom": {
+      "exemple": "EXEMPLE-HF",
+      "aide": "Nom d'usage seul, sans promoteur ni statut. Ex. : BRANCH-HF"
+    },
+    "titre": {
+      "exemple": "Étude de phase III évaluant un traitement fictif versus placebo"
+    },
+    "promoteur": {
+      "exemple": "Laboratoire fictif"
+    },
+    "phase": {
+      "exemple": "III"
+    },
+    "statut": {
+      "exemple": "ouvert"
+    },
+    "thematique": {
+      "exemple": "ICFEP + surpoids",
+      "aide": "Quelques mots. Ex. : ICFEP + surpoids ou DT2"
+    },
+    "intervention": {
+      "exemple": "molécule X vs placebo",
+      "aide": "En DCI. Ex. : finérénone vs placebo"
+    },
+    "design": {
+      "exemple": "randomisé 1:1, double aveugle"
+    },
+    "inclusion_1": {
+      "exemple": "FEVG ≥ 40 %",
+      "aide": "Un critère par ligne, seuils chiffrés. Ex. : FEVG ≥ 40 %"
+    },
+    "inclusion_2": {
+      "exemple": "NYHA II à IV",
+      "aide": "Un critère par ligne, seuils chiffrés. Ex. : NYHA II à IV"
+    },
+    "debut_inclusion": {
+      "exemple": "01/11/2025"
+    },
+    "duree_suivi": {
+      "exemple": "30 mois"
+    },
+    "rythme_visites": {
+      "exemple": "M3, M6 puis tous les 6 mois"
+    },
+    "investigateur": {
+      "exemple": "Prénom NOM"
+    },
+    "arc_1": {
+      "exemple": "Prénom NOM"
+    },
+    "phrase_patient": {
+      "exemple": "Efficacité d'un nouveau traitement chez les patients essoufflés à l'effort."
+    },
+    "details_pratiques": {
+      "exemple": "1 comprimé par jour, suivi tous les 6 mois."
+    },
+    "age_min": {
+      "exemple": 18
+    },
+    "fevg_min": {
+      "exemple": 40
+    },
+    "afficher_ecardioscope": {
+      "exemple": "oui"
+    },
+    "afficher_innovaction": {
+      "exemple": "oui"
+    },
+    "afficher_innovacteur": {
+      "exemple": "non"
+    }
+  },
+  "police": "DM Sans",
+  "groupes_pathologies": [
+    {
+      "id": "ic_cmp",
+      "nom": "Insuffisance cardiaque & Cardiomyopathies",
+      "emoji": "💛"
+    },
+    {
+      "id": "rythmo",
+      "nom": "Rythmologie",
+      "emoji": "💙"
+    },
+    {
+      "id": "usic",
+      "nom": "USIC / Hémodynamique / Transversal",
+      "emoji": "🟠"
+    },
+    {
+      "id": "comorbidites",
+      "nom": "Comorbidités",
+      "emoji": "⚙️"
+    }
+  ],
+  "questions_patient_traitements": {
+    "question": "Traitements actuels",
+    "emoji": "💉",
+    "aide": "cochez ceux que vous prenez"
+  },
+  "textes": {
+    "a_lire": "Textes d'InnovaCoeur v2, repris mot pour mot, sauf les mentions de l'établissement, retirées (règle 3 ; détail dans docs/CHANGELOG.md, version 0.4.0).",
+    "patient": {
+      "titre": "InnovaCœur",
+      "accroche": "Innover, c'est aussi notre cœur de métier.",
+      "sous_titre": [
+        "Avançons ensemble : avec vous, pour tous.",
+        "Participer à l'innovation et la recherche médicale : pourquoi pas vous ?"
+      ],
+      "bandeau": "Cardiologie",
+      "edito_titre": "Pourquoi participer à la recherche clinique ?",
+      "edito_texte": "La recherche clinique, c'est ce qui permet aux traitements de demain d'exister. Chaque patient qui y participe contribue à faire avancer la médecine pour tous.",
+      "benefices": [
+        {
+          "emoji": "🔬",
+          "titre": "Accéder à l'innovation",
+          "texte": "Bénéficiez de traitements à la pointe, parfois des années avant leur mise sur le marché."
+        },
+        {
+          "emoji": "🤝",
+          "titre": "Un suivi renforcé",
+          "texte": "Les patients inclus bénéficient d'un suivi médical particulièrement attentif et régulier."
+        },
+        {
+          "emoji": "🌱",
+          "titre": "Contribuer pour les autres",
+          "texte": "Aidez les médecins à mieux comprendre les maladies et améliorer les traitements pour les générations futures."
+        },
+        {
+          "emoji": "🛡️",
+          "titre": "Un cadre sécurisé",
+          "texte": "Chaque étude suit un protocole rigoureux, approuvé par un comité d'éthique, pour garantir votre sécurité."
+        }
+      ],
+      "temoignages": [
+        {
+          "texte": "Je croyais être un patient comme un autre. En participant à un essai clinique, j'ai découvert que je pouvais aussi être utile à d'autres, tout en ayant la chance de bénéficier de traitements à la pointe.",
+          "auteur": "Bertrand, 62 ans"
+        },
+        {
+          "texte": "Je suis fière d'avoir pu apporter ma contribution dans l'amélioration des connaissances médicales, à la fois pour mon propre bénéfice, mais aussi pour celui de mes enfants et de mes petits-enfants.",
+          "auteur": "Maryse, 81 ans"
+        }
+      ],
+      "appel_titre": "Existe-t-il un protocole qui pourrait vous concerner ?",
+      "appel_texte": "En quelques clics, découvrez si une étude en cours correspond à votre situation.",
+      "appel_bouton": "Faites le test",
+      "appel_duree": "< 1 min",
+      "etape1_titre": "Votre situation clinique",
+      "etape1_texte": "Sélectionnez la ou les situations qui correspondent à votre cas.",
+      "etape2_titre": "Quelques précisions",
+      "etape2_texte": "Ces informations aident à affiner les résultats. Renseignez uniquement ce que vous souhaitez.",
+      "bouton_resultats": "Voir les résultats",
+      "resultat_bouton_contact": "Contacter l'équipe de recherche",
+      "resultat_bouton_cardiologue": "Parlez-en à votre cardiologue",
+      "resultat_en_pratique": "En pratique :",
+      "aucun_resultat_titre": "Pas de protocole correspondant pour le moment",
+      "aucun_resultat_texte": "Pas de panique ! La recherche avance à grands pas et de nouveaux protocoles pourraient bientôt vous être proposés. Merci d'avoir utilisé l'outil InnovaCoeur.",
+      "aucun_resultat_conseil": "N'hésitez pas à en parler à votre cardiologue lors de votre prochaine consultation.",
+      "bouton_recommencer": "Recommencer le test",
+      "pied_de_page": [
+        "InnovaCoeur — Outil d'information sur les essais cliniques en cardiologie",
+        "Service de Cardiologie — Unité de Recherche Clinique"
+      ],
+      "avertissement": "Cet outil est fourni à titre informatif. L'éligibilité définitive sera confirmée par votre cardiologue et l'équipe de recherche.",
+      "conclusion": "Devenez InnovActeur !",
+      "conclusion_source": "cahier des charges § 6.4"
+    },
+    "email_patient": {
+      "objet": "InnovaCoeur — Demande d'information — Protocole {protocole}",
+      "corps": [
+        "Bonjour,",
+        "",
+        "Je suis Monsieur / Madame ____________, né(e) le ___/___/______.",
+        "",
+        "J'ai appris l'existence du protocole {protocole} via l'outil InnovaCoeur et j'aimerais en savoir davantage.",
+        "",
+        "--- Informations renseignées ---",
+        "Situation(s) clinique(s) : {situations}",
+        "{reponses}",
+        "",
+        "Cordialement"
+      ],
+      "titre_fenetre": "Texte à copier-coller dans votre e-mail",
+      "bouton_copier": "Copier",
+      "bouton_messagerie": "Ouvrir ma messagerie"
+    },
+    "adressage": {
+      "objet": "Adressage protocole {protocole}",
+      "objet_source": "cahier des charges § 6.3",
+      "corps": [],
+      "a_rediger": true
+    },
+    "site": {
+      "bandeau_test": "Version de test — ne pas diffuser.",
+      "titre_liste": "Études ouvertes aux inclusions",
+      "aucune_etude": "Aucune étude publiée pour le moment.",
+      "mise_a_jour": "Mise à jour",
+      "contact": "Contact (messagerie sécurisée de santé)"
+    }
+  },
+  "memos": {
+    "titre": "Mémos Études Cliniques — Cardiologie",
+    "hashtags": "#TeamCoeur - #ChaqueInclusionCompte",
+    "emoji_etude": "🔬",
+    "emoji_design": "📌",
+    "emoji_criteres": "✅",
+    "emoji_contact": "📞",
+    "libelle_criteres": "Principaux critères d'inclusion",
+    "sections": [
+      {
+        "titre": "Insuffisance cardiaque",
+        "emoji": "💛",
+        "poles": [
+          "ic"
+        ]
+      },
+      {
+        "titre": "Cardiomyopathies et amyloses",
+        "emoji": "💛",
+        "poles": [
+          "cardiomyopathies"
+        ]
+      },
+      {
+        "titre": "Rythmologie",
+        "emoji": "💙",
+        "poles": [
+          "rythmologie"
+        ]
+      },
+      {
+        "titre": "USIC / Hémodynamique / Transversal",
+        "emoji": "🟠",
+        "poles": [
+          "usic",
+          "hemodynamique",
+          "hta",
+          "endocardites",
+          "transversales",
+          "valves"
+        ]
+      }
+    ],
+    "sections_a_confirmer": true,
+    "pied": "Pour toute question sur les critères détaillés ou les critères d'exclusion, contacter directement l'ARC référent ou le PI de l'étude."
+  },
+  "newsletter": {
+    "jour": "lundi",
+    "nombre_etudes_min": 2,
+    "nombre_etudes_max": 3,
+    "rappel": "Si l'Excel a changé cette semaine, pensez à publier.",
+    "delai_alerte_maj_mois": 6
+  },
+  "publication": {
+    "depot": "david-stevant/InnovaCare",
+    "branche": "main",
+    "chemin": "site/donnees/protocoles.json",
+    "url_site": "https://david-stevant.github.io/InnovaCare/",
+    "contacts_arc": false,
+    "site_discret": true,
+    "a_lire": "contacts_arc = false : aucune donnée d'ARC publiée (décision du 19/11/2026, en attendant l'information des intéressés). Seuls le nom de l'investigateur principal et son adresse MSSanté sont publiés, si elle est marquée vérifiée dans l'annuaire. site_discret = true : pages non référencées par les moteurs de recherche, bandeau « version de test »."
+  }
+}

@@ -6,14 +6,18 @@
 // Types de champ : texte, long (plusieurs lignes), nombre, couleur, choix (liste),
 // lignes (une valeur par ligne → tableau), cases (cases à cocher → tableau).
 // Une rubrique « liste » édite un tableau d'objets (pôles, pathologies…), une fiche par élément.
-// Tout se passe dans la page : rien n'est envoyé.
+// Étape 1.5 : les paramètres sont lus dans l'Excel des études (onglet masqué « Paramètres »)
+// et réécrits dans ce même Excel (« Enregistrer dans l'Excel »). Rien n'est envoyé.
 // =============================================================================
 (function () {
   'use strict';
   const IC = window.InnovaCare;
   const ORIGINE = JSON.parse(document.getElementById('donnees-parametres').textContent);
   let P = JSON.parse(JSON.stringify(ORIGINE));
-  let nomFichier = 'parametres.json (version du dépôt)';
+  let nomFichier = 'réglages de départ de l\'outil (aucun Excel ouvert)';
+  let excel = null;      // { poignee, fichier, nom, sansParametres } : l'Excel ouvert
+  let nonEnregistre = false; // modifications pas encore enregistrées dans l'Excel
+  const CLE_MEMOIRE = 'excel-etudes'; // la même que le Publieur : un seul choix de fichier
   const $ = (id) => document.getElementById(id);
 
   // --- Description du formulaire ------------------------------------------------------
@@ -267,16 +271,21 @@
 
   let minuterie = null;
   function modifie() {
+    nonEnregistre = true;
     clearTimeout(minuterie);
     minuterie = setTimeout(() => { verifier(); apercu(); }, 150);
   }
 
   function verifier() {
     const problemes = IC.parametres.verifier(P);
+    // Règles de publication (aucun DECT, aucun nom de l'établissement…) : signalées dès maintenant,
+    // le Publieur refusera de publier tant qu'elles ne sont pas respectées.
+    const publication = IC.parametres.verifierPourPublication(P).slice(problemes.length);
     const liste = $('problemes');
     liste.textContent = '';
-    if (!problemes.length) liste.appendChild(el('li', { className: 'ok' }, '✔ Paramètres cohérents.'));
+    if (!problemes.length && !publication.length) liste.appendChild(el('li', { className: 'ok' }, '✔ Paramètres cohérents.'));
     for (const p of problemes) liste.appendChild(el('li', { className: 'alerte' }, '! ' + p.rubrique + ' : ' + p.message));
+    for (const m of publication) liste.appendChild(el('li', { className: 'alerte' }, '! Publication : ' + m));
     return problemes;
   }
 
@@ -329,93 +338,212 @@
     ].join('\n');
   }
 
-  // --- Fichier JSON -------------------------------------------------------------------
+  // --- Fichier JSON (rubrique « Avancé ») ----------------------------------------------
 
-  function afficherOrigine() { $('origine').textContent = 'Fichier affiché : ' + nomFichier + '.'; }
+  const nomExcelAttendu = () => ((P.specialite && P.specialite.instance) || 'InnovaCare') + '_ETUDES.xlsx';
+  function afficherOrigine() {
+    $('origine').textContent = 'Réglages affichés : ' + nomFichier + '.';
+    $('nom-excel-attendu').textContent = nomExcelAttendu();
+  }
+  const toutRedessiner = () => { afficherOrigine(); dessinerRubriques(); verifier(); apercu(); };
+
+  function telechargerBlob(contenu, type, nom) {
+    const lien = el('a', { href: URL.createObjectURL(new Blob([contenu], { type })), download: nom });
+    document.body.appendChild(lien);
+    lien.click();
+    setTimeout(() => { URL.revokeObjectURL(lien.href); lien.remove(); }, 1000);
+  }
+  const TYPE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  const aujourdhui = () => new Date().toISOString().slice(0, 10);
 
   function telechargerJson() {
     const problemes = verifier();
     if (problemes.length && !window.confirm(problemes.length + ' problème(s) détecté(s) (voir la liste). Télécharger quand même ?')) return;
-    const blob = new Blob([JSON.stringify(P, null, 2) + '\n'], { type: 'application/json' });
-    const lien = el('a', { href: URL.createObjectURL(blob), download: 'parametres.json' });
-    document.body.appendChild(lien);
-    lien.click();
-    setTimeout(() => { URL.revokeObjectURL(lien.href); lien.remove(); }, 1000);
+    telechargerBlob(JSON.stringify(P, null, 2) + '\n', 'application/json', 'parametres.json');
     $('message-fichier').textContent = 'parametres.json téléchargé (dossier « Téléchargements »).';
   }
 
   async function chargerJson(fichier) {
     try {
       P = JSON.parse(await fichier.text());
-      nomFichier = '« ' + fichier.name + ' »';
-      afficherOrigine(); dessinerRubriques(); verifier(); apercu();
-      $('message-fichier').textContent = 'Fichier ouvert.';
+      nomFichier = '« ' + fichier.name + ' » (pas encore enregistrés dans l\'Excel)';
+      nonEnregistre = true;
+      toutRedessiner();
+      $('message-fichier').textContent = 'Fichier ouvert. Pensez à « Enregistrer dans l\'Excel ».';
     } catch (erreur) {
       $('message-fichier').textContent = 'Ce fichier n\'est pas un JSON valide (' + erreur.message + ').';
     }
   }
 
   function reinitialiser() {
-    if (!window.confirm('Abandonner toutes les modifications et revenir aux paramètres d\'origine ?')) return;
-    P = JSON.parse(JSON.stringify(ORIGINE));
-    nomFichier = 'parametres.json (version du dépôt)';
-    afficherOrigine(); dessinerRubriques(); verifier(); apercu();
+    if (!window.confirm('Abandonner toutes les modifications non enregistrées ?')) return;
+    if (excel && excel.parametres) P = JSON.parse(JSON.stringify(excel.parametres));
+    else P = JSON.parse(JSON.stringify(ORIGINE));
+    nonEnregistre = false;
+    toutRedessiner();
   }
 
-  // --- Mise à jour d'un Excel -------------------------------------------------------------
+  // --- Excel des études : ouverture ---------------------------------------------------------
 
-  async function mettreAJourExcel(fichier) {
+  /** Lit l'Excel : ses paramètres (onglet masqué) deviennent les réglages affichés. */
+  async function ouvrirExcel(fichier, poignee) {
+    const etat = $('origine');
+    if (!/\.xlsx$/i.test(fichier.name)) { etat.textContent = 'Ce fichier n\'est pas au format .xlsx.'; return; }
+    if (nonEnregistre && !window.confirm('Des modifications ne sont pas enregistrées. Les abandonner et ouvrir cet Excel ?')) return;
+    etat.textContent = 'Lecture en cours…';
+    try {
+      const grilles = await IC.excel.lireClasseur(window.ExcelJS, await fichier.arrayBuffer());
+      const lus = IC.lecture.lireParametres(grilles);
+      const reglages = lus.parametres || JSON.parse(JSON.stringify(ORIGINE));
+      const lu = IC.lecture.lireGabarit(grilles, reglages);
+      if (lu.version === null || lu.version === undefined) {
+        etat.textContent = 'Ce fichier n\'est pas l\'Excel harmonisé des études (onglet « Listes » introuvable). L\'ancien Excel doit d\'abord passer par l\'outil Migration.';
+        return;
+      }
+      excel = { poignee: poignee || null, fichier, nom: fichier.name, parametres: lus.parametres };
+      P = JSON.parse(JSON.stringify(reglages));
+      nonEnregistre = false;
+      nomFichier = lus.parametres
+        ? 'ceux de l\'Excel « ' + fichier.name + ' » (' + lu.etudes.length + ' études)'
+        : 'réglages de départ de l\'outil, car l\'Excel « ' + fichier.name + ' » ne contient pas encore les siens'
+          + (lus.probleme === 'absent' ? '' : ' (onglet Paramètres ' + lus.probleme + ')')
+          + ' : ils y seront rangés au premier « Enregistrer dans l\'Excel »';
+      toutRedessiner();
+      $('bouton-enregistrer').disabled = false;
+      $('etat-excel').textContent = '';
+      $('signalements-excel').textContent = '';
+    } catch (erreur) {
+      console.error(erreur);
+      etat.textContent = 'Le fichier n\'a pas pu être lu (' + erreur.message + ').';
+    }
+  }
+
+  async function choisirExcel() {
+    if (!IC.memoireFichier.disponible()) { $('selecteur-excel').click(); return; }
+    try {
+      const choix = await IC.memoireFichier.choisir();
+      if (!choix) return;
+      try { await IC.memoireFichier.memoriser(CLE_MEMOIRE, choix.poignee); } catch (e) { /* pas grave */ }
+      afficherRecharger(choix.poignee.name);
+      await ouvrirExcel(choix.fichier, choix.poignee);
+    } catch (erreur) { $('origine').textContent = 'Le sélecteur de fichier a échoué (' + erreur.name + ').'; }
+  }
+
+  function afficherRecharger(nom) {
+    $('bouton-recharger-excel').hidden = false;
+    $('bouton-recharger-excel').textContent = 'Recharger « ' + nom + ' »';
+  }
+
+  // Fichier mémorisé ; à défaut, celui que le Publieur avait mémorisé avant l'étape 1.5.
+  const retrouverPoignee = async () => (await IC.memoireFichier.retrouver(CLE_MEMOIRE)) || IC.memoireFichier.retrouver('publieur-excel');
+
+  async function rechargerExcel() {
+    try {
+      const poignee = await retrouverPoignee();
+      const fichier = poignee && await IC.memoireFichier.relire(poignee);
+      if (fichier) await ouvrirExcel(fichier, poignee); else $('origine').textContent = 'Autorisation refusée : choisissez de nouveau le fichier.';
+    } catch (erreur) { $('origine').textContent = 'Le fichier mémorisé est introuvable : choisissez-le de nouveau.'; }
+  }
+
+  // --- Excel des études : enregistrement -----------------------------------------------------
+
+  /**
+   * Réécrit l'Excel avec les réglages affichés. Étapes : (1) autorisation d'écrire, demandée tout
+   * de suite après le clic ; (2) relecture du fichier ACTUEL (un ARC a pu le modifier entre-temps) ;
+   * (3) reconstruction avec les nouveaux réglages, sans perte ; (4) copie de sauvegarde téléchargée ;
+   * (5) écriture à sa place, ou téléchargement si le navigateur ne sait pas écrire.
+   */
+  async function enregistrer() {
     const etat = $('etat-excel');
     const liste = $('signalements-excel');
     liste.textContent = '';
-    if (!/\.xlsx$/i.test(fichier.name)) { etat.textContent = 'Ce fichier n\'est pas au format .xlsx.'; return; }
-    if (IC.parametres.verifier(P).length) { etat.textContent = 'Corrigez d\'abord les problèmes signalés dans les paramètres (en haut de la page).'; return; }
-    etat.textContent = 'Lecture et mise à jour en cours…';
+    etat.className = '';
+    if (!excel) { etat.textContent = 'Ouvrez d\'abord l\'Excel (section 1).'; return; }
+    if (verifier().length) { etat.textContent = 'Corrigez d\'abord les problèmes signalés en haut de la liste des rubriques.'; return; }
+    $('bouton-enregistrer').disabled = true;
     try {
-      const grilles = await IC.excel.lireClasseur(window.ExcelJS, await fichier.arrayBuffer());
-      const lu = IC.lecture.lireGabarit(grilles, P);
-      if (lu.version === null || lu.version === undefined) {
-        etat.textContent = 'Ce fichier n\'est pas un Excel harmonisé (onglet « Listes » ou numéro de version introuvable). Pour l\'ancien Excel, utilisez l\'outil Migration.';
-        return;
-      }
+      const ecriturePermise = excel.poignee ? await IC.memoireFichier.autoriserEcriture(excel.poignee) : false;
+      etat.textContent = 'Relecture de l\'Excel et mise à jour en cours…';
+      const fichier = excel.poignee ? await excel.poignee.getFile() : excel.fichier;
+      const octets = await fichier.arrayBuffer();
+      const grilles = await IC.excel.lireClasseur(window.ExcelJS, octets);
+      const anciens = IC.lecture.lireParametres(grilles).parametres || ORIGINE;
+      // Lecture : les LIGNES selon les nouveaux réglages (une ligne supprimée part en Remarques), les ONGLETS
+      // selon les deux (un pôle renommé ou supprimé : ses études sont retrouvées et replacées).
+      const nomsPoles = new Set((P.poles || []).map((x) => x.nom));
+      const lecture = Object.assign({}, P, { poles: (P.poles || []).concat((anciens.poles || []).filter((x) => !nomsPoles.has(x.nom))) });
+      const lu = IC.lecture.lireGabarit(grilles, lecture);
+      if (lu.version === null || lu.version === undefined) { etat.textContent = 'Ce fichier n\'est plus l\'Excel harmonisé des études : rien n\'a été écrit.'; return; }
+      const connus = new Set(lecture.poles.map((x) => x.nom.slice(0, 31)).concat(Object.values(IC.gabarit.NOMS_ONGLETS)));
+      const enTrop = grilles.map((g) => g.nom).filter((n) => !connus.has(n));
+      if (enTrop.length && !window.confirm('Ces onglets ajoutés à la main ne seront pas repris : ' + enTrop.join(', ') + '.\nUne copie de sauvegarde sera téléchargée. Continuer ?')) { etat.textContent = 'Enregistrement annulé : rien n\'a été écrit.'; return; }
       const { contenu, signalements } = IC.lecture.versContenu(lu, P);
-      const classeur = IC.gabarit.creerClasseur(window.ExcelJS, P, contenu);
-      const tampon = await classeur.xlsx.writeBuffer();
-      const blob = new Blob([tampon], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      const lien = el('a', { href: URL.createObjectURL(blob), download: fichier.name.replace(/\.xlsx$/i, '') + '_mis_a_jour.xlsx' });
-      document.body.appendChild(lien);
-      lien.click();
-      setTimeout(() => { URL.revokeObjectURL(lien.href); lien.remove(); }, 1000);
-      etat.textContent = lu.etudes.length + ' études et ' + lu.annuaire.length + ' personnes reprises. Fichier mis à jour téléchargé : vérifiez-le dans Excel, puis remplacez l\'ancien.';
+      const tampon = await IC.gabarit.creerClasseur(window.ExcelJS, P, contenu).xlsx.writeBuffer();
+      const base = excel.nom.replace(/\.xlsx$/i, '');
+      telechargerBlob(octets, TYPE_EXCEL, base + '_sauvegarde_' + aujourdhui() + '.xlsx');
+      const bilan = lu.etudes.length + ' études et ' + lu.annuaire.length + ' personnes reprises.';
+      if (ecriturePermise) {
+        const r = await IC.memoireFichier.ecrire(excel.poignee, tampon);
+        if (!r.ok) {
+          etat.className = 'etat-echec';
+          etat.textContent = r.raison === 'verrouille'
+            ? '✘ L\'Excel est ouvert (par vous ou par un ARC) : il n\'a pas été modifié. Fermez-le partout, puis cliquez de nouveau sur « Enregistrer dans l\'Excel ».'
+            : '✘ L\'écriture a échoué (' + r.detail + ') : l\'Excel n\'a pas été modifié.';
+          liste.appendChild(el('li', null, el('button', { type: 'button', className: 'secondaire petit', textContent: 'Télécharger plutôt le fichier mis à jour', onclick: () => telechargerBlob(tampon, TYPE_EXCEL, excel.nom) })));
+          return;
+        }
+        etat.className = 'etat-ok';
+        etat.textContent = '✔ Enregistré dans « ' + excel.nom + ' ». ' + bilan + ' Une copie de l\'ancienne version a été téléchargée (« ' + base + '_sauvegarde_… »).';
+      } else {
+        telechargerBlob(tampon, TYPE_EXCEL, excel.nom);
+        etat.className = 'etat-ok';
+        etat.textContent = '✔ ' + bilan + ' Ce navigateur ne peut pas écrire directement dans le fichier : le fichier mis à jour a été téléchargé sous le même nom. Remplacez l\'Excel du disque partagé par celui-ci (une copie de l\'ancien a aussi été téléchargée).';
+      }
+      excel.parametres = JSON.parse(JSON.stringify(P));
+      nonEnregistre = false;
+      nomFichier = 'ceux de l\'Excel « ' + excel.nom + ' » (' + lu.etudes.length + ' études)';
+      afficherOrigine();
       const anomalies = lu.anomalies.filter((a) => a.type === 'libelle_inconnu');
       for (const a of anomalies) liste.appendChild(el('li', { className: 'alerte' }, '! ' + a.onglet + ' ' + (a.adresse || '') + ' : ' + a.message + ' Ses valeurs ont été gardées en Remarques.'));
-      for (const s of signalements) liste.appendChild(el('li', { className: 'alerte' }, '! ' + s.etude + ' : ' + s.message));
+      for (const x of signalements) liste.appendChild(el('li', { className: 'alerte' }, '! ' + x.etude + ' : ' + x.message));
       if (!anomalies.length && !signalements.length) liste.appendChild(el('li', { className: 'ok' }, '✔ Aucune valeur déplacée.'));
     } catch (erreur) {
       console.error(erreur);
-      etat.textContent = 'Le fichier n\'a pas pu être lu (' + erreur.message + '). Est-il ouvert dans Excel ?';
+      etat.className = 'etat-echec';
+      etat.textContent = '✘ Le fichier n\'a pas pu être lu ou écrit (' + erreur.message + ') : l\'Excel n\'a pas été modifié. Est-il ouvert dans Excel ?';
+    } finally {
+      $('bouton-enregistrer').disabled = false;
     }
   }
 
   // --- Démarrage ------------------------------------------------------------------------
 
-  function demarrer() {
-    afficherOrigine();
-    dessinerRubriques();
-    verifier();
-    apercu();
+  async function demarrer() {
+    toutRedessiner();
     $('bouton-telecharger').addEventListener('click', telechargerJson);
     $('bouton-charger').addEventListener('click', () => $('selecteur-json').click());
     $('selecteur-json').addEventListener('change', (e) => { if (e.target.files[0]) chargerJson(e.target.files[0]); });
     $('bouton-reinitialiser').addEventListener('click', reinitialiser);
-    $('bouton-excel').addEventListener('click', () => $('selecteur-excel').click());
-    $('selecteur-excel').addEventListener('change', (e) => { if (e.target.files[0]) mettreAJourExcel(e.target.files[0]); });
+    $('bouton-ouvrir-excel').addEventListener('click', choisirExcel);
+    $('bouton-recharger-excel').addEventListener('click', rechargerExcel);
+    $('selecteur-excel').addEventListener('change', (e) => { if (e.target.files[0]) ouvrirExcel(e.target.files[0], null); });
+    $('bouton-enregistrer').addEventListener('click', enregistrer);
+    // Toute saisie dans les rubriques = modification à enregistrer.
+    ['input', 'change'].forEach((n) => $('rubriques').addEventListener(n, () => { nonEnregistre = true; }));
+    $('rubriques').addEventListener('click', (e) => { if (e.target.tagName === 'BUTTON') nonEnregistre = true; });
+    window.addEventListener('beforeunload', (e) => { if (nonEnregistre) { e.preventDefault(); e.returnValue = ''; } });
     const zone = $('zone-depot');
     ['dragenter', 'dragover'].forEach((n) => zone.addEventListener(n, (e) => { e.preventDefault(); zone.classList.add('survol'); }));
     ['dragleave', 'drop'].forEach((n) => zone.addEventListener(n, () => zone.classList.remove('survol')));
-    zone.addEventListener('drop', (e) => { e.preventDefault(); if (e.dataTransfer.files[0]) mettreAJourExcel(e.dataTransfer.files[0]); });
+    zone.addEventListener('drop', (e) => { e.preventDefault(); if (e.dataTransfer.files[0]) ouvrirExcel(e.dataTransfer.files[0], null); });
     window.addEventListener('dragover', (e) => e.preventDefault());
     window.addEventListener('drop', (e) => e.preventDefault());
+    if (IC.memoireFichier.disponible()) {
+      try {
+        const poignee = await retrouverPoignee();
+        if (poignee) afficherRecharger(poignee.name);
+      } catch (e) { /* base locale indisponible */ }
+    }
   }
 
   demarrer();

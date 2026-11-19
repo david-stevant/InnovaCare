@@ -5,14 +5,19 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import ExcelJS from 'exceljs';
-import { chargerInnovaCare, correspondances, parametres, RACINE } from './charger.js';
+import { chargerInnovaCare, correspondances, parametres, parametresDuSite, RACINE } from './charger.js';
 import { ongletSain, annuaireFictif } from './fabrique.js';
 
 const IC = chargerInnovaCare();
 const PARAM = parametres();
 const copie = () => JSON.parse(JSON.stringify(PARAM));
 
-test('parametres.json du dépôt : cohérent, complet', () => {
+test('parametres.json du site (modifié et publié par le porteur) : cohérent et publiable', () => {
+  // Seulement des règles : le contenu (nombre de pathologies…) appartient au porteur du projet.
+  assert.deepEqual(IC.parametres.verifierPourPublication(parametresDuSite()), []);
+});
+
+test('paramètres de test (copie figée du 19/11) : cohérents, complets', () => {
   assert.deepEqual(IC.parametres.verifier(PARAM), []);
   assert.equal(PARAM.pathologies.length, 21, '20 contextes d\'e-CardioScope v4 + Endocardite');
   assert.equal(PARAM.vignettes.length, 7, 'les 7 catégories d\'InnovaCoeur v2');
@@ -23,6 +28,7 @@ test('parametres.json du dépôt : cohérent, complet', () => {
 });
 
 test('règle 3 : parametres.json (public) ne mentionne pas l\'établissement', () => {
+  // (doublon volontaire de verifierPourPublication, écrit autrement)
   const texte = readFileSync(join(RACINE, 'site/donnees/parametres.json'), 'utf8').replace(/@chu-nantes(\.mssante)?\.fr/gi, '').replace(/chu-nantes(\.mssante)?\.fr/gi, '');
   assert.ok(!/CHU\s+de\s+Nantes|CHU\s+Nantes|\bCHU\b/i.test(texte));
 });

@@ -15,7 +15,7 @@ Instance de départ : cardiologie (« InnovaCoeur »). Plateforme générique : 
 | --- | --- | --- | --- |
 | eCardioScope | médecins du service | **local** (fichier HTML posé à côté de l'Excel) | complètes |
 | Publieur | porteur du projet | **local** | lit tout, n'exporte que le public |
-| Paramètres | porteur du projet | **local** | `parametres.json` |
+| Paramètres | porteur du projet | **local** | `parametres.json`, rangé dans l'Excel (onglet masqué) et publié par le Publieur |
 | InnovActeur | patients (smartphone) | GitHub Pages | publiques, niveau patient |
 | InnovAction | cardiologues libéraux | GitHub Pages | publiques, niveau professionnel |
 | Mémos, newsletter | médecins du service | générés | publiques (DECT seulement en local) |

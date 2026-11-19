@@ -19,8 +19,10 @@ async function ecrireEtRelire(contenu) {
 const vierge = await ecrireEtRelire();
 const poles = PARAM.poles.map((p) => vierge.classeur.getWorksheet(p.nom));
 
-test('onglets : Lisez-moi, un par pôle des paramètres, Annuaire, Listes — dans cet ordre', () => {
-  assert.deepEqual(vierge.classeur.worksheets.map((f) => f.name), ['Lisez-moi'].concat(PARAM.poles.map((p) => p.nom), ['Annuaire', 'Listes']));
+test('onglets : Lisez-moi, un par pôle des paramètres, Annuaire, Listes, Paramètres (très masqué) — dans cet ordre', () => {
+  assert.deepEqual(vierge.classeur.worksheets.map((f) => f.name), ['Lisez-moi'].concat(PARAM.poles.map((p) => p.nom), ['Annuaire', 'Listes', 'Paramètres']));
+  const masque = vierge.classeur.worksheets.filter((f) => f.state !== 'visible').map((f) => [f.name, f.state]);
+  assert.deepEqual(masque, [['Paramètres', 'veryHidden']], 'seul l\'onglet Paramètres est masqué, et très masqué');
 });
 
 test('tous les onglets de pôle ont exactement les lignes du schéma, dans le même ordre', () => {
@@ -122,5 +124,5 @@ test('fichier rempli : valeurs aux bonnes lignes, colonne décalée signalée, r
   assert.equal(annuaire.getCell('I2').value.result, 'Alice FICTIVE');
   const rapport = classeur.getWorksheet('Rapport de migration');
   assert.equal(rapport.getCell('B2').value, 'à corriger');
-  assert.equal(classeur.worksheets[classeur.worksheets.length - 1].name, 'Rapport de migration');
+  assert.deepEqual(classeur.worksheets.slice(-2).map((f) => f.name), ['Rapport de migration', 'Paramètres']);
 });
