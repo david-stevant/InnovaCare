@@ -38,7 +38,6 @@
     $('etat').className = 'note' + (gravite ? ' etat-' + gravite : '');
   }
 
-  const aujourdhui = () => new Date().toISOString().slice(0, 10);
 
   /** Propose le téléchargement d'un classeur ExcelJS. */
   async function telecharger(classeur, nomFichier) {
@@ -85,7 +84,7 @@
     if (!derniere) return;
     $('message').textContent = 'Fabrication du fichier…';
     try {
-      await telecharger(IC.gabarit.creerClasseur(window.ExcelJS, PARAMETRES, derniere), INSTANCE + '_etudes_harmonise_' + aujourdhui() + '.xlsx');
+      await telecharger(IC.gabarit.creerClasseur(window.ExcelJS, PARAMETRES, derniere), INSTANCE + '_ETUDES.xlsx');
       $('message').textContent = 'Fichier téléchargé (dossier « Téléchargements »). Déposez-le sur le disque partagé à côté de l\'ancien.';
     } catch (erreur) {
       console.error(erreur);
@@ -95,7 +94,7 @@
 
   async function telechargerVierge() {
     try {
-      await telecharger(IC.gabarit.creerClasseur(window.ExcelJS, PARAMETRES), INSTANCE + '_gabarit_vierge.xlsx');
+      await telecharger(IC.gabarit.creerClasseur(window.ExcelJS, PARAMETRES), INSTANCE + '_ETUDES_gabarit_vierge.xlsx');
     } catch (erreur) {
       console.error(erreur);
       etat('Échec de la fabrication du gabarit vierge (' + erreur.message + ').', 'echec');

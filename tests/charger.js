@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 export const RACINE = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 // Ordre de chargement : chaque fichier peut utiliser ceux qui le précèdent.
-const ORDRE = ['normalisation', 'excel-vers-grille', 'lecture-ancien', 'controles', 'schema', 'gabarit', 'migration', 'lecture', 'parametres', 'export-public', 'publication'];
+const ORDRE = ['normalisation', 'excel-vers-grille', 'lecture-ancien', 'controles', 'schema', 'gabarit', 'migration', 'lecture', 'parametres', 'export-public', 'publication', 'memoire-fichier'];
 
 export function chargerInnovaCare() {
   if (!globalThis.InnovaCare) {
@@ -21,5 +21,9 @@ export function chargerInnovaCare() {
 }
 
 export const lireJson = (chemin) => JSON.parse(readFileSync(join(RACINE, chemin), 'utf8'));
-export const parametres = () => lireJson('site/donnees/parametres.json');
+// Paramètres FIGÉS pour les tests (copie de site/donnees/parametres.json au 19/11/2026) : les tests
+// ne dépendent pas des réglages que le porteur du projet modifie et publie lui-même (étape 1.5).
+export const parametres = () => lireJson('tests/donnees/parametres-test.json');
+// Paramètres EN LIGNE (ceux du site) : seules des RÈGLES y sont vérifiées, jamais leur contenu.
+export const parametresDuSite = () => lireJson('site/donnees/parametres.json');
 export const correspondances = () => lireJson('outils-src/donnees/correspondances-ancien-excel.json');

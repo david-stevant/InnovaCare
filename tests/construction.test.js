@@ -26,12 +26,17 @@ test('assembler : un fichier introuvable provoque une erreur claire', () => {
   assert.throws(() => assembler('<!DOCTYPE html>\n<!--@inclure outils-src/inexistant.js-->\n'));
 });
 
-test('les fichiers de outils/ sont à jour par rapport à leurs sources', () => {
+// Les paramètres intégrés aux outils ne sont qu'une valeur de départ (étape 1.5 : les vrais
+// paramètres sont rangés dans l'Excel). Quand le Publieur publie de nouveaux paramètres, les
+// outils ne sont pas « périmés » pour autant : ce bloc est donc exclu de la comparaison.
+const sansParametres = (html) => html.replace(/<script type="application\/json" id="donnees-parametres">[\s\S]*?<\/script>/, '');
+
+test('les fichiers de outils/ sont à jour par rapport à leurs sources (hors paramètres de départ)', () => {
   for (const [nom, attendu] of Object.entries(construireTout())) {
     const chemin = join(RACINE, 'outils', nom);
     assert.ok(existsSync(chemin), 'outils/' + nom + ' est absent : lancer « npm run construire »');
     // Comparaison simple (sans recopier ~1 Mo de différences dans le message d'erreur).
-    assert.ok(readFileSync(chemin, 'utf8') === attendu, 'outils/' + nom + ' est périmé : lancer « npm run construire »');
+    assert.ok(sansParametres(readFileSync(chemin, 'utf8')) === sansParametres(attendu), 'outils/' + nom + ' est périmé : lancer « npm run construire »');
   }
 });
 
@@ -59,4 +64,13 @@ test('règle 2 : un seul fichier Excel dans le dépôt, la copie de développeme
   const classeurs = suivis.filter((chemin) => /\.(xlsx|xlsm|xls)$/i.test(chemin));
   // Le fichier du dossier « modele/ » (gabarit vierge, étape 1.2) sera ajouté ici le moment venu.
   assert.deepEqual(classeurs, ['reference/CardioScope_RC_copie_dev_sans_confidentiel.xlsx']);
+});
+
+test('chaque script intégré aux outils est du JavaScript valide (erreur de syntaxe = outil inutilisable)', async () => {
+  const vm = await import('node:vm');
+  for (const [nom, html] of Object.entries(construireTout())) {
+    const scripts = [...html.matchAll(/<script>\n([\s\S]*?)<\/script>/g)].map((m) => m[1]);
+    assert.ok(scripts.length > 0, nom);
+    scripts.forEach((code, i) => assert.doesNotThrow(() => new vm.Script(code), nom + ' : script n° ' + (i + 1)));
+  }
 });

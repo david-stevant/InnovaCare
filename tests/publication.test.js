@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import ExcelJS from 'exceljs';
-import { chargerInnovaCare, correspondances, parametres, RACINE } from './charger.js';
+import { chargerInnovaCare, correspondances, parametres, parametresDuSite, RACINE } from './charger.js';
 
 const IC = chargerInnovaCare();
 const PARAM = parametres();
@@ -34,7 +34,8 @@ test('liste blanche : aucun champ verrouillé, aucun nom de personne, aucun DECT
   assert.ok(!/91234|95678|dect/i.test(texte), 'un DECT a fuité');
   assert.ok(!texte.includes('Alice') && !texte.includes('COLLEGUE'), 'ARC et co-investigateurs ne sont pas publiés');
   for (const id of IC.schema.champsJamaisPublics(PARAM)) assert.ok(!(id in contenu.protocoles[0].valeurs), id);
-  assert.deepEqual(IC.exportPublic.verifierContenu(contenu, PARAM), []);
+  // Vérifié avec les paramètres EN LIGNE : ce sont eux qui ont servi à la publication.
+  assert.deepEqual(IC.exportPublic.verifierContenu(contenu, parametresDuSite()), []);
 });
 
 test('liste blanche : même si les paramètres déclarent un champ verrouillé « public », il reste interne', () => {
@@ -170,6 +171,11 @@ test('site/ : aucun Excel, aucun contenu interne, aucun DECT, aucune mention de 
 test('site/ : discret tant que les avis ne sont pas obtenus (noindex, robots.txt)', () => {
   assert.match(readFileSync(join(RACINE, 'site/index.html'), 'utf8'), /<meta name="robots" content="noindex, nofollow">/);
   assert.match(readFileSync(join(RACINE, 'site/robots.txt'), 'utf8'), /Disallow: \//);
+  // Réglages en ligne : modifiables par le porteur (outil Paramètres) ; on vérifie seulement leur forme.
+  const pub = parametresDuSite().publication;
+  assert.equal(typeof pub.site_discret, 'boolean');
+  assert.equal(typeof pub.contacts_arc, 'boolean');
+  // Paramètres de test : décisions du 19/11 (site discret, pas de données d'ARC publiées).
   assert.equal(PARAM.publication.site_discret, true);
-  assert.equal(PARAM.publication.contacts_arc, false, 'décision du 19/11 : pas de données d\'ARC publiées');
+  assert.equal(PARAM.publication.contacts_arc, false);
 });

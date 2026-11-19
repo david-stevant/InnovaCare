@@ -15,6 +15,8 @@
     <p>Transforme l'Excel actuel des études en un nouveau fichier, avec la même structure dans tous les onglets.
        <strong>L'ancien fichier n'est pas modifié.</strong> Rien n'est envoyé : le nouveau fichier est fabriqué
        dans cette page et téléchargé sur votre ordinateur.</p>
+    <p class="etat-echec">À n'utiliser qu'une fois. Après la bascule vers le nouvel Excel, ne plus jamais relancer la migration :
+       elle repartirait de l'ancien fichier et effacerait les corrections. Cet outil n'a pas sa place dans le dossier des outils.</p>
   </header>
 
   <section class="carte sans-impression" aria-labelledby="titre-vierge">
@@ -55,6 +57,8 @@
       <div class="defilement"><table id="table-rapport"></table></div>
     </section>
   </div>
+
+  <footer class="pied-outil" data-version="@@VERSION_OUTIL@@">Migration vers l'Excel harmonisé — version @@VERSION_OUTIL@@</footer>
 
 </div>
 <!--@inclure site/donnees/parametres.json-->

@@ -93,6 +93,31 @@
   }
 
   /**
+   * Lit les paramètres rangés dans l'onglet masqué « Paramètres » (étape 1.5).
+   * Renvoie { parametres, probleme } : parametres = null si l'onglet est absent (Excel
+   * produit avant l'étape 1.5) ou illisible ; probleme explique pourquoi, en clair.
+   */
+  function lireParametres(grilles) {
+    const { NOMS_ONGLETS } = InnovaCare.gabarit;
+    const onglet = grilles.find((g) => N.texteSimple(g.nom) === N.texteSimple(NOMS_ONGLETS.parametres));
+    if (!onglet) return { parametres: null, probleme: 'absent' };
+    const nombre = Number((onglet.cellules[1] || [])[1]);
+    const morceaux = [];
+    for (let l = 1; l < onglet.cellules.length; l++) {
+      const v = (onglet.cellules[l] || [])[0];
+      if (typeof v === 'string' && v) morceaux.push(v);
+    }
+    if (!morceaux.length || (nombre && morceaux.length !== nombre)) return { parametres: null, probleme: 'incomplet' };
+    try {
+      const parametres = JSON.parse(morceaux.join(''));
+      if (!parametres || typeof parametres !== 'object' || !Array.isArray(parametres.poles)) return { parametres: null, probleme: 'illisible' };
+      return { parametres, probleme: null };
+    } catch (erreur) {
+      return { parametres: null, probleme: 'illisible' };
+    }
+  }
+
+  /**
    * Prépare le contenu à réécrire (gabarit.creerClasseur) à partir d'un Excel harmonisé relu :
    * sert à « mettre à jour l'Excel » quand les paramètres changent (listes, filtres…).
    * Rien n'est perdu : une valeur dont la ligne n'existe plus est recopiée en Remarques,
@@ -121,5 +146,5 @@
     return { contenu, signalements };
   }
 
-  InnovaCare.lecture = { lireGabarit, versContenu };
+  InnovaCare.lecture = { lireGabarit, lireParametres, versContenu };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

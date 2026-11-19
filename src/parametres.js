@@ -52,8 +52,10 @@
     listeAvecIds('Vignettes patient', p.vignettes, false);
     listeAvecIds('Filtres', p.filtres, false);
 
-    // Pôles : nom d'onglet Excel valide
+    // Pôles : nom d'onglet Excel valide, et différent des onglets techniques
+    const reserves = ['Lisez-moi', 'Annuaire', 'Listes', 'Rapport de migration', 'Paramètres'].map(N.texteSimple);
     for (const pole of p.poles || []) {
+      if (pole.nom && reserves.includes(N.texteSimple(pole.nom))) signaler('Pôles', 'Nom « ' + pole.nom + ' » réservé à un onglet technique de l\'Excel.');
       if (pole.nom && (pole.nom.length > 31 || /[[\]:*?/\\]/.test(pole.nom))) signaler('Pôles', 'Nom « ' + pole.nom + ' » impossible pour un onglet Excel (31 caractères au plus, sans [ ] : * ? / \\).');
     }
 
@@ -94,5 +96,47 @@
     return problemes;
   }
 
-  InnovaCare.parametres = { verifier };
+  /**
+   * Motif de détection du nom de l'établissement, DÉDUIT du format des e-mails de l'annuaire
+   * (« prenom.nom@xxx-ville.fr » → « xxx », « xxx ville », « xxx de ville ») : rien n'est écrit en dur.
+   * Renvoie { motif, adresses } ou null si le format est absent.
+   */
+  function motifEtablissement(p) {
+    const formats = [(p.annuaire || {}).format_email, (p.annuaire || {}).format_mssante].filter(Boolean);
+    const domaine = (formats[0] || '').split('@')[1];
+    if (!domaine) return null;
+    const echapper = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const morceaux = domaine.split('.')[0].split('-').filter(Boolean);
+    if (!morceaux.length) return null;
+    const variantes = [morceaux.map(echapper).join("[\\s-]+(?:de\\s+|d')?")];
+    if (morceaux.length > 1 && morceaux[0].length <= 4) variantes.push('\\b' + echapper(morceaux[0]) + '\\b'); // le sigle seul
+    const domaines = formats.map((f) => echapper(f.split('@')[1]));
+    return { motif: new RegExp(variantes.join('|'), 'i'), adresses: new RegExp('@?(?:' + domaines.join('|') + ')', 'gi') };
+  }
+
+  /**
+   * Contrôles supplémentaires AVANT de publier parametres.json sur le site (dépôt public) :
+   * paramètres cohérents, aucun DECT, aucun contenu interne, aucune mention de l'établissement
+   * (règle 3 : les adresses e-mail de l'établissement restent permises). Mêmes règles que le
+   * test automatique du dossier site/. Renvoie une liste de messages ; vide = publiable.
+   */
+  function verifierPourPublication(p) {
+    const problemes = verifier(p).map((x) => x.rubrique + ' : ' + x.message);
+    const texte = JSON.stringify(p || {});
+    if (/\[interne/i.test(texte)) problemes.push('Un texte contient « [interne ».');
+    if (/\bDECT\b|"dect"/i.test(texte)) problemes.push('Un texte contient le mot « DECT » : les numéros de poste ne sont jamais publiés.');
+    const nom = motifEtablissement(p);
+    if (nom && nom.motif.test(texte.replace(nom.adresses, ''))) problemes.push('Un texte mentionne l\'établissement (règle : aucun nom ni sigle de l\'établissement sur le site).');
+    return problemes;
+  }
+
+  /** Texte stable d'un objet (clés triées) : deux paramètres identiques donnent le même texte. */
+  function empreinte(valeur) {
+    if (Array.isArray(valeur)) return '[' + valeur.map(empreinte).join(',') + ']';
+    if (valeur && typeof valeur === 'object') return '{' + Object.keys(valeur).sort().map((k) => JSON.stringify(k) + ':' + empreinte(valeur[k])).join(',') + '}';
+    return JSON.stringify(valeur === undefined ? null : valeur);
+  }
+  const identiques = (a, b) => empreinte(a) === empreinte(b);
+
+  InnovaCare.parametres = { verifier, verifierPourPublication, identiques };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

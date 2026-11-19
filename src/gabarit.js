@@ -8,7 +8,8 @@
 //   - le fichier MIGRÉ (études et annuaire remplis par src/migration.js).
 //
 // Onglets : Lisez-moi · un onglet par pôle (tous identiques) · Annuaire · Listes
-//           · Rapport de migration (fichier migré seulement).
+//           · Rapport de migration (fichier migré seulement)
+//           · Paramètres (très masqué : invisible pour les ARC ; contient parametres.json).
 // Dans un onglet de pôle : colonne A = libellés, colonne B = exemple fictif,
 // colonnes C et suivantes = une étude par colonne ; ligne 1 = nom de l'étude.
 // =============================================================================
@@ -16,11 +17,13 @@
   'use strict';
   const InnovaCare = racine.InnovaCare || (racine.InnovaCare = {});
 
-  const VERSION_GABARIT = 1;
+  const VERSION_GABARIT = 2; // 2 : ajout de l'onglet masqué « Paramètres » (étape 1.5)
   const PREMIERE_COLONNE_ETUDE = 3; // colonne C
   const COLONNES_ETUDE_MIN = 25;
   const LIGNES_ANNUAIRE_MIN = 200;
-  const NOMS_ONGLETS = { lisezMoi: 'Lisez-moi', annuaire: 'Annuaire', listes: 'Listes', rapport: 'Rapport de migration' };
+  const NOMS_ONGLETS = { lisezMoi: 'Lisez-moi', annuaire: 'Annuaire', listes: 'Listes', rapport: 'Rapport de migration', parametres: 'Paramètres' };
+  // Une cellule Excel contient au plus 32 767 caractères : parametres.json est découpé en morceaux.
+  const TAILLE_MORCEAU = 30000;
 
   // Couleurs (format ARGB d'Excel). Bandes de blocs : teintes très claires, lisibles.
   const COULEURS_BLOCS = ['FFDDF5F7', 'FFFFF1D1', 'FFFDE2EC', 'FFDFF7E5', 'FFE6EEF8', 'FFF1E6F8', 'FFEFF3D9', 'FFEDEDED'];
@@ -151,6 +154,24 @@
     f.getCell(1, colVersion).value = 'version_gabarit';
     f.getCell(2, colVersion).value = VERSION_GABARIT;
     f.getColumn(colVersion).width = 16;
+    return f;
+  }
+
+  /**
+   * Onglet « Paramètres » : le parametres.json complet, découpé en morceaux (colonne A, à partir de A2).
+   * Très masqué (« veryHidden ») : il n'apparaît pas dans Excel, même avec « Afficher ». Protégé.
+   * C'est lui qui rend l'Excel autonome : les outils y lisent les listes, filtres et textes.
+   */
+  function ongletParametres(classeur, parametres) {
+    const f = classeur.addWorksheet(NOMS_ONGLETS.parametres, { state: 'veryHidden' });
+    const texte = JSON.stringify(parametres);
+    f.getCell(1, 1).value = 'parametres_json';
+    f.getCell(1, 2).value = 'morceaux';
+    const morceaux = [];
+    for (let i = 0; i < texte.length; i += TAILLE_MORCEAU) morceaux.push(texte.slice(i, i + TAILLE_MORCEAU));
+    f.getCell(2, 2).value = morceaux.length;
+    morceaux.forEach((m, i) => { f.getCell(i + 2, 1).value = m; });
+    f.protect('', { selectLockedCells: false, selectUnlockedCells: false });
     return f;
   }
 
@@ -335,8 +356,9 @@
     ongletAnnuaire(classeur, parametres, listes, personnes);
     ongletListes(classeur, listes);
     if (donnees.rapport) ongletRapport(classeur, donnees.rapport);
+    ongletParametres(classeur, parametres);
     return classeur;
   }
 
-  InnovaCare.gabarit = { VERSION_GABARIT, NOMS_ONGLETS, PREMIERE_COLONNE_ETUDE, creerClasseur, listesDeValeurs, validation };
+  InnovaCare.gabarit = { VERSION_GABARIT, NOMS_ONGLETS, TAILLE_MORCEAU, PREMIERE_COLONNE_ETUDE, creerClasseur, listesDeValeurs, validation };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

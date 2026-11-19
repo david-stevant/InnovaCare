@@ -121,3 +121,5 @@ ul.liste-tags { margin: 0; padding-left: 20px; }
   section.carte { border: none; padding: 0; break-inside: auto; }
   table { font-size: 11px; }
 }
+/* Pied de page : nom et version de l'outil (à comparer avec la liste affichée par le Publieur). */
+footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douce); text-align: center; }
