@@ -1,0 +1,23 @@
+/* Site public minimal (étape 1.4). Les couleurs sont remplacées au chargement par celles de parametres.json. */
+@font-face { font-family: "DM Sans"; src: url("polices/dm-sans-latin.woff2") format("woff2"); font-weight: 100 1000; font-display: swap; }
+:root { --turquoise: #00bac6; --turquoise-fonce: #00727a; --or: #fab316; --encre: #17313a; --encre-douce: #51666d; --fond: #f4f8f9; --trait: #d5e1e4; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--encre); font-family: "DM Sans", "Segoe UI", Arial, sans-serif; font-size: 18px; line-height: 1.55; }
+.page { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+.bandeau-test { background: var(--or); color: #1a1a1a; text-align: center; font-weight: 700; padding: 8px 16px; }
+.entete { background: #fff; border-bottom: 4px solid var(--turquoise); padding: 24px 0 16px; margin-bottom: 24px; }
+.entete h1 { margin: 0; font-size: 30px; }
+.entete p { margin: 6px 0 0; color: var(--encre-douce); }
+h2.pole { font-size: 22px; margin: 32px 0 12px; border-left: 6px solid var(--turquoise); padding-left: 10px; }
+.etude { background: #fff; border: 1px solid var(--trait); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }
+.etude h3 { margin: 0 0 4px; font-size: 21px; color: var(--turquoise-fonce); }
+.etude .thematique { margin: 0 0 8px; font-weight: 600; }
+.etude dl { margin: 8px 0 0; display: grid; grid-template-columns: max-content 1fr; gap: 2px 12px; font-size: 17px; }
+.etude dt { color: var(--encre-douce); }
+.etude dd { margin: 0; overflow-wrap: anywhere; }
+.puces { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; padding: 0; list-style: none; }
+.puces li { background: var(--fond); border: 1px solid var(--trait); border-radius: 20px; padding: 2px 12px; font-size: 16px; }
+.note { color: var(--encre-douce); font-size: 16px; }
+.pied { margin-top: 40px; padding-bottom: 40px; border-top: 1px solid var(--trait); }
+a { color: var(--turquoise-fonce); }
+@media (max-width: 520px) { .etude dl { grid-template-columns: 1fr; } .etude dt { margin-top: 6px; } }

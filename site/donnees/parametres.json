@@ -917,6 +917,13 @@
       "objet_source": "cahier des charges § 6.3",
       "corps": [],
       "a_rediger": true
+    },
+    "site": {
+      "bandeau_test": "Version de test — ne pas diffuser.",
+      "titre_liste": "Études ouvertes aux inclusions",
+      "aucune_etude": "Aucune étude publiée pour le moment.",
+      "mise_a_jour": "Mise à jour",
+      "contact": "Contact (messagerie sécurisée de santé)"
     }
   },
   "memos": {
@@ -971,5 +978,14 @@
     "nombre_etudes_max": 3,
     "rappel": "Si l'Excel a changé cette semaine, pensez à publier.",
     "delai_alerte_maj_mois": 6
+  },
+  "publication": {
+    "depot": "david-stevant/InnovaCare",
+    "branche": "main",
+    "chemin": "site/donnees/protocoles.json",
+    "url_site": "https://david-stevant.github.io/InnovaCare/",
+    "contacts_arc": false,
+    "site_discret": true,
+    "a_lire": "contacts_arc = false : aucune donnée d'ARC publiée (décision du 19/11/2026, en attendant l'information des intéressés). Seuls le nom de l'investigateur principal et son adresse MSSanté sont publiés, si elle est marquée vérifiée dans l'annuaire. site_discret = true : pages non référencées par les moteurs de recherche, bandeau « version de test »."
   }
 }

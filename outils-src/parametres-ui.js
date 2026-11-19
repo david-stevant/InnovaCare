@@ -97,6 +97,13 @@
     ] },
     { titre: 'Sections des mémos', liste: 'memos.sections', nomElement: 'section',
       colonnes: [{ cle: 'emoji', libelle: 'Émoji' }, { cle: 'titre', libelle: 'Titre' }, { cle: 'poles', libelle: 'Pôles', type: 'cases', options: poles }] },
+    { titre: 'Publication (site public)', champs: [
+      { chemin: 'publication.depot', libelle: 'Dépôt GitHub (propriétaire/nom)' },
+      { chemin: 'publication.branche', libelle: 'Branche' },
+      { chemin: 'publication.url_site', libelle: 'Adresse du site' },
+      { chemin: 'publication.contacts_arc', libelle: 'Publier les e-mails des ARC', type: 'booleen', aide: 'À activer seulement une fois les ARC informés.' },
+      { chemin: 'publication.site_discret', libelle: 'Site discret (bandeau de test)', type: 'booleen' },
+    ] },
     { titre: 'Newsletter', champs: [
       { chemin: 'newsletter.jour', libelle: 'Jour du brouillon' },
       { chemin: 'newsletter.nombre_etudes_min', libelle: 'Études mises en lumière (minimum)', type: 'nombre' },
@@ -156,6 +163,11 @@
       rangee.append(saisie, texte);
       boite.appendChild(rangee);
       return boite;
+    } else if (type === 'booleen') {
+      saisie = el('select', { id });
+      saisie.append(el('option', { value: 'true', textContent: 'oui' }), el('option', { value: 'false', textContent: 'non' }));
+      saisie.value = valeur === true ? 'true' : 'false';
+      saisie.addEventListener('change', () => changer(saisie.value === 'true'));
     } else if (type === 'choix') {
       saisie = el('select', { id });
       const options = desc.options();

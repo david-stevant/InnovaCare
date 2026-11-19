@@ -2,6 +2,30 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.5.0 — 19 novembre 2026 — Étape 1.4 : Publieur, site public minimal, GitHub Pages
+
+- **Nouvel outil `outils/Publieur.html`** :
+  - il lit l'Excel harmonisé, puis contrôle sa cohérence ;
+  - une erreur rouge (nom en double, statut hors liste, ligne manquante) bloque la publication ; les
+    avertissements orange ne la bloquent pas ;
+  - il compare avec la version en ligne et affiche les études ajoutées, modifiées ou retirées ;
+  - il publie `protocoles.json` sur GitHub en un clic, avec un jeton limité au dépôt ;
+  - en secours, il propose le téléchargement du fichier pour un dépôt manuel.
+- **Liste blanche** (`src/export-public.js`) : seuls les champs du schéma de niveau professionnel ou
+  patient, et non verrouillés, sont exportés.
+- **Contacts publiés** (décision du 19/11) : seulement le nom de l'investigateur principal et son
+  adresse MSSanté, si elle est vérifiée. Aucune donnée d'ARC ; le DECT n'est jamais publié.
+- **Date de mise à jour automatique** : elle ne change que si une information publique change.
+- **Site public minimal** (`site/`) : les études ouvertes, regroupées par pôle. Il est **discret** :
+  non référencé (`noindex`, `robots.txt`), avec un bandeau « Version de test ». Aucun cookie, aucune
+  mesure d'audience.
+- **Déploiement GitHub Pages** (`.github/workflows/pages.yml`) : il publie le seul dossier `site/`,
+  **après** avoir relancé tous les tests.
+- **`docs/GUIDE_PORTEUR.md`** : activer le site, créer le jeton, publier, dépôt manuel, procédure de
+  bascule vers l'Excel harmonisé, gestes courants.
+- **Tests** : 85 tests. Le test « sentinelle » vérifie que **aucun champ interne n'est publié** ; le
+  contenu du dossier `site/` est analysé à chaque test.
+
 ## Version 0.4.0 — 19 novembre 2026 — Étape 1.3 : paramètres complets et formulaire d'édition
 
 - **Nouvel outil `outils/Parametres.html`** : modification de tous les réglages de l'instance (identité,

@@ -16,6 +16,8 @@
 //   jamaisPublic  true = verrou : le champ ne sort JAMAIS du réseau interne, quels que
 //                 soient les paramètres (règle absolue n° 2 de CLAUDE.md)
 //   aide          message d'aide affiché à l'ARC dans l'Excel (255 caractères au plus)
+//   contact       true = nom de personne : jamais exporté tel quel ; le Publieur reconstruit
+//                 les contacts publics selon les règles de parametres.publication
 //
 // Les lignes des filtres d'éligibilité ne sont pas écrites ici : elles sont fabriquées
 // à partir de la liste des filtres de parametres.json (fonction champsFiltres).
@@ -76,11 +78,11 @@
     ],
     // --- Contacts ---  (le DECT n'est jamais dans la fiche : il vient de l'annuaire, où il est verrouillé)
     [
-      { id: 'investigateur', libelle: 'Investigateur principal', bloc: 'Contacts', type: 'personne', obligatoire: 'oui', visibilite: 'professionnel', aide: 'Choisir dans la liste. Absent ? L\'ajouter d\'abord dans l\'onglet Annuaire.' },
-      { id: 'co_investigateurs', libelle: 'Co-investigateur(s)', bloc: 'Contacts', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Prénom NOM, séparés par « ; ».' },
-      { id: 'arc_1', libelle: 'ARC n° 1', bloc: 'Contacts', type: 'personne', obligatoire: 'oui', visibilite: 'patient', aide: 'Choisir dans la liste. Le DECT vient de l\'annuaire : ne pas l\'écrire ici.' },
+      { contact: true, id: 'investigateur', libelle: 'Investigateur principal', bloc: 'Contacts', type: 'personne', obligatoire: 'oui', visibilite: 'professionnel', aide: 'Choisir dans la liste. Absent ? L\'ajouter d\'abord dans l\'onglet Annuaire.' },
+      { contact: true, id: 'co_investigateurs', libelle: 'Co-investigateur(s)', bloc: 'Contacts', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Prénom NOM, séparés par « ; ».' },
+      { contact: true, id: 'arc_1', libelle: 'ARC n° 1', bloc: 'Contacts', type: 'personne', obligatoire: 'oui', visibilite: 'patient', aide: 'Choisir dans la liste. Le DECT vient de l\'annuaire : ne pas l\'écrire ici.' },
     ],
-    serie(2, (n) => ({ id: 'arc_backup_' + n, libelle: 'ARC back-up ' + n, bloc: 'Contacts', type: 'personne', obligatoire: 'non', visibilite: 'patient', aide: 'Choisir dans la liste.' })),
+    serie(2, (n) => ({ contact: true, id: 'arc_backup_' + n, libelle: 'ARC back-up ' + n, bloc: 'Contacts', type: 'personne', obligatoire: 'non', visibilite: 'patient', aide: 'Choisir dans la liste.' })),
     // --- Patient ---
     [
       { id: 'phrase_patient', libelle: 'Phrase patient', bloc: 'Patient', type: 'texte', obligatoire: 'si_patient', visibilite: 'patient', aide: 'Reprise telle quelle pour les patients. 1 à 2 phrases, mots simples, sans abréviation.' },
