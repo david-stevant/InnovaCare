@@ -11,6 +11,7 @@
   @media (max-width: 1000px) { .mise-en-page { grid-template-columns: 1fr; } }
   .colonne-apercu { position: sticky; top: 12px; }
   @media (max-width: 1000px) { .colonne-apercu { position: static; } }
+  .bandeau-brouillon { border: 2px solid var(--or, #fab316); background: #fff7e0; border-radius: 10px; padding: 8px 14px; margin-top: 10px; }
   details.rubrique { background: var(--carte); border: 1px solid var(--trait); border-radius: 12px; margin-bottom: 12px; padding: 4px 16px; }
   details.rubrique > summary { cursor: pointer; font-weight: 700; font-size: 19px; padding: 10px 0; }
   details.rubrique > p.note { margin-top: 0; }
@@ -66,6 +67,14 @@
     </div>
     <div id="zone-depot" class="zone-depot">… ou glissez-déposez le fichier ici (format .xlsx).</div>
     <p id="origine" class="note" aria-live="polite"></p>
+    <div id="bandeau-brouillon" class="bandeau-brouillon" hidden>
+      <p><strong id="texte-brouillon"></strong><br>
+         Si vous voulez les ranger dans l'Excel : ouvrez d'abord l'Excel ci-dessus, puis cliquez sur « Reprendre ».</p>
+      <div class="rangee">
+        <button type="button" id="bouton-reprendre">Reprendre ces modifications</button>
+        <button type="button" id="bouton-effacer-brouillon" class="secondaire">Les effacer</button>
+      </div>
+    </div>
   </section>
 
   <div class="mise-en-page">
@@ -129,6 +138,7 @@
 <!--@inclure src/lecture.js-->
 <!--@inclure src/parametres.js-->
 <!--@inclure src/memoire-fichier.js-->
+<!--@inclure src/brouillon.js-->
 <!--@inclure outils-src/parametres-ui.js-->
 </body>
 </html>

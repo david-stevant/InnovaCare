@@ -130,6 +130,11 @@ des réglages ; un ajout manuel serait perdu et refusé par le Publieur.
    - Message « ✔ Enregistré » : c'est fait. Message « L'Excel est ouvert » : le fermer partout et recommencer.
 6. Ouvrir le **Publieur**, « Recharger », puis **Publier** : le site utilise désormais les nouveaux réglages.
 
+**Page fermée avant d'enregistrer ?** Rien n'est perdu : à la réouverture de `Parametres.html`, un
+bandeau jaune propose « Reprendre ces modifications ». Ouvrir d'abord l'Excel, puis cliquer sur
+« Reprendre », puis sur « Enregistrer dans l'Excel ». Ce brouillon n'existe que dans le navigateur de ce
+poste.
+
 Je n'ai plus besoin d'intervenir pour ces changements.
 
 ## 7. Basculer vers l'Excel harmonisé (une seule fois)

@@ -11,6 +11,14 @@ Les changements sont décrits en langage simple, du plus récent au plus ancien.
   - Si l'Excel est ouvert ailleurs, l'enregistrement est refusé sans rien abîmer.
   - Si le navigateur ne sait pas écrire dans le fichier, l'outil télécharge le fichier mis à jour.
   - Les problèmes qui bloqueraient la publication (DECT, nom de l'établissement…) sont signalés dès la saisie.
+- **Brouillon automatique dans l'outil Paramètres** :
+  - une modification non enregistrée n'est plus perdue si la page se ferme ;
+  - à la réouverture, un bandeau propose « Reprendre ces modifications » ;
+  - le brouillon est gardé sur ce poste seulement (mémoire locale du navigateur, pas de cookie) et ne
+    contient que des réglages ;
+  - il est effacé après un enregistrement réussi dans l'Excel.
+- **Nom daté du parametres.json téléchargé** (`parametres_AAAA-MM-JJ_HHhMM.json`) : fini les
+  « parametres (1).json » qu'on confond avec l'ancien.
 - **Publieur** :
   - il lit les réglages dans l'Excel ;
   - s'ils ont changé, il publie aussi `parametres.json`, après contrôle, et **avant** les études ;
@@ -23,7 +31,7 @@ Les changements sont décrits en langage simple, du plus récent au plus ancien.
   - chaque outil affiche son numéro de version en bas de page ; la liste est dans `outils/versions.json`.
 - **Guide du porteur réécrit** : tableau « quel fichier, où, pour quoi faire », récupération d'un outil
   (bouton « Download raw file »), ajout d'une pathologie clic par clic, colonnes rouges de la migration.
-- **Tests** : 100 tests.
+- **Tests** : 103 tests.
   - Les tests utilisent une copie figée des réglages (`tests/donnees/parametres-test.json`) : un réglage
     publié par le porteur ne peut plus bloquer la mise en ligne.
   - Sur les réglages en ligne, seules des règles sont vérifiées.
