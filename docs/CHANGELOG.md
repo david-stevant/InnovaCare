@@ -2,6 +2,29 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.3.0 — 19 novembre 2026 — Étape 1.2 : gabarit Excel harmonisé et migration
+
+- **Nouvel outil `outils/Migration.html`** : on y dépose l'ancien Excel, il fabrique le **nouvel Excel
+  harmonisé** rempli avec les études existantes, à télécharger. L'ancien fichier n'est pas modifié.
+  Un bouton fournit aussi un **gabarit vierge**.
+- **Nouvel Excel** : un onglet par pôle, tous avec exactement les mêmes 88 lignes ; listes déroulantes
+  (statut, phase, pôles, personnes de l'annuaire, requis/exclu…) ; message d'aide sur chaque ligne ;
+  champs obligatoires vides en orange ; statut en couleur ; colonne « Exemple » ; feuilles protégées
+  sans mot de passe ; onglets Annuaire, Listes et « Rapport de migration » (ce qu'il reste à vérifier).
+- **Règles de migration** : rien n'est deviné. Toute valeur non convertible est gardée en Remarques,
+  précédée de « [migration] ». Les doublons sont fusionnés en une seule colonne, l'autre pôle étant noté.
+  Les colonnes décalées sont reprises telles quelles, surlignées en rouge, et masquées de tous les
+  affichages. Les DECT passent dans l'annuaire, et les personnes absentes de l'annuaire y sont ajoutées.
+- **Décisions du 19/11** : les classes « IEC ou ARA2 » et « inhibiteur de la myosine » sont gardées ;
+  une étude annulée prend le statut « terminé ». Le pôle des études de l'onglet « suivi ou terminées »
+  est proposé dans `correspondances-ancien-excel.json` (à valider).
+- **Règle 5** : les exemples propres à la cardiologie des messages d'aide passent dans `parametres.json`
+  (rubrique `champs`) ; le schéma ne contient plus que des textes génériques.
+- **Tests** : 65 tests, dont un aller-retour complet sur la copie de développement : ancien Excel →
+  migration → nouvel Excel → relecture. Plus de 300 textes d'origine vérifiés, aucun perdu.
+- Sur le vrai fichier, la lecture de 1.1 a fonctionné : 66 études ; les 8 colonnes signalées comme
+  décalées le sont toutes réellement.
+
 ## Version 0.2.0 — 19 novembre 2026 — Étape 1.1 : schéma, lecture de l'Excel actuel, rapport de contrôle
 
 - **Nouvel outil `outils/Controle.html`** : on y dépose l'Excel actuel (ou on le recharge d'un clic, le

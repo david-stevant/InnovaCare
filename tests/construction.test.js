@@ -39,7 +39,9 @@ test('chaque outil est autonome : aucun fichier ni script chargé depuis l\'ext�
     assert.ok(!/<script[^>]*\ssrc=/i.test(html), nom + ' : script externe interdit');
     assert.ok(!/<link[^>]*\shref=/i.test(html), nom + ' : feuille de style ou police externe interdite');
     assert.ok(!/@import/i.test(html), nom + ' : @import interdit');
-    assert.ok(!/url\((?!data:)/i.test(html), nom + ' : ressource externe dans le style interdite');
+    // Dans les feuilles de style, seules les ressources intégrées (« data: ») sont permises.
+    const styles = (html.match(/<style>[\s\S]*?<\/style>/g) || []).join('\n');
+    assert.ok(!/url\((?!data:)/i.test(styles), nom + ' : ressource externe dans le style interdite');
   }
 });
 

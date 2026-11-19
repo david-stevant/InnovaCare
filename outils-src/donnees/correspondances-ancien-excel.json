@@ -2,58 +2,284 @@
   "a_lire": "Description de l'ANCIEN Excel (avant harmonisation), propre à l'instance cardiologie. Sert seulement au contrôle (étape 1.1) et à la migration (étape 1.2). Les libellés sont comparés sans tenir compte des majuscules, des accents ni des espaces.",
   "libelle_entete": "Etudes",
   "onglets": [
-    { "nom": "Insuff Cardiaque", "role": "pole", "pole": "ic" },
-    { "nom": "Cardiomyopathies - Amyloses", "role": "pole", "pole": "cardiomyopathies" },
-    { "nom": "Valves", "role": "pole", "pole": "valves" },
-    { "nom": "Rythmologie", "role": "pole", "pole": "rythmologie" },
-    { "nom": "Hémodynamique", "role": "pole", "pole": "hemodynamique" },
-    { "nom": "USIC", "role": "pole", "pole": "usic" },
-    { "nom": "HTA", "role": "pole", "pole": "hta" },
-    { "nom": "Endocardites", "role": "pole", "pole": "endocardites" },
-    { "nom": "Etudes transversales", "role": "pole", "pole": "transversales" },
-    { "nom": "Etudes en suivi ou terminées", "role": "suivi" },
-    { "nom": "Coordonnées des ARC", "role": "annuaire" },
-    { "nom": "Synthétique ++ pour mémo", "role": "ignore", "raison": "recopie partielle des autres onglets, remplacée par les mémos générés" },
-    { "nom": "LISEZ-MOI (copie dev)", "role": "ignore", "raison": "onglet propre à la copie de développement" }
+    {
+      "nom": "Insuff Cardiaque",
+      "role": "pole",
+      "pole": "ic"
+    },
+    {
+      "nom": "Cardiomyopathies - Amyloses",
+      "role": "pole",
+      "pole": "cardiomyopathies"
+    },
+    {
+      "nom": "Valves",
+      "role": "pole",
+      "pole": "valves"
+    },
+    {
+      "nom": "Rythmologie",
+      "role": "pole",
+      "pole": "rythmologie"
+    },
+    {
+      "nom": "Hémodynamique",
+      "role": "pole",
+      "pole": "hemodynamique"
+    },
+    {
+      "nom": "USIC",
+      "role": "pole",
+      "pole": "usic"
+    },
+    {
+      "nom": "HTA",
+      "role": "pole",
+      "pole": "hta"
+    },
+    {
+      "nom": "Endocardites",
+      "role": "pole",
+      "pole": "endocardites"
+    },
+    {
+      "nom": "Etudes transversales",
+      "role": "pole",
+      "pole": "transversales"
+    },
+    {
+      "nom": "Etudes en suivi ou terminées",
+      "role": "suivi"
+    },
+    {
+      "nom": "Coordonnées des ARC",
+      "role": "annuaire"
+    },
+    {
+      "nom": "Synthétique ++ pour mémo",
+      "role": "ignore",
+      "raison": "recopie partielle des autres onglets, remplacée par les mémos générés"
+    },
+    {
+      "nom": "LISEZ-MOI (copie dev)",
+      "role": "ignore",
+      "raison": "onglet propre à la copie de développement"
+    }
   ],
   "libelles": [
-    { "ancien": "Etudes", "champ": "nom", "nature": "nom", "suite": "titre" },
-    { "ancien": "Thématique", "champ": "thematique", "nature": "texte" },
-    { "ancien": "Synopsis", "champ": "synopsis", "nature": "texte" },
-    { "ancien": "Design", "champ": "design", "nature": "texte" },
-    { "ancien": "Critères d'inclusion principaux", "champ": "inclusion", "nature": "texte", "plusieurs": true },
-    { "ancien": "Critères d'exclusion principaux", "champ": "exclusion", "nature": "texte", "plusieurs": true },
-    { "ancien": "NSN global", "champ": "nsn", "nature": "texte" },
-    { "ancien": "Début d'inclusion", "champ": "debut_inclusion", "nature": "date" },
-    { "ancien": "Durée de recrutement prévisible", "champ": "duree_recrutement", "nature": "texte" },
-    { "ancien": "Durée de suivi", "champ": "duree_suivi", "nature": "texte" },
-    { "ancien": "Rythme global de suivi sur site", "champ": "rythme_visites", "nature": "texte" },
-    { "ancien": "Remarques", "champ": "remarques", "nature": "texte" },
-    { "ancien": "Recrutés / Objectif Nantes", "champ": "recrutes_objectif", "nature": "texte" },
-    { "ancien": "Objectif d'inclusion Nantes", "champ": "recrutes_objectif", "nature": "texte" },
-    { "ancien": "CJP", "champ": "cjp", "nature": "texte" },
-    { "ancien": "Investigateur Principal", "champ": "investigateur", "nature": "personne" },
-    { "ancien": "ARC n°1", "champ": "arc_1", "nature": "personne", "arc": true },
-    { "ancien": "ARC back-up", "champ": "arc_backup", "nature": "personne", "arc": true, "plusieurs": true },
-    { "ancien": "Tag e-Cardioscope", "champ": "tag_ecs", "nature": "texte" },
-    { "ancien": "Faire apparaître dans e-Cardioscope (1=oui; 0=non)", "champ": "afficher_ecardioscope", "nature": "drapeau" },
-    { "ancien": "Filtres e-Cardioscope", "champ": "question_specifique", "nature": "texte" },
-    { "ancien": "Filtre âge", "champ": "filtre_age", "nature": "filtre", "filtre": "age" },
-    { "ancien": "Filtre FEVG", "champ": "filtre_fevg", "nature": "filtre", "filtre": "fevg" },
-    { "ancien": "Filtre DFG", "champ": "filtre_dfg", "nature": "filtre", "filtre": "dfg" },
-    { "ancien": "Filtre Diabète", "champ": "filtre_diabete", "nature": "filtre", "filtre": "diabete" },
-    { "ancien": "Filtre Nt pro BNP", "champ": "filtre_ntprobnp", "nature": "filtre", "filtre": "ntprobnp" },
-    { "ancien": "Filtre BMI", "champ": "filtre_imc", "nature": "filtre", "filtre": "imc" },
-    { "ancien": "Tag InnovaCoeur", "champ": "tag_innovacoeur", "nature": "texte", "debut_section": "patient" },
-    { "ancien": "Faire apparaître dans InnovaCoeur (1=oui; 0=non)", "champ": "afficher_innovacoeur", "nature": "drapeau", "section": "patient" },
-    { "ancien": "Phrase", "champ": "phrase_patient", "nature": "texte", "section": "patient" },
-    { "ancien": "Détails pratiques", "champ": "details_pratiques", "nature": "texte", "section": "patient" },
-    { "ancien": "Filtre âge", "champ": "patient_filtre_age", "nature": "filtre", "filtre": "age", "section": "patient" },
-    { "ancien": "Filtre Force de contraction cardiaque normale (= valeur de \"FEVG\" sur dernière échographie cardiaque > 40%)", "champ": "patient_filtre_fevg", "nature": "filtre", "filtre": "fevg", "section": "patient", "oui_signifie_min": 40 },
-    { "ancien": "Filtre BMI", "champ": "patient_filtre_imc", "nature": "filtre", "filtre": "imc", "section": "patient" },
-    { "ancien": "Filtre Diabète", "champ": "patient_filtre_diabete", "nature": "filtre", "filtre": "diabete", "section": "patient" },
-    { "ancien": "Filtre Nt pro BNP", "champ": "patient_filtre_ntprobnp", "nature": "filtre", "filtre": "ntprobnp", "section": "patient" },
-    { "ancien": "Filtre Traitements", "champ": "patient_filtre_traitements", "nature": "traitements", "section": "patient" }
+    {
+      "ancien": "Etudes",
+      "champ": "nom",
+      "nature": "nom",
+      "suite": "titre"
+    },
+    {
+      "ancien": "Thématique",
+      "champ": "thematique",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Synopsis",
+      "champ": "synopsis",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Design",
+      "champ": "design",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Critères d'inclusion principaux",
+      "champ": "inclusion",
+      "nature": "texte",
+      "plusieurs": true
+    },
+    {
+      "ancien": "Critères d'exclusion principaux",
+      "champ": "exclusion",
+      "nature": "texte",
+      "plusieurs": true
+    },
+    {
+      "ancien": "NSN global",
+      "champ": "nsn",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Début d'inclusion",
+      "champ": "debut_inclusion",
+      "nature": "date"
+    },
+    {
+      "ancien": "Durée de recrutement prévisible",
+      "champ": "duree_recrutement",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Durée de suivi",
+      "champ": "duree_suivi",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Rythme global de suivi sur site",
+      "champ": "rythme_visites",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Remarques",
+      "champ": "remarques",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Recrutés / Objectif Nantes",
+      "champ": "recrutes_objectif",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Objectif d'inclusion Nantes",
+      "champ": "recrutes_objectif",
+      "nature": "texte"
+    },
+    {
+      "ancien": "CJP",
+      "champ": "cjp",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Investigateur Principal",
+      "champ": "investigateur",
+      "nature": "personne"
+    },
+    {
+      "ancien": "ARC n°1",
+      "champ": "arc_1",
+      "nature": "personne",
+      "arc": true
+    },
+    {
+      "ancien": "ARC back-up",
+      "champ": "arc_backup",
+      "nature": "personne",
+      "arc": true,
+      "plusieurs": true
+    },
+    {
+      "ancien": "Tag e-Cardioscope",
+      "champ": "tag_ecs",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Faire apparaître dans e-Cardioscope (1=oui; 0=non)",
+      "champ": "afficher_ecardioscope",
+      "nature": "drapeau"
+    },
+    {
+      "ancien": "Filtres e-Cardioscope",
+      "champ": "question_specifique",
+      "nature": "texte"
+    },
+    {
+      "ancien": "Filtre âge",
+      "champ": "filtre_age",
+      "nature": "filtre",
+      "filtre": "age"
+    },
+    {
+      "ancien": "Filtre FEVG",
+      "champ": "filtre_fevg",
+      "nature": "filtre",
+      "filtre": "fevg"
+    },
+    {
+      "ancien": "Filtre DFG",
+      "champ": "filtre_dfg",
+      "nature": "filtre",
+      "filtre": "dfg"
+    },
+    {
+      "ancien": "Filtre Diabète",
+      "champ": "filtre_diabete",
+      "nature": "filtre",
+      "filtre": "diabete"
+    },
+    {
+      "ancien": "Filtre Nt pro BNP",
+      "champ": "filtre_ntprobnp",
+      "nature": "filtre",
+      "filtre": "ntprobnp"
+    },
+    {
+      "ancien": "Filtre BMI",
+      "champ": "filtre_imc",
+      "nature": "filtre",
+      "filtre": "imc"
+    },
+    {
+      "ancien": "Tag InnovaCoeur",
+      "champ": "tag_innovacoeur",
+      "nature": "texte",
+      "debut_section": "patient"
+    },
+    {
+      "ancien": "Faire apparaître dans InnovaCoeur (1=oui; 0=non)",
+      "champ": "afficher_innovacoeur",
+      "nature": "drapeau",
+      "section": "patient"
+    },
+    {
+      "ancien": "Phrase",
+      "champ": "phrase_patient",
+      "nature": "texte",
+      "section": "patient"
+    },
+    {
+      "ancien": "Détails pratiques",
+      "champ": "details_pratiques",
+      "nature": "texte",
+      "section": "patient"
+    },
+    {
+      "ancien": "Filtre âge",
+      "champ": "patient_filtre_age",
+      "nature": "filtre",
+      "filtre": "age",
+      "section": "patient"
+    },
+    {
+      "ancien": "Filtre Force de contraction cardiaque normale (= valeur de \"FEVG\" sur dernière échographie cardiaque > 40%)",
+      "champ": "patient_filtre_fevg",
+      "nature": "filtre",
+      "filtre": "fevg",
+      "section": "patient",
+      "oui_signifie_min": 40
+    },
+    {
+      "ancien": "Filtre BMI",
+      "champ": "patient_filtre_imc",
+      "nature": "filtre",
+      "filtre": "imc",
+      "section": "patient"
+    },
+    {
+      "ancien": "Filtre Diabète",
+      "champ": "patient_filtre_diabete",
+      "nature": "filtre",
+      "filtre": "diabete",
+      "section": "patient"
+    },
+    {
+      "ancien": "Filtre Nt pro BNP",
+      "champ": "patient_filtre_ntprobnp",
+      "nature": "filtre",
+      "filtre": "ntprobnp",
+      "section": "patient"
+    },
+    {
+      "ancien": "Filtre Traitements",
+      "champ": "patient_filtre_traitements",
+      "nature": "traitements",
+      "section": "patient"
+    }
   ],
   "debuts_blocs_ignores": [
     "ARC IC",
@@ -61,32 +287,187 @@
     "Précisions tag valables pour tous les protocoles"
   ],
   "libelles_attendus": [
-    "nom", "thematique", "synopsis", "design", "inclusion", "exclusion", "nsn", "debut_inclusion",
-    "duree_recrutement", "duree_suivi", "rythme_visites", "remarques", "recrutes_objectif", "cjp",
-    "investigateur", "arc_1", "arc_backup", "tag_ecs", "afficher_ecardioscope", "question_specifique",
-    "filtre_age", "filtre_fevg", "filtre_dfg", "filtre_diabete", "filtre_ntprobnp", "filtre_imc",
-    "tag_innovacoeur", "afficher_innovacoeur", "phrase_patient", "details_pratiques",
-    "patient_filtre_age", "patient_filtre_fevg", "patient_filtre_imc", "patient_filtre_diabete",
-    "patient_filtre_ntprobnp", "patient_filtre_traitements"
+    "nom",
+    "thematique",
+    "synopsis",
+    "design",
+    "inclusion",
+    "exclusion",
+    "nsn",
+    "debut_inclusion",
+    "duree_recrutement",
+    "duree_suivi",
+    "rythme_visites",
+    "remarques",
+    "recrutes_objectif",
+    "cjp",
+    "investigateur",
+    "arc_1",
+    "arc_backup",
+    "tag_ecs",
+    "afficher_ecardioscope",
+    "question_specifique",
+    "filtre_age",
+    "filtre_fevg",
+    "filtre_dfg",
+    "filtre_diabete",
+    "filtre_ntprobnp",
+    "filtre_imc",
+    "tag_innovacoeur",
+    "afficher_innovacoeur",
+    "phrase_patient",
+    "details_pratiques",
+    "patient_filtre_age",
+    "patient_filtre_fevg",
+    "patient_filtre_imc",
+    "patient_filtre_diabete",
+    "patient_filtre_ntprobnp",
+    "patient_filtre_traitements"
   ],
   "mentions_statut": [
-    { "motif": "non ouverte", "statut": "à venir" },
-    { "motif": "mise en place non faite", "statut": "à venir" },
-    { "motif": "annul", "statut": "terminé" },
-    { "motif": "termin", "statut": "terminé" }
+    {
+      "motif": "non ouverte",
+      "statut": "à venir"
+    },
+    {
+      "motif": "mise en place non faite",
+      "statut": "à venir"
+    },
+    {
+      "motif": "annul",
+      "statut": "terminé"
+    },
+    {
+      "motif": "termin",
+      "statut": "terminé"
+    }
   ],
-  "statut_par_defaut": { "pole": "ouvert", "suivi": "clos aux inclusions (suivi)" },
-  "valeurs_non_personnes": ["Hors CIC"],
+  "statut_par_defaut": {
+    "pole": "ouvert",
+    "suivi": "clos aux inclusions (suivi)"
+  },
+  "valeurs_non_personnes": [
+    "Hors CIC"
+  ],
   "annuaire": {
-    "colonnes": { "prenom": "A", "nom": "B", "dect": "C", "email": "D" },
+    "colonnes": {
+      "prenom": "A",
+      "nom": "B",
+      "dect": "C",
+      "email": "D"
+    },
     "premiere_ligne": 2,
     "corrections_validees": [
-      { "quoi": "prénom", "avant": "Henela", "apres": "Helena", "source": "cahier des charges § 11 (16/11)" },
-      { "quoi": "e-mail", "avant": "quenola.coste@chu-nantes.fr", "apres": "guenola.coste@chu-nantes.fr", "source": "cahier des charges § 11 (16/11)" }
+      {
+        "quoi": "prénom",
+        "avant": "Henela",
+        "apres": "Helena",
+        "source": "cahier des charges § 11 (16/11)"
+      },
+      {
+        "quoi": "e-mail",
+        "avant": "quenola.coste@chu-nantes.fr",
+        "apres": "guenola.coste@chu-nantes.fr",
+        "source": "cahier des charges § 11 (16/11)"
+      }
     ],
     "personnes_a_ajouter": [
-      { "prenom": "Audrey", "nom": "ERNOULD", "email": "audrey.ernould@chu-nantes.fr", "source": "cahier des charges § 11 (16/11)" },
-      { "prenom": "Emilie", "nom": "BOURGEON CONAN", "email": "emilie.conan@chu-nantes.fr", "source": "cahier des charges § 11 (16/11)" }
+      {
+        "prenom": "Audrey",
+        "nom": "ERNOULD",
+        "email": "audrey.ernould@chu-nantes.fr",
+        "source": "cahier des charges § 11 (16/11)"
+      },
+      {
+        "prenom": "Emilie",
+        "nom": "BOURGEON CONAN",
+        "email": "emilie.conan@chu-nantes.fr",
+        "source": "cahier des charges § 11 (16/11)"
+      }
+    ],
+    "poles_anciens": {
+      "Insuffisance cardiaque": "ic",
+      "Rythmo": "rythmologie",
+      "Valves": "valves",
+      "Hémodynamique": "hemodynamique",
+      "USIC (Chir Vasc)": "usic",
+      "Cardiomyopathies/amylose (CRCM)": "cardiomyopathies"
+    }
+  },
+  "affectation_suivi": {
+    "a_lire": "Pôle proposé pour chaque étude de l'onglet « Etudes en suivi ou terminées », qui disparaît. Proposition de Claude, à valider par le porteur du projet. Sources : thématique de l'étude, et regroupement de l'onglet « Synthétique ++ pour mémo » (colonnes AF à AM = USIC).",
+    "a_confirmer": true,
+    "etudes": [
+      {
+        "nom": "Dyna-MI",
+        "pole": "usic",
+        "raison": "SCA ; regroupée avec l'USIC dans l'onglet Synthétique"
+      },
+      {
+        "nom": "DEPPLETTR - Alexion",
+        "pole": "cardiomyopathies",
+        "raison": "amylose ATTR"
+      },
+      {
+        "nom": "Registre Multivalvular Disease",
+        "pole": "valves",
+        "raison": "polyvalvulopathie"
+      },
+      {
+        "nom": "ACACIA",
+        "pole": "cardiomyopathies",
+        "raison": "CMH non obstructive"
+      },
+      {
+        "nom": "FOREST (suite Sequoia en ouvert)",
+        "pole": "cardiomyopathies",
+        "raison": "CMH"
+      },
+      {
+        "nom": "RESPIRE - HFPEF (NovoNordisk)",
+        "pole": "ic",
+        "raison": "ICFEP / obésité"
+      },
+      {
+        "nom": "REVERSE-MR",
+        "pole": "valves",
+        "raison": "insuffisance mitrale"
+      },
+      {
+        "nom": "DISCOVER-HCM",
+        "pole": "cardiomyopathies",
+        "raison": "CMH"
+      },
+      {
+        "nom": "LIBREXIA",
+        "pole": "usic",
+        "raison": "SCA"
+      },
+      {
+        "nom": "BALANCED-HF (Astra Zeneca)",
+        "pole": "ic",
+        "raison": "IC"
+      },
+      {
+        "nom": "NICD-CRT",
+        "pole": "rythmologie",
+        "raison": "resynchronisation"
+      },
+      {
+        "nom": "TRITON (ALN-TTRSC04)",
+        "pole": "cardiomyopathies",
+        "raison": "amylose ; déjà présente dans l'onglet Cardiomyopathies"
+      },
+      {
+        "nom": "EACVI - INFLAME",
+        "pole": "usic",
+        "raison": "myocardites et atteintes inflammatoires ; regroupée avec l'USIC dans l'onglet Synthétique"
+      },
+      {
+        "nom": "VICTORION Rides",
+        "pole": "usic",
+        "raison": "coronaropathie ; regroupée avec l'USIC dans l'onglet Synthétique"
+      }
     ]
   }
 }

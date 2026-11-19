@@ -17,22 +17,75 @@
     "vert": "#23cd4b"
   },
   "poles": [
-    { "id": "ic", "nom": "Insuffisance cardiaque" },
-    { "id": "cardiomyopathies", "nom": "Cardiomyopathies-Amyloses" },
-    { "id": "valves", "nom": "Valves" },
-    { "id": "rythmologie", "nom": "Rythmologie" },
-    { "id": "hemodynamique", "nom": "Hémodynamique" },
-    { "id": "usic", "nom": "USIC" },
-    { "id": "hta", "nom": "HTA" },
-    { "id": "endocardites", "nom": "Endocardites" },
-    { "id": "transversales", "nom": "Transversales" }
+    {
+      "id": "ic",
+      "nom": "Insuffisance cardiaque"
+    },
+    {
+      "id": "cardiomyopathies",
+      "nom": "Cardiomyopathies-Amyloses"
+    },
+    {
+      "id": "valves",
+      "nom": "Valves"
+    },
+    {
+      "id": "rythmologie",
+      "nom": "Rythmologie"
+    },
+    {
+      "id": "hemodynamique",
+      "nom": "Hémodynamique"
+    },
+    {
+      "id": "usic",
+      "nom": "USIC"
+    },
+    {
+      "id": "hta",
+      "nom": "HTA"
+    },
+    {
+      "id": "endocardites",
+      "nom": "Endocardites"
+    },
+    {
+      "id": "transversales",
+      "nom": "Transversales"
+    }
   ],
   "listes": {
-    "phase": ["I", "II", "III", "IV", "étude observationnelle", "registre", "dispositif médical"],
-    "statut": ["à venir", "ouvert", "suspendu", "clos aux inclusions (suivi)", "terminé"],
-    "oui_non": ["oui", "non"],
-    "requis_exclu": ["requis", "exclu", "indifférent"],
-    "fonction": ["investigateur", "ARC", "autre"]
+    "phase": [
+      "I",
+      "II",
+      "III",
+      "IV",
+      "étude observationnelle",
+      "registre",
+      "dispositif médical"
+    ],
+    "statut": [
+      "à venir",
+      "ouvert",
+      "suspendu",
+      "clos aux inclusions (suivi)",
+      "terminé"
+    ],
+    "oui_non": [
+      "oui",
+      "non"
+    ],
+    "requis_exclu": [
+      "requis",
+      "exclu",
+      "indifférent"
+    ],
+    "fonction": [
+      "investigateur",
+      "ARC",
+      "autre"
+    ],
+    "statut_note": "Une étude annulée prend le statut « terminé » (décision du 19/11/2026) ; la mention d'origine est gardée en Remarques."
   },
   "annuaire": {
     "format_email": "prenom.nom@chu-nantes.fr",
@@ -41,22 +94,364 @@
   "pathologies": [],
   "vignettes": [],
   "filtres": [
-    { "id": "age", "libelle": "Âge", "type": "bornes", "unite": "ans", "valeur_min": 0, "valeur_max": 120, "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "fevg", "libelle": "FEVG", "type": "bornes", "unite": "%", "valeur_min": 0, "valeur_max": 100, "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "dfg", "libelle": "DFG", "type": "bornes", "unite": "mL/min/1,73 m²", "valeur_min": 0, "valeur_max": 200, "visibilite": "professionnel", "modules": ["interne", "professionnel"] },
-    { "id": "imc", "libelle": "IMC", "type": "bornes", "unite": "kg/m²", "valeur_min": 10, "valeur_max": 80, "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "ntprobnp", "libelle": "NT-proBNP", "type": "bornes", "unite": "pg/mL", "valeur_min": 0, "valeur_max": 100000, "visibilite": "professionnel", "modules": ["interne", "professionnel"] },
-    { "id": "diabete", "libelle": "Diabète", "type": "requis", "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "hta", "libelle": "HTA", "type": "requis", "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "pm_dai", "libelle": "Porteur de PM ou de DAI", "type": "requis", "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "hospit_ic", "libelle": "Hospitalisation pour insuffisance cardiaque récente", "type": "requis", "avec_delai_mois": true, "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "ttt_betabloquant", "libelle": "Bêtabloquant", "type": "requis", "famille": "traitement", "dci": [], "noms_commerciaux": [], "synonymes": ["beta-bloquant", "bêta-bloquant", "betabloquant", "bêtabloquant", "BB"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "ttt_arm", "libelle": "Antagoniste des récepteurs minéralocorticoïdes", "type": "requis", "famille": "traitement", "dci": ["spironolactone", "éplérénone"], "noms_commerciaux": ["Aldactone", "Inspra"], "synonymes": ["MRA", "ARM"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "ttt_arni", "libelle": "Sacubitril/valsartan", "type": "requis", "famille": "traitement", "dci": ["sacubitril/valsartan"], "noms_commerciaux": ["Entresto"], "synonymes": ["ARNI", "sacubitril-valsartan"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "ttt_gliflozine", "libelle": "Gliflozine", "type": "requis", "famille": "traitement", "dci": ["dapagliflozine", "empagliflozine"], "noms_commerciaux": ["Forxiga", "Jardiance"], "synonymes": ["gliflozine", "iSGLT2", "SGLT2"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
-    { "id": "ttt_diuretique_anse", "libelle": "Diurétique de l'anse", "type": "requis", "famille": "traitement", "dci": ["furosémide"], "noms_commerciaux": ["Lasilix"], "synonymes": ["diurétique de l'anse"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"], "a_confirmer": true },
-    { "id": "ttt_anticoagulant", "libelle": "Anticoagulant", "type": "requis", "famille": "traitement", "dci": ["rivaroxaban"], "noms_commerciaux": ["Xarelto"], "synonymes": ["anticoagulant", "AOD"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"], "a_confirmer": true },
-    { "id": "ttt_iec_ara2", "libelle": "IEC ou ARA2", "type": "requis", "famille": "traitement", "dci": [], "noms_commerciaux": [], "synonymes": ["IEC", "ARA2"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"], "a_confirmer": true },
-    { "id": "ttt_inhib_myosine", "libelle": "Inhibiteur de la myosine cardiaque", "type": "requis", "famille": "traitement", "dci": ["mavacamten"], "noms_commerciaux": ["Camzyos"], "synonymes": [], "visibilite": "professionnel", "modules": ["interne", "professionnel"], "a_confirmer": true }
-  ]
+    {
+      "id": "age",
+      "libelle": "Âge",
+      "type": "bornes",
+      "unite": "ans",
+      "valeur_min": 0,
+      "valeur_max": 120,
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "fevg",
+      "libelle": "FEVG",
+      "type": "bornes",
+      "unite": "%",
+      "valeur_min": 0,
+      "valeur_max": 100,
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "dfg",
+      "libelle": "DFG",
+      "type": "bornes",
+      "unite": "mL/min/1,73 m²",
+      "valeur_min": 0,
+      "valeur_max": 200,
+      "visibilite": "professionnel",
+      "modules": [
+        "interne",
+        "professionnel"
+      ]
+    },
+    {
+      "id": "imc",
+      "libelle": "IMC",
+      "type": "bornes",
+      "unite": "kg/m²",
+      "valeur_min": 10,
+      "valeur_max": 80,
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "ntprobnp",
+      "libelle": "NT-proBNP",
+      "type": "bornes",
+      "unite": "pg/mL",
+      "valeur_min": 0,
+      "valeur_max": 100000,
+      "visibilite": "professionnel",
+      "modules": [
+        "interne",
+        "professionnel"
+      ]
+    },
+    {
+      "id": "diabete",
+      "libelle": "Diabète",
+      "type": "requis",
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "hta",
+      "libelle": "HTA",
+      "type": "requis",
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "pm_dai",
+      "libelle": "Porteur de PM ou de DAI",
+      "type": "requis",
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "hospit_ic",
+      "libelle": "Hospitalisation pour insuffisance cardiaque récente",
+      "type": "requis",
+      "avec_delai_mois": true,
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "ttt_betabloquant",
+      "libelle": "Bêtabloquant",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [],
+      "noms_commerciaux": [],
+      "synonymes": [
+        "beta-bloquant",
+        "bêta-bloquant",
+        "betabloquant",
+        "bêtabloquant",
+        "BB"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "ttt_arm",
+      "libelle": "Antagoniste des récepteurs minéralocorticoïdes",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "spironolactone",
+        "éplérénone"
+      ],
+      "noms_commerciaux": [
+        "Aldactone",
+        "Inspra"
+      ],
+      "synonymes": [
+        "MRA",
+        "ARM"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "ttt_arni",
+      "libelle": "Sacubitril/valsartan",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "sacubitril/valsartan"
+      ],
+      "noms_commerciaux": [
+        "Entresto"
+      ],
+      "synonymes": [
+        "ARNI",
+        "sacubitril-valsartan"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "ttt_gliflozine",
+      "libelle": "Gliflozine",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "dapagliflozine",
+        "empagliflozine"
+      ],
+      "noms_commerciaux": [
+        "Forxiga",
+        "Jardiance"
+      ],
+      "synonymes": [
+        "gliflozine",
+        "iSGLT2",
+        "SGLT2"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "ttt_diuretique_anse",
+      "libelle": "Diurétique de l'anse",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "furosémide"
+      ],
+      "noms_commerciaux": [
+        "Lasilix"
+      ],
+      "synonymes": [
+        "diurétique de l'anse"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "a_confirmer": true
+    },
+    {
+      "id": "ttt_anticoagulant",
+      "libelle": "Anticoagulant",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "rivaroxaban"
+      ],
+      "noms_commerciaux": [
+        "Xarelto"
+      ],
+      "synonymes": [
+        "anticoagulant",
+        "AOD"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ],
+      "a_confirmer": true
+    },
+    {
+      "id": "ttt_iec_ara2",
+      "libelle": "IEC ou ARA2",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [],
+      "noms_commerciaux": [],
+      "synonymes": [
+        "IEC",
+        "ARA2"
+      ],
+      "visibilite": "patient",
+      "modules": [
+        "interne",
+        "professionnel",
+        "patient"
+      ]
+    },
+    {
+      "id": "ttt_inhib_myosine",
+      "libelle": "Inhibiteur de la myosine cardiaque",
+      "type": "requis",
+      "famille": "traitement",
+      "dci": [
+        "mavacamten"
+      ],
+      "noms_commerciaux": [
+        "Camzyos"
+      ],
+      "synonymes": [],
+      "visibilite": "professionnel",
+      "modules": [
+        "interne",
+        "professionnel"
+      ]
+    }
+  ],
+  "champs": {
+    "nom": {
+      "exemple": "EXEMPLE-HF",
+      "aide": "Nom d'usage seul, sans promoteur ni statut. Ex. : BRANCH-HF"
+    },
+    "titre": {
+      "exemple": "Étude de phase III évaluant un traitement fictif versus placebo"
+    },
+    "promoteur": {
+      "exemple": "Laboratoire fictif"
+    },
+    "phase": {
+      "exemple": "III"
+    },
+    "statut": {
+      "exemple": "ouvert"
+    },
+    "thematique": {
+      "exemple": "ICFEP + surpoids",
+      "aide": "Quelques mots. Ex. : ICFEP + surpoids ou DT2"
+    },
+    "intervention": {
+      "exemple": "molécule X vs placebo",
+      "aide": "En DCI. Ex. : finérénone vs placebo"
+    },
+    "design": {
+      "exemple": "randomisé 1:1, double aveugle"
+    },
+    "inclusion_1": {
+      "exemple": "FEVG ≥ 40 %",
+      "aide": "Un critère par ligne, seuils chiffrés. Ex. : FEVG ≥ 40 %"
+    },
+    "inclusion_2": {
+      "exemple": "NYHA II à IV",
+      "aide": "Un critère par ligne, seuils chiffrés. Ex. : NYHA II à IV"
+    },
+    "debut_inclusion": {
+      "exemple": "01/11/2025"
+    },
+    "duree_suivi": {
+      "exemple": "30 mois"
+    },
+    "rythme_visites": {
+      "exemple": "M3, M6 puis tous les 6 mois"
+    },
+    "investigateur": {
+      "exemple": "Prénom NOM"
+    },
+    "arc_1": {
+      "exemple": "Prénom NOM"
+    },
+    "phrase_patient": {
+      "exemple": "Efficacité d'un nouveau traitement chez les patients essoufflés à l'effort."
+    },
+    "details_pratiques": {
+      "exemple": "1 comprimé par jour, suivi tous les 6 mois."
+    },
+    "age_min": {
+      "exemple": 18
+    },
+    "fevg_min": {
+      "exemple": 40
+    },
+    "afficher_ecardioscope": {
+      "exemple": "oui"
+    },
+    "afficher_innovaction": {
+      "exemple": "oui"
+    },
+    "afficher_innovacteur": {
+      "exemple": "non"
+    }
+  }
 }
