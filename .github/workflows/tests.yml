@@ -1,0 +1,21 @@
+# Lance les tests automatiques à chaque pull request et à chaque modification de la branche principale.
+# Gratuit sur un dépôt public. Un échec apparaît en rouge dans la pull request.
+name: Tests automatiques
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test

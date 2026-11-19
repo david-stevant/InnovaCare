@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnostic du poste — InnovaCare</title>
+<!--@inclure outils-src/bibliotheques/dm-sans/dm-sans-latin.woff2 "DM Sans"-->
+<!--@inclure outils-src/style-commun.css-->
+</head>
+<body>
+<div class="page">
+
+  <header class="entete">
+    <h1>Diagnostic du poste</h1>
+    <p>Quatre vérifications, deux minutes. Rien n'est installé, aucune donnée personnelle n'est lue ni envoyée.</p>
+  </header>
+
+  <section class="carte" aria-labelledby="titre-navigateur">
+    <h2 id="titre-navigateur"><span class="numero">1</span>Votre navigateur</h2>
+    <p class="note">Cette partie se remplit toute seule à l'ouverture.</p>
+    <ul class="resultats" id="liste-navigateur"></ul>
+  </section>
+
+  <section class="carte" aria-labelledby="titre-reseau">
+    <h2 id="titre-reseau"><span class="numero">2</span>Accès à GitHub depuis ce poste</h2>
+    <p>Vérifie si ce poste peut joindre GitHub, où le site public sera hébergé.
+       Le test n'écrit rien et n'a besoin d'aucun mot de passe.</p>
+    <label for="depot">Dépôt GitHub à tester</label>
+    <input type="text" id="depot" value="david-stevant/InnovaCare" spellcheck="false">
+    <div class="rangee">
+      <button type="button" id="bouton-reseau">Tester l'accès à GitHub</button>
+    </div>
+    <ul class="resultats" id="liste-reseau" aria-live="polite"></ul>
+  </section>
+
+  <section class="carte" aria-labelledby="titre-fichier">
+    <h2 id="titre-fichier"><span class="numero">3</span>Mémorisation d'un fichier</h2>
+    <p>Vérifie si le navigateur retient un fichier d'une session à l'autre (cela évitera de re-sélectionner
+       l'Excel à chaque fois). <strong>En deux temps :</strong></p>
+    <p>① Cliquez sur « Choisir un fichier » et prenez <strong>n'importe quel fichier sans importance</strong>
+       (son contenu n'est pas lu, son nom n'est pas noté).<br>
+       ② <strong>Fermez complètement le navigateur</strong>, rouvrez ce fichier Diagnostic par double-clic,
+       puis cliquez sur « Recharger le fichier mémorisé ».</p>
+    <div class="rangee">
+      <button type="button" id="bouton-choisir">Choisir un fichier</button>
+      <button type="button" id="bouton-recharger" class="secondaire" disabled>Recharger le fichier mémorisé</button>
+      <button type="button" id="bouton-oublier" class="secondaire" disabled>Oublier le fichier</button>
+      <input type="file" id="selecteur-classique" hidden>
+    </div>
+    <ul class="resultats" id="liste-fichier" aria-live="polite"></ul>
+  </section>
+
+  <section class="carte" aria-labelledby="titre-compte-rendu">
+    <h2 id="titre-compte-rendu"><span class="numero">4</span>Compte rendu à transmettre</h2>
+    <p>Une fois les étapes 2 et 3 faites, copiez ce texte et collez-le dans la conversation avec Claude.
+       Il ne contient ni nom, ni nom de fichier, ni mot de passe.</p>
+    <div class="rangee">
+      <button type="button" id="bouton-copier">Copier le compte rendu</button>
+      <span id="message-copie" class="note" aria-live="polite"></span>
+    </div>
+    <p></p>
+    <textarea id="compte-rendu" readonly aria-label="Compte rendu du diagnostic"></textarea>
+  </section>
+
+</div>
+<!--@inclure outils-src/diagnostic.js-->
+</body>
+</html>
