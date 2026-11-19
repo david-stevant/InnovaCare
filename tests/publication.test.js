@@ -158,7 +158,12 @@ test('site/ : aucun Excel, aucun contenu interne, aucun DECT, aucune mention de 
     assert.ok(!/\[interne/i.test(texte), nom + ' : contenu interne');
     assert.ok(!/\bDECT\b|"dect"/i.test(texte), nom + ' : DECT');
     const sansAdresses = texte.replace(/@?chu-nantes(\.mssante)?\.fr/gi, '');
-    assert.ok(!/CHU\s+de\s+Nantes|CHU\s+Nantes|\bCHU\b/i.test(sansAdresses), nom + ' mentionne l\'établissement');
+    // Règle 3 : jamais le NOM de l'établissement. Dans les données publiées (protocoles.json), les textes
+    // des ARC sont repris mot pour mot (règle 4) et peuvent dire « suivi au CHU » : le mot seul est toléré.
+    // Dans le code et les textes du site, même le mot seul est refusé.
+    const donneesPubliees = /protocoles\.json$/.test(chemin);
+    const motif = donneesPubliees ? /CHU\s+de\s+Nantes|CHU\s+Nantes|chu[- ]nantes/i : /CHU\s+de\s+Nantes|CHU\s+Nantes|chu[- ]nantes|\bCHU\b/i;
+    assert.ok(!motif.test(sansAdresses), nom + ' mentionne l\'établissement');
   }
 });
 
