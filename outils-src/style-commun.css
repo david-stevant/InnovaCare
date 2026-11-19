@@ -49,7 +49,7 @@ section.carte h2 .numero {
   display: inline-block; width: 32px; height: 32px; line-height: 32px; margin-right: 8px;
   border-radius: 50%; background: var(--turquoise); color: #fff; text-align: center; font-size: 17px;
 }
-section.carte p { margin: 8px 0; }
+section.carte p { margin: 8px 0; overflow-wrap: anywhere; }
 
 button {
   font: inherit; font-weight: 600; cursor: pointer;
@@ -78,3 +78,46 @@ textarea {
 
 .note { color: var(--encre-douce); font-size: 15px; }
 .rangee { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+
+/* --- Rapports et tableaux (outil Contrôle, puis Migration et Publieur) --- */
+.page-large { max-width: 1240px; }
+h3 { font-size: 18px; margin: 12px 0 6px; }
+.defilement { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid var(--trait); overflow-wrap: anywhere; }
+th { background: var(--fond); font-weight: 700; white-space: nowrap; }
+td.adresse { white-space: nowrap; font-family: Consolas, "Courier New", monospace; font-size: 14px; color: var(--encre-douce); }
+
+.zone-depot {
+  margin-top: 14px; padding: 18px; border: 2px dashed var(--trait); border-radius: 10px;
+  color: var(--encre-douce); text-align: center;
+}
+.zone-depot.survol { border-color: var(--turquoise-fonce); background: var(--ok-fond); }
+.etat-ok { color: var(--ok-texte); font-weight: 600; }
+.etat-echec { color: var(--echec-texte); font-weight: 600; }
+
+.compteurs { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+.compteur { padding: 10px 16px; border-radius: 10px; background: var(--fond); border: 1px solid var(--trait); }
+.compteur strong { font-size: 24px; margin-right: 4px; }
+.compteur.gravite-corriger { background: var(--echec-fond); color: var(--echec-texte); border-color: transparent; }
+.compteur.gravite-verifier { background: var(--alerte-fond); color: var(--alerte-texte); border-color: transparent; }
+
+details.groupe { border: 1px solid var(--trait); border-left-width: 6px; border-radius: 8px; margin: 10px 0; padding: 4px 12px; }
+details.groupe summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
+details.groupe.gravite-corriger { border-left-color: var(--echec-texte); }
+details.groupe.gravite-verifier { border-left-color: var(--or); }
+details.groupe.gravite-info { border-left-color: var(--trait); }
+.pastille { display: inline-block; font-size: 13px; font-weight: 700; padding: 1px 8px; border-radius: 20px; background: var(--fond); }
+.gravite-corriger .pastille { background: var(--echec-fond); color: var(--echec-texte); }
+.gravite-verifier .pastille { background: var(--alerte-fond); color: var(--alerte-texte); }
+.nombre { color: var(--encre-douce); font-weight: 400; }
+
+.deux-colonnes { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+ul.liste-tags { margin: 0; padding-left: 20px; }
+
+@media print {
+  .sans-impression { display: none !important; }
+  body { background: #fff; font-size: 12px; }
+  section.carte { border: none; padding: 0; break-inside: auto; }
+  table { font-size: 11px; }
+}
