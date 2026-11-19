@@ -317,6 +317,28 @@
         "Diabète",
         "DT2"
       ]
+    },
+    {
+      "id": "cmi",
+      "emoji": "",
+      "nom": "CMI",
+      "groupe": "ic_cmp",
+      "synonymes": [
+        "CMI",
+        "Cardiomyopathie ischémique",
+        "Cardiopathie ischémique"
+      ]
+    },
+    {
+      "id": "cmd",
+      "emoji": "",
+      "nom": "CMD",
+      "groupe": "ic_cmp",
+      "synonymes": [
+        "CMD",
+        "Cardiomyopathie dilatée",
+        "Cardiopathie dilatée"
+      ]
     }
   ],
   "vignettes": [
@@ -425,7 +447,7 @@
         "professionnel",
         "patient"
       ],
-      "question_patient": "Votre force de contraction cardiaque est-elle normale ?",
+      "question_patient": "Votre force de contraction cardiaque est-elle normale (FEVG > 50%) ?",
       "emoji": "🫀",
       "aide_patient": "valeur FEVG > 40% sur votre dernière échographie",
       "seuil_patient": 40,
@@ -498,7 +520,7 @@
         "professionnel",
         "patient"
       ],
-      "question_patient": "Avez-vous un diabète ?",
+      "question_patient": "Avez-vous un diabète et/ou un traitement contre le diabète ?",
       "emoji": "🩸"
     },
     {
@@ -511,7 +533,7 @@
         "professionnel",
         "patient"
       ],
-      "question_patient": "Avez-vous de l'hypertension artérielle ?",
+      "question_patient": "Avez-vous de l'hypertension artérielle et/ou un traitement contre l'hypertension artérielle ?",
       "emoji": "💊"
     },
     {
@@ -524,7 +546,7 @@
         "professionnel",
         "patient"
       ],
-      "question_patient": null,
+      "question_patient": "Etes-vous porteur d'un stimulateur cardiaque (pacemaker) ou d'un défibrillateur cardiaque ?",
       "a_rediger": true
     },
     {
@@ -538,7 +560,7 @@
         "professionnel",
         "patient"
       ],
-      "question_patient": null,
+      "question_patient": "Avez-vous déjà été hospitalisé pour de l'insuffisance cardiaque ? (œdème pulmonaire, œdèmes des jambes...)",
       "a_rediger": true
     },
     {
@@ -622,7 +644,9 @@
       ],
       "noms_commerciaux": [
         "Forxiga",
-        "Jardiance"
+        "Jardiance",
+        "Synjardy",
+        "Xigduo"
       ],
       "synonymes": [
         "gliflozine",
@@ -666,10 +690,14 @@
       "type": "requis",
       "famille": "traitement",
       "dci": [
-        "rivaroxaban"
+        "rivaroxaban",
+        "apixaban",
+        "dabigatran"
       ],
       "noms_commerciaux": [
-        "Xarelto"
+        "Xarelto",
+        "Eliquis",
+        "Pradaxa"
       ],
       "synonymes": [
         "anticoagulant",
@@ -702,7 +730,8 @@
         "patient"
       ],
       "libelle_patient": null,
-      "a_rediger": true
+      "a_rediger": true,
+      "question_patient": "Traitement pour l'hypertension artérielle se terminant par -pril ou -sartan ?"
     },
     {
       "id": "ttt_inhib_myosine",
@@ -710,10 +739,12 @@
       "type": "requis",
       "famille": "traitement",
       "dci": [
-        "mavacamten"
+        "mavacamten",
+        "aficamten"
       ],
       "noms_commerciaux": [
-        "Camzyos"
+        "Camzyos",
+        "Myqorzo"
       ],
       "synonymes": [],
       "visibilite": "professionnel",
