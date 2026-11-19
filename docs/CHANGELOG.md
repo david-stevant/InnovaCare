@@ -13,5 +13,8 @@ Les changements sont décrits en langage simple, du plus récent au plus ancien.
 - **Tests automatiques** (`npm test`), relancés par GitHub à chaque pull request : outils à jour, aucun
   chargement extérieur, aucune mention de l'établissement, un seul fichier Excel dans le dépôt.
 - **Police DM Sans** intégrée aux outils (licence libre OFL, fournie dans le dépôt).
+- **Diagnostic du 19/11** (Chrome 158 sous Windows) : mémorisation du fichier **validée** (fichier retrouvé
+  après fermeture du navigateur, relu après un seul clic d'autorisation) ; stockage local et copie
+  automatique fonctionnent. **Accès à GitHub depuis un poste hospitalier : reste à tester.**
 - **Ménage** : suppression du doublon de la copie de développement de l'Excel à la racine du dépôt
   (seule la copie de `reference/` est conservée, conformément aux règles du projet).
