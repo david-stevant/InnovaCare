@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Migration de l'Excel — InnovaCare</title>
+<!--@inclure outils-src/bibliotheques/dm-sans/dm-sans-latin.woff2 "DM Sans"-->
+<!--@inclure outils-src/style-commun.css-->
+</head>
+<body>
+<div class="page page-large">
+
+  <header class="entete">
+    <h1>Migration vers l'Excel harmonisé</h1>
+    <p>Transforme l'Excel actuel des études en un nouveau fichier, avec la même structure dans tous les onglets.
+       <strong>L'ancien fichier n'est pas modifié.</strong> Rien n'est envoyé : le nouveau fichier est fabriqué
+       dans cette page et téléchargé sur votre ordinateur.</p>
+  </header>
+
+  <section class="carte sans-impression" aria-labelledby="titre-vierge">
+    <h2 id="titre-vierge"><span class="numero">A</span>Gabarit vierge</h2>
+    <p>Un fichier harmonisé sans aucune étude, pour démarrer de zéro ou pour une autre spécialité.</p>
+    <div class="rangee"><button type="button" id="bouton-vierge" class="secondaire">Télécharger le gabarit vierge</button></div>
+  </section>
+
+  <section class="carte sans-impression" aria-labelledby="titre-fichier">
+    <h2 id="titre-fichier"><span class="numero">1</span>Choisir l'ancien fichier Excel</h2>
+    <div class="rangee">
+      <button type="button" id="bouton-choisir">Choisir le fichier Excel</button>
+      <button type="button" id="bouton-recharger" class="secondaire" hidden>Recharger</button>
+      <input type="file" id="selecteur-classique" accept=".xlsx" hidden>
+    </div>
+    <div id="zone-depot" class="zone-depot">… ou glissez-déposez le fichier ici (format .xlsx).</div>
+    <p id="etat" class="note" aria-live="polite"></p>
+  </section>
+
+  <div id="resultat" hidden>
+    <section class="carte" aria-labelledby="titre-synthese">
+      <h2 id="titre-synthese"><span class="numero">2</span>Résultat de la migration</h2>
+      <div class="compteurs" id="compteurs"></div>
+      <div class="defilement"><table id="table-poles"></table></div>
+      <div class="rangee sans-impression">
+        <button type="button" id="bouton-telecharger">Télécharger le nouvel Excel</button>
+        <button type="button" id="bouton-copier" class="secondaire">Copier les compteurs (sans contenu)</button>
+        <span id="message" class="note" aria-live="polite"></span>
+      </div>
+      <p class="note">Le nouveau fichier contient un onglet « Rapport de migration » : la liste de ce qu'il reste à vérifier,
+         avec une colonne « Fait ? » à cocher au fur et à mesure. Supprimez cet onglet une fois le travail terminé.
+         Ce rapport contient des informations internes : il reste sur le disque partagé, comme l'Excel.</p>
+    </section>
+
+    <section class="carte" aria-labelledby="titre-rapport">
+      <h2 id="titre-rapport"><span class="numero">3</span>Ce qu'il reste à vérifier</h2>
+      <p class="note">Le même contenu que l'onglet « Rapport de migration », du plus important au moins important.</p>
+      <div class="defilement"><table id="table-rapport"></table></div>
+    </section>
+  </div>
+
+</div>
+<!--@inclure site/donnees/parametres.json-->
+<!--@inclure outils-src/donnees/correspondances-ancien-excel.json-->
+<!--@inclure outils-src/bibliotheques/exceljs/exceljs.min.js-->
+<!--@inclure src/normalisation.js-->
+<!--@inclure src/excel-vers-grille.js-->
+<!--@inclure src/lecture-ancien.js-->
+<!--@inclure src/controles.js-->
+<!--@inclure src/schema.js-->
+<!--@inclure src/gabarit.js-->
+<!--@inclure src/migration.js-->
+<!--@inclure src/memoire-fichier.js-->
+<!--@inclure outils-src/migration-ui.js-->
+</body>
+</html>

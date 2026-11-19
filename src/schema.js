@@ -37,9 +37,9 @@
   const CHAMPS_FICHE = [].concat(
     // --- Identification ---
     [
-      { id: 'nom', libelle: 'Nom court de l\'étude', bloc: 'Identification', type: 'texte', obligatoire: 'oui', visibilite: 'patient', aide: 'Nom d\'usage seul, sans promoteur ni statut. Ex. : BRANCH-HF' },
+      { id: 'nom', libelle: 'Nom court de l\'étude', bloc: 'Identification', type: 'texte', obligatoire: 'oui', visibilite: 'patient', aide: 'Nom d\'usage seul, sans promoteur ni statut.' },
       { id: 'titre', libelle: 'Titre complet', bloc: 'Identification', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Titre officiel du protocole.' },
-      { id: 'promoteur', libelle: 'Promoteur', bloc: 'Identification', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Ex. : laboratoire, CHU promoteur, groupe académique.' },
+      { id: 'promoteur', libelle: 'Promoteur', bloc: 'Identification', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Ex. : laboratoire, établissement promoteur, groupe académique.' },
       { id: 'coordinateur', libelle: 'Coordinateur national', bloc: 'Identification', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Prénom NOM, ville.' },
       { id: 'phase', libelle: 'Phase', bloc: 'Identification', type: 'liste', liste: 'phase', obligatoire: 'si_public', visibilite: 'professionnel', aide: 'Choisir dans la liste.' },
       { id: 'registre', libelle: 'N° NCT ou EU CT', bloc: 'Identification', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Facultatif. Ex. : NCT01234567' },
@@ -49,14 +49,14 @@
     serie(2, (n) => ({ id: 'autre_pole_' + n, libelle: 'Autre pôle concerné ' + n, bloc: 'Identification', type: 'liste', liste: 'poles', obligatoire: 'non', visibilite: 'professionnel', aide: 'Si l\'étude concerne aussi un autre pôle. Ne pas la recopier dans l\'autre onglet.' })),
     // --- Classement ---
     serie(4, (n) => ({ id: 'pathologie_' + n, libelle: 'Pathologie ' + n, bloc: 'Classement', type: 'liste', liste: 'pathologies', obligatoire: n === 1 ? 'oui' : 'non', visibilite: 'patient', aide: 'Une pathologie par ligne, choisie dans la liste.' })),
-    [{ id: 'thematique', libelle: 'Thématique courte', bloc: 'Classement', type: 'texte', obligatoire: 'oui', visibilite: 'professionnel', aide: 'Quelques mots. Ex. : ICFEP + surpoids ou DT2' }],
+    [{ id: 'thematique', libelle: 'Thématique courte', bloc: 'Classement', type: 'texte', obligatoire: 'oui', visibilite: 'professionnel', aide: 'Quelques mots résumant la population étudiée.' }],
     // --- Science ---
     [
       Object.assign({ id: 'synopsis', libelle: 'Synopsis', bloc: 'Science', type: 'texte_long', obligatoire: 'non', aide: 'Résumé interne, jamais publié.' }, INTERNE),
-      { id: 'intervention', libelle: 'Intervention vs comparateur (DCI)', bloc: 'Science', type: 'texte', obligatoire: 'si_public', visibilite: 'professionnel', aide: 'En DCI. Ex. : finérénone vs placebo' },
+      { id: 'intervention', libelle: 'Intervention vs comparateur (DCI)', bloc: 'Science', type: 'texte', obligatoire: 'si_public', visibilite: 'professionnel', aide: 'Traitement étudié et comparateur, en DCI.' },
       { id: 'design', libelle: 'Design', bloc: 'Science', type: 'texte', obligatoire: 'si_public', visibilite: 'professionnel', aide: 'Randomisation, aveugle, ratio. Ex. : randomisé 1:1, double aveugle' },
     ],
-    serie(5, (n) => ({ id: 'inclusion_' + n, libelle: 'Critère d\'inclusion principal ' + n, bloc: 'Science', type: 'texte', obligatoire: n === 1 ? 'oui' : 'non', visibilite: 'professionnel', aide: 'Un critère par ligne, seuils chiffrés. Ex. : FEVG ≥ 40 %' })),
+    serie(5, (n) => ({ id: 'inclusion_' + n, libelle: 'Critère d\'inclusion principal ' + n, bloc: 'Science', type: 'texte', obligatoire: n === 1 ? 'oui' : 'non', visibilite: 'professionnel', aide: 'Un critère par ligne, avec les seuils chiffrés.' })),
     serie(5, (n) => Object.assign({ id: 'inclusion_autre_' + n, libelle: 'Autre critère d\'inclusion ' + n, bloc: 'Science', type: 'texte', obligatoire: 'non', aide: 'Critères secondaires, usage interne.' }, INTERNE)),
     serie(12, (n) => Object.assign({ id: 'exclusion_' + n, libelle: 'Critère d\'exclusion ' + n, bloc: 'Science', type: 'texte', obligatoire: 'non', aide: 'Un critère par ligne. Jamais publié.' }, INTERNE)),
     [
@@ -134,9 +134,32 @@
     return lignes;
   }
 
+  /**
+   * Textes propres à l'instance : parametres.champs peut préciser, pour un champ donné,
+   * un message d'aide et une valeur d'exemple (colonne « Exemple » du gabarit).
+   *   "champs": { "thematique": { "aide": "…", "exemple": "…" } }
+   * Seuls ces deux textes peuvent être changés ici : jamais la visibilité ni le verrou.
+   */
+  function appliquerTextes(champs, parametres) {
+    const textes = (parametres && parametres.champs) || {};
+    return champs.map((c) => {
+      const t = textes[c.id];
+      if (!t) return Object.assign({ exemple: '' }, c);
+      return Object.assign({ exemple: '' }, c, {
+        aide: typeof t.aide === 'string' ? t.aide : c.aide,
+        exemple: t.exemple !== undefined ? t.exemple : '',
+      });
+    });
+  }
+
   /** Liste complète et ordonnée des lignes d'une fiche protocole. */
   function champsFiche(parametres) {
-    return CHAMPS_FICHE.concat(champsFiltres(parametres), CHAMPS_AFFICHAGE);
+    return appliquerTextes(CHAMPS_FICHE.concat(champsFiltres(parametres), CHAMPS_AFFICHAGE), parametres);
+  }
+
+  /** Colonnes de l'onglet Annuaire, dans l'ordre. */
+  function champsAnnuaire(parametres) {
+    return appliquerTextes(CHAMPS_ANNUAIRE, parametres);
   }
 
   /** Identifiants des champs verrouillés (jamais publiés), fiche et annuaire. */
@@ -146,6 +169,6 @@
 
   InnovaCare.schema = {
     VISIBILITES, BLOCS, CHAMPS_ANNUAIRE,
-    champsFiche, champsFiltres, champsJamaisPublics,
+    champsFiche, champsFiltres, champsAnnuaire, champsJamaisPublics,
   };
 })(typeof globalThis !== 'undefined' ? globalThis : this);
