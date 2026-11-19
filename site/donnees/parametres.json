@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "a_lire": "Paramètres de l'instance. Version minimale (étape 1.1) : pôles, listes, filtres et traitements. Pathologies, vignettes, textes et couleurs seront complétés à l'étape 1.3, d'après les anciens outils. Les éléments marqués a_confirmer=true restent à valider par le porteur du projet.",
+  "specialite": {
+    "nom": "Cardiologie",
+    "instance": "InnovaCoeur"
+  },
+  "modules": {
+    "interne": "eCardioScope",
+    "patient": "InnovActeur",
+    "professionnel": "InnovAction"
+  },
+  "couleurs": {
+    "turquoise": "#00bac6",
+    "or": "#fab316",
+    "rose": "#ef4d89",
+    "vert": "#23cd4b"
+  },
+  "poles": [
+    { "id": "ic", "nom": "Insuffisance cardiaque" },
+    { "id": "cardiomyopathies", "nom": "Cardiomyopathies-Amyloses" },
+    { "id": "valves", "nom": "Valves" },
+    { "id": "rythmologie", "nom": "Rythmologie" },
+    { "id": "hemodynamique", "nom": "Hémodynamique" },
+    { "id": "usic", "nom": "USIC" },
+    { "id": "hta", "nom": "HTA" },
+    { "id": "endocardites", "nom": "Endocardites" },
+    { "id": "transversales", "nom": "Transversales" }
+  ],
+  "listes": {
+    "phase": ["I", "II", "III", "IV", "étude observationnelle", "registre", "dispositif médical"],
+    "statut": ["à venir", "ouvert", "suspendu", "clos aux inclusions (suivi)", "terminé"],
+    "oui_non": ["oui", "non"],
+    "requis_exclu": ["requis", "exclu", "indifférent"],
+    "fonction": ["investigateur", "ARC", "autre"]
+  },
+  "annuaire": {
+    "format_email": "prenom.nom@chu-nantes.fr",
+    "format_mssante": "prenom.nom@chu-nantes.mssante.fr"
+  },
+  "pathologies": [],
+  "vignettes": [],
+  "filtres": [
+    { "id": "age", "libelle": "Âge", "type": "bornes", "unite": "ans", "valeur_min": 0, "valeur_max": 120, "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "fevg", "libelle": "FEVG", "type": "bornes", "unite": "%", "valeur_min": 0, "valeur_max": 100, "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "dfg", "libelle": "DFG", "type": "bornes", "unite": "mL/min/1,73 m²", "valeur_min": 0, "valeur_max": 200, "visibilite": "professionnel", "modules": ["interne", "professionnel"] },
+    { "id": "imc", "libelle": "IMC", "type": "bornes", "unite": "kg/m²", "valeur_min": 10, "valeur_max": 80, "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "ntprobnp", "libelle": "NT-proBNP", "type": "bornes", "unite": "pg/mL", "valeur_min": 0, "valeur_max": 100000, "visibilite": "professionnel", "modules": ["interne", "professionnel"] },
+    { "id": "diabete", "libelle": "Diabète", "type": "requis", "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "hta", "libelle": "HTA", "type": "requis", "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "pm_dai", "libelle": "Porteur de PM ou de DAI", "type": "requis", "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "hospit_ic", "libelle": "Hospitalisation pour insuffisance cardiaque récente", "type": "requis", "avec_delai_mois": true, "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "ttt_betabloquant", "libelle": "Bêtabloquant", "type": "requis", "famille": "traitement", "dci": [], "noms_commerciaux": [], "synonymes": ["beta-bloquant", "bêta-bloquant", "betabloquant", "bêtabloquant", "BB"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "ttt_arm", "libelle": "Antagoniste des récepteurs minéralocorticoïdes", "type": "requis", "famille": "traitement", "dci": ["spironolactone", "éplérénone"], "noms_commerciaux": ["Aldactone", "Inspra"], "synonymes": ["MRA", "ARM"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "ttt_arni", "libelle": "Sacubitril/valsartan", "type": "requis", "famille": "traitement", "dci": ["sacubitril/valsartan"], "noms_commerciaux": ["Entresto"], "synonymes": ["ARNI", "sacubitril-valsartan"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "ttt_gliflozine", "libelle": "Gliflozine", "type": "requis", "famille": "traitement", "dci": ["dapagliflozine", "empagliflozine"], "noms_commerciaux": ["Forxiga", "Jardiance"], "synonymes": ["gliflozine", "iSGLT2", "SGLT2"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"] },
+    { "id": "ttt_diuretique_anse", "libelle": "Diurétique de l'anse", "type": "requis", "famille": "traitement", "dci": ["furosémide"], "noms_commerciaux": ["Lasilix"], "synonymes": ["diurétique de l'anse"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"], "a_confirmer": true },
+    { "id": "ttt_anticoagulant", "libelle": "Anticoagulant", "type": "requis", "famille": "traitement", "dci": ["rivaroxaban"], "noms_commerciaux": ["Xarelto"], "synonymes": ["anticoagulant", "AOD"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"], "a_confirmer": true },
+    { "id": "ttt_iec_ara2", "libelle": "IEC ou ARA2", "type": "requis", "famille": "traitement", "dci": [], "noms_commerciaux": [], "synonymes": ["IEC", "ARA2"], "visibilite": "patient", "modules": ["interne", "professionnel", "patient"], "a_confirmer": true },
+    { "id": "ttt_inhib_myosine", "libelle": "Inhibiteur de la myosine cardiaque", "type": "requis", "famille": "traitement", "dci": ["mavacamten"], "noms_commerciaux": ["Camzyos"], "synonymes": [], "visibilite": "professionnel", "modules": ["interne", "professionnel"], "a_confirmer": true }
+  ]
+}
