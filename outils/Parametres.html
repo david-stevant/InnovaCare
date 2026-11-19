@@ -254,7 +254,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     <p id="message-fichier" class="note" aria-live="polite"></p>
   </details>
 
-  <footer class="pied-outil" data-version="cee728e5">Paramètres de l'instance — version cee728e5</footer>
+  <footer class="pied-outil" data-version="c393da38">Paramètres de l'instance — version c393da38</footer>
 
 </div>
 <script type="application/json" id="donnees-parametres">
@@ -3100,7 +3100,6 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     setTimeout(() => { URL.revokeObjectURL(lien.href); lien.remove(); }, 1000);
   }
   const TYPE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-  const aujourdhui = () => new Date().toISOString().slice(0, 10);
 
   function telechargerJson() {
     const problemes = verifier();
@@ -3228,7 +3227,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       const { contenu, signalements } = IC.lecture.versContenu(lu, P);
       const tampon = await IC.gabarit.creerClasseur(window.ExcelJS, P, contenu).xlsx.writeBuffer();
       const base = excel.nom.replace(/\.xlsx$/i, '');
-      telechargerBlob(octets, TYPE_EXCEL, base + '_sauvegarde_' + aujourdhui() + '.xlsx');
+      // Nom impossible à confondre avec le bon fichier : la sauvegarde est l'ANCIENNE version.
+      const nomSauvegarde = IC.brouillon.nomDate('ANCIENNE_VERSION_' + base, '.xlsx');
+      telechargerBlob(octets, TYPE_EXCEL, nomSauvegarde);
       const bilan = lu.etudes.length + ' études et ' + lu.annuaire.length + ' personnes reprises.';
       if (ecriturePermise) {
         const r = await IC.memoireFichier.ecrire(excel.poignee, tampon);
@@ -3242,11 +3243,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         }
         if (stockage) IC.brouillon.effacer(stockage);
         etat.className = 'etat-ok';
-        etat.textContent = '✔ Enregistré dans « ' + excel.nom + ' ». ' + bilan + ' Une copie de l\'ancienne version a été téléchargée (« ' + base + '_sauvegarde_… »).';
+        etat.textContent = '✔ Enregistré dans « ' + excel.nom + ' ». ' + bilan + ' Rien d\'autre à faire. Dans « Téléchargements », « ' + nomSauvegarde + ' » est l\'ancienne version, gardée par précaution : ne pas la remettre dans le dossier.';
       } else {
         telechargerBlob(tampon, TYPE_EXCEL, excel.nom);
         etat.className = 'etat-ok';
-        etat.textContent = '✔ ' + bilan + ' Ce navigateur ne peut pas écrire directement dans le fichier : le fichier mis à jour a été téléchargé sous le même nom. Remplacez l\'Excel du disque partagé par celui-ci (une copie de l\'ancien a aussi été téléchargée).';
+        etat.textContent = '✔ ' + bilan + ' Ce navigateur ne peut pas écrire directement dans le fichier : deux fichiers ont été téléchargés. Déplacez dans le dossier des outils, à la place de l\'ancien, celui qui s\'appelle exactement « ' + excel.nom + ' » (si Windows l\'a renommé « … (1).xlsx », retirez le « (1) »). L\'autre, « ' + nomSauvegarde + ' », est l\'ancienne version : ne pas l\'utiliser.';
       }
       excel.parametres = JSON.parse(JSON.stringify(P));
       nonEnregistre = false;

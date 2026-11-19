@@ -27,7 +27,7 @@ Les changements sont décrits en langage simple, du plus récent au plus ancien.
   si leur code change.
 - **Noms de fichiers sans ambiguïté** :
   - la migration produit `InnovaCoeur_ETUDES.xlsx` (nom tiré du nom de l'instance) ;
-  - le gabarit vierge s'appelle `…_ETUDES_gabarit_vierge.xlsx`, la sauvegarde `…_sauvegarde_AAAA-MM-JJ.xlsx` ;
+  - le gabarit vierge s'appelle `…_ETUDES_gabarit_vierge.xlsx`, la sauvegarde `ANCIENNE_VERSION_…_ETUDES_AAAA-MM-JJ_HHhMM.xlsx`, pour ne jamais la confondre avec le bon fichier ;
   - chaque outil affiche son numéro de version en bas de page ; la liste est dans `outils/versions.json`.
 - **Guide du porteur réécrit** : tableau « quel fichier, où, pour quoi faire », récupération d'un outil
   (bouton « Download raw file »), ajout d'une pathologie clic par clic, colonnes rouges de la migration.

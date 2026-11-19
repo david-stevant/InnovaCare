@@ -15,7 +15,7 @@ GitHub ne sert qu'à récupérer les outils et à héberger le site public.**
 | `eCardioScope.html` (phase 2) | dossier « Innovacoeur - outils » | consulter les études, screener un patient | les médecins |
 | `ARCHIVE_ancien_Excel_NE_PLUS_MODIFIER.xlsx` | ailleurs, en lecture seule | l'ancien Excel, gardé pour mémoire | personne |
 | `Migration.html`, `Controle.html`, `Diagnostic.html` | **pas** dans le dossier des outils | ont servi une fois ; la migration ne doit plus être relancée | — |
-| `…_sauvegarde_AAAA-MM-JJ.xlsx` | dossier « Téléchargements » de votre PC | copie automatique faite avant chaque enregistrement par l'outil Paramètres | à garder quelques semaines |
+| `ANCIENNE_VERSION_…_ETUDES_AAAA-MM-JJ_HHhMM.xlsx` | dossier « Téléchargements » de votre PC | **ancienne** version, copiée automatiquement avant chaque enregistrement par l'outil Paramètres : ne pas la remettre dans le dossier des outils (sauf pour annuler un enregistrement) | à garder quelques semaines |
 
 Sur GitHub (dépôt InnovaCare), vous ne trouverez **jamais** l'Excel des études : le dépôt est public.
 On n'y voit que la copie de développement, sans contenu confidentiel, qui sert aux tests automatiques.
@@ -126,7 +126,8 @@ des réglages ; un ajout manuel serait perdu et refusé par le Publieur.
    - message d'adressage aux libéraux : rubrique **« Messages types »**.
 4. Vérifier, en haut des rubriques : « ✔ Paramètres cohérents ».
 5. Section 2 : cliquer sur **« Enregistrer dans l'Excel »** (accepter l'autorisation d'écrire).
-   - Une copie de sauvegarde de l'ancienne version arrive dans « Téléchargements ».
+   - L'Excel du dossier est mis à jour directement : rien à déplacer. Dans « Téléchargements » arrive
+     seulement `ANCIENNE_VERSION_…xlsx`, l'ancienne version, gardée par précaution.
    - Message « ✔ Enregistré » : c'est fait. Message « L'Excel est ouvert » : le fermer partout et recommencer.
 6. Ouvrir le **Publieur**, « Recharger », puis **Publier** : le site utilise désormais les nouveaux réglages.
 
