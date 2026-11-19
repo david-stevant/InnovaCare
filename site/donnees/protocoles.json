@@ -1,0 +1,433 @@
+{
+  "format": 1,
+  "instance": "InnovaCoeur",
+  "genere_le": "2026-11-19",
+  "protocoles": [
+    {
+      "id": "bonfire",
+      "pole": "ic",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "BONFIRE",
+        "statut": "ouvert",
+        "pathologie_1": "Insuffisance cardiaque",
+        "thematique": "IC FEVG altérée --> normalisée",
+        "design": "étude randomisée en ouvert de non infériorité",
+        "inclusion_1": "-Antécédent de FEVG altérée ≤ 45%",
+        "inclusion_2": "-FEVG normalisée ≥ 50 %",
+        "inclusion_3": "- sous beta-bloquants de l'IC depuis au moins 12 mois",
+        "inclusion_4": "- IC très peu symptomatique NYHA 1 ou 2",
+        "inclusion_5": "- VolTD VG indexé ≤ 74 H ou ≤ 61 mL/m² F",
+        "debut_inclusion": "2025-03-01",
+        "duree_suivi": "1 à 4 ans",
+        "rythme_visites": "à 2 mois puis tous les 6 mois",
+        "phrase_patient": "Evaluation de l'arrêt du traitement beta-bloquant chez les patients ayant présenté une diminution de la force de contraction cardiaque, qui s'est secondairement normalisée",
+        "details_pratiques": "1 visite additionnelle au CHU par an seulement",
+        "question_specifique": "sous beta-bloquant + ARA2/IEC/ARNI + gliflozine ?",
+        "fevg_min": 50,
+        "dfg_min": 20,
+        "ttt_betabloquant": "requis",
+        "ttt_arm": "requis",
+        "ttt_arni": "requis",
+        "ttt_gliflozine": "requis"
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "easi-protkt-boerhinger",
+      "pole": "ic",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "EASi PROTKT - BOERHINGER",
+        "statut": "ouvert",
+        "pathologie_1": "Risque cardiovasculaire",
+        "pathologie_2": "Diabète",
+        "thematique": "Diabète type 2 à risque d'ICFEP",
+        "design": "Phase 3 :  randomisé double aveugle vicadrostat + empa vs placebo + empa 1:1",
+        "inclusion_1": "-HTA traitée >= 1 traitement",
+        "inclusion_2": "-Diabète de type 2 traité par >= 1 ttt",
+        "inclusion_3": "-ATCD de MCV établie : au moins 1 parmi (ATCD d'ATC ou PAC ou lésion coronaire > 50%, ATCD de geste AOMI ou lésion > 50%, ATCD d'AVC isch ou AIT, ou revasc carotidienne)",
+        "inclusion_4": "+ 1 critère additionnel  parmi :  HVG ECG ou ETT, ATCD de FA/flutter, maladie polyvasculaire ou UACR > 200mg/g dans les 6 mois  (anciennement les critères diabète sous insuline ou Nt pro BNP > 125 dans les 6 mois, ou  ou sous Furosémide, PAS 140/90 mmhg sous au moins 2 ttt ne sont plus suffisants selon dernier amendement)",
+        "debut_inclusion": "2025-11-01",
+        "duree_suivi": "30 mois (2 ans 1/2)",
+        "rythme_visites": "tous les 6 mois après les 3 premiers mois",
+        "phrase_patient": "Efficacité d'un traitement visant à empêcher la survenue d'insuffisance cardiaque chez les patients diabétiques",
+        "details_pratiques": "Traitement = 2 comprimés par jour. Suivi sur le CHU tous les 6 mois après le 3eme mois. Indemnités de visite entre 15 et 75€/ visite",
+        "dfg_min": 20,
+        "ntprobnp_max": 1200,
+        "diabete": "requis"
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "branch-hf-pfizer",
+      "pole": "ic",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "BRANCH-HF - PFIZER",
+        "statut": "ouvert",
+        "pathologie_1": "Insuffisance cardiaque",
+        "pathologie_2": "Obésité / Surpoids",
+        "pathologie_3": "Diabète",
+        "thematique": "ICFEP + surpoids ou DT2",
+        "design": "Phase 2 : randomisé 4 groupes 1:2:2:2 (100mg / 200mg / 400mg / placebo)",
+        "inclusion_1": "- Diagnostic d'ICFEP depuis plus de 3 mois avec : NYHA 2-3-4 ; FEVG ≥ 40% et jamais d'antériorité de FEVG < 40%",
+        "inclusion_2": "- FEVG 40 à 50%;             ou \n - FEVG > 50% avec au moins 1 critère parmi :\n       >  e/e' moy ≥ 11   \n       > Vol OG indexé  ≥ 34mL/m²   \n       >  masse VG ind ≥ 115g/m²  si Homme  ou   95g/m² si Femme",
+        "inclusion_3": "- au moins 1 parmi : \n  * Nt pro BNP en RS > 150 pg/mL si BMI > 30 ou  > 300 si BMI < 30,  en FA > 300 si BMI > 30 ou  > 600 si BMI < 30 \n  * hospit avec furo IV dans les 12 derniers mois  (mais pas < 1an) \n   *  intro de diurétique < 6 mois pour IC en ambulatoire.",
+        "inclusion_4": "-au moins 1 critère parmi :\n* IMC 27 à 50   ou périmètre abdo > 94cm H ou > 80cm F\n* diabète type 2 ou HBA1c > 5,7%\n* triglycérides > 150 mg/dL",
+        "inclusion_5": "-âge 18-80 ans",
+        "debut_inclusion": "2025-12-01",
+        "duree_suivi": "10 mois",
+        "rythme_visites": "toutes les 2 semaines pendant 2 mois puis tous les 2 à 3 mois (au total 1 an)",
+        "phrase_patient": "Efficacité d'un nouveau traitement contre l'insuffisance cardiaque chez les patients en surpoids",
+        "details_pratiques": "Traitement = 3 comprimés par jour pendant 9 mois. Suivi rapproché mais de courte durée (toutes les 2 semaines pendant 2 mois puis tous les 2 à 3 mois pour 1 an au total.",
+        "vignette_1": "Antécédent d'insuffisance cardiaque ou essoufflement à l'effort",
+        "age_min": 18,
+        "age_max": 80,
+        "fevg_min": 40,
+        "dfg_min": 30,
+        "imc_min": 27,
+        "ntprobnp_min": 150,
+        "ttt_gliflozine": "requis"
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "elevate-hfpef",
+      "pole": "ic",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "ELEVATE-HFpEF",
+        "statut": "ouvert",
+        "pathologie_1": "Insuffisance cardiaque",
+        "thematique": "ICFEP",
+        "design": "Implantation d'un PM avec stim physiologique chez tous et Rando 1:1 stim FC personnalisée vs VVI back-up",
+        "inclusion_1": "FEVG > 50%, > 40 ans",
+        "inclusion_2": "1 critère parmi : \n- épisode d'IC documenté < 12 mois        \n OU\n- NYHA ≥ 2 + un critère d'enrichissement (Nt pro BNP> 400, critères ETT simples, diurétiques etc … à détailler)",
+        "inclusion_3": "FC moyenne /24h < FC théorique (selon abaque taille/FEVG) - 5 bpm (pas indispensable au screening, sera vérifié à la visite de screening)",
+        "duree_suivi": "4,5 ans",
+        "rythme_visites": "M2-6-12-14-18-24 puis annuel",
+        "phrase_patient": "Efficacité d'une stimulation cardiaque personnalisée par pace-maker chez les patients présentant une insuffisance cardiaque à force de contraction préservée",
+        "details_pratiques": "Implantation d'un stimulateur cardiaque. Suivi tous les 4 à 6 mois pendant 2 ans puis annuel.",
+        "vignette_1": "Antécédent d'insuffisance cardiaque ou essoufflement à l'effort",
+        "age_min": 40,
+        "fevg_min": 50,
+        "dfg_min": 30,
+        "ttt_diuretique_anse": "requis"
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "polaris",
+      "pole": "ic",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "POLARIS",
+        "statut": "ouvert",
+        "pathologie_1": "Insuffisance cardiaque",
+        "pathologie_2": "Obésité / Surpoids",
+        "thematique": "ICFEP / Obésité",
+        "design": "Rando 1:1 vs placebo (phase 3B)",
+        "inclusion_1": "NYHA 2-4",
+        "inclusion_2": "FEVG > 40% depuis au moins 12 mois (un ATCD de FE < 40% n'est pas un critère d'exclusion) + autre critère (OG dilatée, HVG …)",
+        "inclusion_3": "Nt pro BNP > 150 (ou 100 si BMI > 35) en RS\nNt pro BNP > 300 (ou 200 si BMI > 35) en FA",
+        "inclusion_4": "BMI > 30",
+        "inclusion_5": "1 critère parmi : \n* DFG 15 à 60\n* RAC > 30\n* hospit pour IC < 12 mois",
+        "debut_inclusion": "2026-05-01",
+        "duree_suivi": "1 à 3 ans",
+        "rythme_visites": "1 par mois pendant phase de titration puis espacé / 3mois",
+        "phrase_patient": "Efficacité d'un nouveau traitement chez les patients présentant une insuffisance cardiaque et en situation de surpoids/obésité",
+        "vignette_1": "Antécédent d'insuffisance cardiaque ou essoufflement à l'effort",
+        "fevg_min": 40,
+        "imc_min": 30,
+        "ntprobnp_min": 100
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "hf-relief",
+      "pole": "ic",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "HF-RELIEF",
+        "statut": "ouvert",
+        "autre_pole_1": "Rythmologie",
+        "pathologie_1": "Insuffisance cardiaque",
+        "pathologie_2": "Fibrillation atriale",
+        "thematique": "FA permanente / ICFEP",
+        "design": "Bras traitement médical avec contrôle de fréquence versus Ablation du NAV et Pose de PM",
+        "inclusion_1": "FA permanente de plus de 6 mois",
+        "inclusion_2": "QRS < 130 ms",
+        "inclusion_3": "FEVG Préservée",
+        "inclusion_4": "1 hospitalisation pour IC dans l'année au moins",
+        "inclusion_5": "NYHA supérieure à 2",
+        "duree_suivi": "2 ans",
+        "rythme_visites": "screening, baseline (15 jours après) visite à 3 mois, 1 an et 2 an",
+        "phrase_patient": "Efficacité d'une stimulation cardiaque régulière par pace-maker chez les patients présentant une arythmie permanente ancienne (fibrillation atriale)",
+        "details_pratiques": "Suivi très simple, à 3 mois puis annuel.",
+        "vignette_1": "Arythmie cardiaque / fibrillation atriale",
+        "vignette_2": "Antécédent d'insuffisance cardiaque ou essoufflement à l'effort",
+        "age_min": 65,
+        "fevg_min": 50,
+        "dfg_max": 20,
+        "imc_max": 40
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "fortitude",
+      "pole": "cardiomyopathies",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "FORTITUDE",
+        "statut": "ouvert",
+        "pathologie_1": "CMH",
+        "thematique": "CMH non obstructive",
+        "design": "Phase 2 Randomisation 1:1   200 mg de Ninerafaxstat ou placebo, 2 fois par jour pendant 12 semaines",
+        "inclusion_1": "-CMH non obstructive (gradient < 30mmHg au repos et < 30mmHg Valsalva) symptomatique (diag classique de CMH > 15mm ou > 13mm si apparenté ou mutation)",
+        "inclusion_2": "-NYHA 2-3",
+        "inclusion_3": "- FEVG > 55%",
+        "inclusion_4": "- Nt pro BNP >=125 (>= 300 si FA)",
+        "inclusion_5": "-Score KCCQ-CSS < 80",
+        "duree_suivi": "14 semaines",
+        "rythme_visites": "Toutes les 6 semaines",
+        "phrase_patient": "Efficacité d'un nouveau traitement chez les patients atteints de cardiomyopathie hypertrophique sans obstruction",
+        "details_pratiques": "Traitement = 2 comprimés par jour. Suivi sur le CHU tous les 6 semaines, mais durée totale de suivi courte (3 mois)",
+        "vignette_1": "Cardiomyopathie hypertrophique",
+        "question_specifique": "CMH non obstructve ?",
+        "fevg_min": 55,
+        "dfg_min": 30,
+        "imc_max": 35,
+        "ntprobnp_min": 125
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "registre-national-des-amyloses-cardiaques-hear",
+      "pole": "cardiomyopathies",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "Registre National des Amyloses Cardiaques (HEAR)",
+        "statut": "ouvert",
+        "pathologie_1": "Amylose cardiaque",
+        "thematique": "Amylose cardiaque (ATTRwt, ATTRh, AL)",
+        "design": "Registre - Soins courant (simple signature d'une non opposition)",
+        "inclusion_1": "Diagnostic d'amylose cardiaque (ATTRwt - ATTRv - AL)\n--> Merci d'appeler Sophie CLERO pour essayer d'inclure tous les patients que le diagnostic soit ancien ou récent",
+        "duree_suivi": "recueil prospectif sur soin courant",
+        "rythme_visites": "NA (soins courant)",
+        "phrase_patient": "Registre national des patients porteurs d'une amylose cardiaque (simple recueil de données de suivi anonymisées, pas de traitement ou ou examen en dehors du suivi habituel)",
+        "details_pratiques": "Aucune modification du suivi habituel"
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "triton-aln-ttrsc04",
+      "pole": "cardiomyopathies",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "TRITON (ALN-TTRSC04)",
+        "statut": "ouvert",
+        "pathologie_1": "Amylose cardiaque",
+        "thematique": "Amylose cardiaque",
+        "design": "Nucresiran 300mg (1 injection SC / 6 mois)  vs placebo",
+        "inclusion_1": "Amylose cardiaque ATTR wt ou héréditaire, patient âgé de ≤ 85 ans",
+        "inclusion_2": "Nt pro BNP entre 600 et 3000 pg/mL en RS ( entre 600 et 3000pg/mL en FA)",
+        "inclusion_3": "Antécédent d'IC défini par au moins un critère parmi : \n- au moins une hospitalisation pour IC\n- IC sous traitement diurétique avec dose stable depuis plus d'un mois (mais ok pour gliflozine ou MRA comme diurétique)",
+        "inclusion_4": "Pouvant être traité par stabilisateur (tafamidis/acoramidis)",
+        "inclusion_5": "Cliniquement stable : pas d'hospit CV dans les 6 sernières semaines avant la rando",
+        "duree_suivi": "2 à 5 ans + 2 ans d'ouvert",
+        "rythme_visites": "Après les 3 premières visites rapprochées de 3 à 6 semaines, alternance d'une visite avec injection et d'une une viste sans injection tous les 3 mois, Donc injection tous les 6 mois",
+        "phrase_patient": "Efficacité d'un nouveau traitement suppresseur de la protéine TTR chez les patients atteints d'amylose cardiaque ATTR",
+        "details_pratiques": "Traitement = 1 injection sous-cutanée seulement tous les 6 mois. Après 3 premières visites rapprochées, suivi sur le CHU tous les 3 mois.",
+        "vignette_1": "Amylose cardiaque",
+        "age_max": 85,
+        "dfg_min": 30,
+        "ntprobnp_min": 600,
+        "ntprobnp_max": 8500
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "cleopattra-novo-nordisk",
+      "pole": "cardiomyopathies",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "CLEOPATTRA (Novo Nordisk)",
+        "statut": "ouvert",
+        "pathologie_1": "Amylose cardiaque",
+        "thematique": "Amylose cardiaque",
+        "design": "Randomisé NNC6019-000 intra-veineux / mois, vs placebo",
+        "inclusion_1": "Diagnostic d'amylose ATTRwt ou ATTRv - NYHA 1-4 requérant un traitement par diurétique de l'anse avec au moins 1 critère parmi :\n> au moins 1 antécédent de décompensation cardiaquet   OU\n> au moins 1 épisode de congestion clinique (crépitants, OMI ...).",
+        "inclusion_2": "NT-proBNP concentration ≥1000 pg/mL at screening.",
+        "inclusion_3": "pas de critère d'âge",
+        "inclusion_4": "sous traitement médical stabilisé depuis au moins 1 mois",
+        "inclusion_5": "Completed >50 meters on the 6MWT at screening",
+        "debut_inclusion": "2026-03-01",
+        "duree_suivi": "3 ans et 1/2",
+        "rythme_visites": "1 visite / mois avec perfusion",
+        "phrase_patient": "Efficacité d'un nouveau traitement visant à éliminer les dépots d'amylose, chez les patients présentant une amylose cardiaque ATTR",
+        "details_pratiques": "Traitement = 1 injection intra-veineuse tous les mois au CHU.",
+        "ntprobnp_min": 1000
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "brave",
+      "pole": "cardiomyopathies",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "BRAVE",
+        "statut": "ouvert",
+        "autre_pole_1": "Rythmologie",
+        "pathologie_1": "DAVD / CAVD",
+        "thematique": "DAVD",
+        "design": "Etude prospective, randomisée, multicentrique en\ndouble aveugle",
+        "inclusion_1": "Diagnostic de DAVD basé sur les critères de la Task Force",
+        "inclusion_2": "FEVG >40%",
+        "inclusion_3": "Patient sous traitement médical optimisé, comprenant des bétabloquants",
+        "inclusion_4": "adulte≥ 18 ans",
+        "duree_suivi": "1 an de ttt et 2 ans de suivi",
+        "rythme_visites": "Screening/rando, M1, M6, 1 an, 3 ans",
+        "phrase_patient": "Efficacité d'un traitement sur le ventricule droit et les arythmies chez les patients atteints de Dysplasie arythmogène du ventricule droit.",
+        "details_pratiques": "Traitement = 1 comprimé par jour. Suivi très simple (+1 visite par rapport au suivi habituel)",
+        "vignette_1": "Dysplasie arythmogène du ventricule droit",
+        "age_min": 18,
+        "fevg_min": 40
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "remy",
+      "pole": "cardiomyopathies",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "REMY",
+        "statut": "ouvert",
+        "pathologie_1": "CMH",
+        "thematique": "CMH",
+        "design": "Registre - Soins courant",
+        "inclusion_1": "Toute CMH sarcomérique en principe (mais focus sur les nouvelles thérapeutiques - camten - niferaxastat …)",
+        "duree_suivi": "18 mois, 3 ans et 5 ans",
+        "rythme_visites": "soins courant",
+        "phrase_patient": "Registre national des patients porteurs d'une cardiomyopathie hypertrophique obstructive sous traitement innovant (simple recueil de données anonymisées, pas de traitement ou ou examen en dehors du suivi habituel)",
+        "details_pratiques": "Aucune modification du suivi habituel",
+        "vignette_1": "Cardiomyopathie hypertrophique",
+        "ttt_inhib_myosine": "requis"
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "edearly-af",
+      "pole": "rythmologie",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "EDEARLY-AF",
+        "statut": "ouvert",
+        "pathologie_1": "Fibrillation atriale",
+        "thematique": "FA",
+        "design": "Etude prospective contrôlée randomisée, multicentrique nationale, de supériorité, ouverte en 2 groupes parallèles.",
+        "inclusion_1": "- FA paroxystique ou FA paroxystique récidivante ou persistante précoce diagnostiquée pour la première fois il y a moins de 12 mois.",
+        "inclusion_2": "- Age supérieur ou égal à 75 ans",
+        "duree_suivi": "2 ans",
+        "rythme_visites": "M3 M12 M24",
+        "age_min": 75,
+        "dfg_min": 30,
+        "imc_min": 30
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "resoudre",
+      "pole": "rythmologie",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "RESOUDRE",
+        "statut": "ouvert",
+        "pathologie_1": "ACR / Mort subite",
+        "thematique": "Mort subite",
+        "design": "Étude observationnelle prospective nationale multicentrique",
+        "inclusion_1": "12 à 35 ans inclus",
+        "inclusion_2": "sans pathologie cardiovasculaire connue",
+        "inclusion_3": "Personne victime d’un ACR brutal et non traumatique pendant ou dans l’heure qui a suivi une pratique sportive",
+        "inclusion_4": "En cas d’ACR réanimé avec succès, non opposition à la participation à la recherche (personne de confiance si non en capacité)",
+        "inclusion_5": "En cas d’ACR non réanimé : personne n’ayant pas exprimé d’opposition à la réutilisation de ses données de son vivant par écrit",
+        "debut_inclusion": "2025-03-20",
+        "phrase_patient": "Registre national des morts subites à l'effort chez des sujets jeunes (simple recueil de données anonymisées, pas de traitement ou ou examen en dehors du suivi habituel)",
+        "details_pratiques": "aucune modification du suivi habituel",
+        "vignette_1": "Arrêt cardiaque récupéré (sportif jeune)",
+        "age_min": 12,
+        "age_max": 35
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "zenith",
+      "pole": "hta",
+      "modules": [
+        "patient"
+      ],
+      "valeurs": {
+        "nom": "ZENITH",
+        "statut": "ouvert",
+        "pathologie_1": "HTA",
+        "design": "Étude de phase III, en double aveugle et randomisé, visant à évaluer l'efficacité et l'innocuité du Zilbesiran (en complément de la PEC standard) pour réduire le risque de survenu d'évènements cardiovasculaires majeurs chez les patients hypertendus (non contrôlés) avec : soit une maladie CV avéré ou soit à haut risque CV",
+        "inclusion_1": "Patient ≥ 55 ans à haut risque cardiovasculaire OU patient  ≥ 18 ans avec une maladie cardiovasculaire avérée",
+        "inclusion_2": "Haut risque cardiovasculaire définit par la présence de 2 facteurs de risques (ou plus) suivant : \n- âge ≥ 70 ans\n- DFGe < 60 mL/min/1,73 m^2\n- Rapport albumine/créatinine > 300 mg/g\n- Fumeur actif\n- Fibrilation atriale sous traitement\n- score CAC > 100 UA\n- NT pro BNP > 125 pg/mL\n- Diabète de type I ou type II et/ou IMC  ≥ 30 kg/m^2\n\n\nFIN DES INCLUSIONS SUR CES PARAMETRES",
+        "inclusion_3": "Maladie cardiovasculaire établie (Une condition ou plus) : \nMaladie coronarienne : \n- ATCD d’un infarctus du myocarde (STEMI ou NSTEMI) d’origine athérosclérotique \n- Sténose coronaire significative documenté par angiographie ou coroscanner : \n• du tronc coronaire gauche ou sténose significative \n• ≥ 70% d’une artère coronaire majeure \n• ≥ 50% présente au niveau de 2 artères coronaires\n- Calcification des artères coronaires (avec un score > 400 AU)\n- ATCD d’une revascularisation coronaire par un pontage coronarien ou par angioplastie (stent)\n\nMaladie cérébrovasculaire : \n- ATCD d’un AVC ischémique ou hémorragique ou de cause inconnue\n- Sténose carotidienne significative (≥ 50% ) documenté par angiographie ou IRM ou échodoppler\n- ATCD d’endartériectomie, revascularisation par pontage ou angioplastie (stent) \n\nAOMI :\n- Claudication intermittente et indice de pression cheville-bras (IPCB) < 0,9, au cours des 12 derniers mois\n- ATCD d’amputation (non traumatique), revascularisation par pontage ou angioplastie en lien avec un ischémie",
+        "inclusion_4": "Traitement antihypertenseur associant un diurétique (thiazidique ou diurétique non thiazidique ou un diurétique de l’anse) et au moins un traitement standard (ex : inhibiteur calcique, IEC, ARA II…)",
+        "inclusion_5": "Pression artérielle systolique moyenne mesurée  en consultation (pré screening) : ≥145 mmHg et <180 mmHg lors du screening et ≥140 mmHg et <180 mmHg le jour de la randomisation\nNB : la tension doit être mesurée par le tensionmètre fourni par l'étude",
+        "duree_suivi": "2,5 ans à 5 ans, l'étude se poursuivra jusqu'à ce que le nb de EI lié au CJP soit atteint",
+        "rythme_visites": "Suivi tous les 3 mois durant la 1ère année puis tous les 6 mois.",
+        "phrase_patient": "Efficacité d'un nouveau traitement en 1 prise tous les 6 mois, chez les patients présentant une hypertension artérielle et un risque cardiovasculaire élevé.",
+        "details_pratiques": "Traitement =  1 injection sous-cutanée tous les 6 mois. Suivi au CHU tous les 3 mois durant la 1ère année puis tous les 6 mois.",
+        "vignette_1": "Hypertension artérielle",
+        "age_min": 18,
+        "dfg_min": 30
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    }
+  ]
+}
