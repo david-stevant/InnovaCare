@@ -30,7 +30,8 @@ test('les fichiers de outils/ sont à jour par rapport à leurs sources', () => 
   for (const [nom, attendu] of Object.entries(construireTout())) {
     const chemin = join(RACINE, 'outils', nom);
     assert.ok(existsSync(chemin), 'outils/' + nom + ' est absent : lancer « npm run construire »');
-    assert.equal(readFileSync(chemin, 'utf8'), attendu, 'outils/' + nom + ' est périmé : lancer « npm run construire »');
+    // Comparaison simple (sans recopier ~1 Mo de différences dans le message d'erreur).
+    assert.ok(readFileSync(chemin, 'utf8') === attendu, 'outils/' + nom + ' est périmé : lancer « npm run construire »');
   }
 });
 

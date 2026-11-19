@@ -62,7 +62,11 @@ test('listes déroulantes et contrôles de saisie', () => {
   assert.equal(regle('age_min').type, 'whole');
   assert.deepEqual(regle('age_min').formulae.map(Number), [0, 120]);
   assert.equal(regle('debut_inclusion').type, 'date');
-  assert.equal(regle('pathologie_1').type, 'any', 'pathologies en saisie libre tant que la liste des paramètres est vide');
+  assert.equal(regle('pathologie_1').type, 'list', 'pathologies choisies dans la liste des paramètres');
+  assert.equal(regle('vignette_1').type, 'list');
+  // Sans pathologies dans les paramètres, la ligne reste en saisie libre.
+  const sansListe = IC.gabarit.validation(CHAMPS.find((c) => c.id === 'pathologie_1'), IC.gabarit.listesDeValeurs(Object.assign({}, PARAM, { pathologies: [] })), null);
+  assert.equal(sansListe.type, 'any');
   // L'onglet Listes contient bien les valeurs des paramètres
   const listes = vierge.classeur.getWorksheet('Listes');
   const colStatut = listes.getRow(1).values.indexOf('statut');

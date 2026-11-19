@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paramètres — InnovaCare</title>
+<!--@inclure outils-src/bibliotheques/dm-sans/dm-sans-latin.woff2 "DM Sans"-->
+<!--@inclure outils-src/style-commun.css-->
+<style>
+  .mise-en-page { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; align-items: start; }
+  @media (max-width: 1000px) { .mise-en-page { grid-template-columns: 1fr; } }
+  .colonne-apercu { position: sticky; top: 12px; }
+  @media (max-width: 1000px) { .colonne-apercu { position: static; } }
+  details.rubrique { background: var(--carte); border: 1px solid var(--trait); border-radius: 12px; margin-bottom: 12px; padding: 4px 16px; }
+  details.rubrique > summary { cursor: pointer; font-weight: 700; font-size: 19px; padding: 10px 0; }
+  details.rubrique > p.note { margin-top: 0; }
+  .grille-champs { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 14px; }
+  .champ label { font-size: 14px; margin: 0 0 2px; }
+  .champ input[type="text"], .champ input[type="number"], .champ select, .champ textarea {
+    font: inherit; font-size: 15px; width: 100%; max-width: none; padding: 6px 8px; border: 1px solid var(--trait); border-radius: 6px; background: #fff;
+  }
+  .champ textarea { min-height: 64px; font-family: inherit; }
+  .champ.large { grid-column: 1 / -1; }
+  .champ .aide { font-size: 13px; color: var(--encre-douce); }
+  .fiche { border: 1px solid var(--trait); border-radius: 10px; padding: 10px 12px; margin: 10px 0; background: var(--fond); }
+  .fiche-entete { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .fiche-entete strong { flex: 1; overflow-wrap: anywhere; }
+  button.petit { padding: 4px 10px; font-size: 14px; }
+  .cases { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 15px; }
+  .cases label { display: inline-flex; gap: 4px; font-weight: 400; margin: 0; }
+  #problemes li { font-size: 15px; }
+  .apercu { --turquoise: #00bac6; --or: #fab316; --rose: #ef4d89; --vert: #23cd4b; }
+  .apercu .nuancier { display: flex; gap: 8px; margin-bottom: 10px; }
+  .apercu .pastille-couleur { flex: 1; height: 34px; border-radius: 8px; }
+  .apercu .vignettes { display: grid; gap: 8px; }
+  .apercu .vignette { display: flex; gap: 10px; align-items: flex-start; border: 2px solid var(--trait); border-radius: 12px; padding: 10px; background: #fff; font-size: 18px; }
+  .apercu .vignette.choisie { border-color: var(--turquoise); background: #e0f6f8; }
+  .apercu .vignette small { display: block; font-size: 15px; color: var(--encre-douce); }
+  .apercu .bouton-patient { display: inline-block; background: var(--or); color: #1a1a1a; font-weight: 700; padding: 12px 24px; border-radius: 40px; font-size: 18px; }
+  .apercu .question { font-size: 18px; font-weight: 600; margin: 12px 0 6px; }
+  .apercu .reponses { display: flex; flex-wrap: wrap; gap: 6px; }
+  .apercu .reponses span { border: 2px solid var(--turquoise); border-radius: 10px; padding: 6px 12px; font-size: 17px; }
+  .apercu .memo { font-size: 14px; background: #fff; border: 1px solid var(--trait); border-radius: 10px; padding: 10px; white-space: pre-wrap; }
+  .apercu .puces { display: flex; flex-wrap: wrap; gap: 4px; }
+  .apercu .puces span { background: #fff; border: 1px solid var(--trait); border-radius: 20px; padding: 2px 10px; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="page page-large">
+
+  <header class="entete">
+    <h1>Paramètres de l'instance</h1>
+    <p>Tout ce qui est propre à la spécialité : noms, couleurs, pôles, pathologies, vignettes patient, filtres, textes.
+       Modifiez, vérifiez l'aperçu, puis téléchargez le fichier <strong>parametres.json</strong>. Rien n'est envoyé.</p>
+  </header>
+
+  <section class="carte" aria-labelledby="titre-fichier">
+    <h2 id="titre-fichier"><span class="numero">1</span>Fichier de paramètres</h2>
+    <p class="note" id="origine"></p>
+    <div class="rangee">
+      <button type="button" id="bouton-telecharger">Télécharger parametres.json</button>
+      <button type="button" id="bouton-charger" class="secondaire">Ouvrir un autre parametres.json</button>
+      <button type="button" id="bouton-reinitialiser" class="secondaire">Revenir aux paramètres d'origine</button>
+      <input type="file" id="selecteur-json" accept=".json,application/json" hidden>
+    </div>
+    <p id="message-fichier" class="note" aria-live="polite"></p>
+    <ul class="resultats" id="problemes" aria-live="polite"></ul>
+  </section>
+
+  <div class="mise-en-page">
+    <div id="rubriques"></div>
+    <aside class="colonne-apercu">
+      <section class="carte apercu" id="apercu" aria-labelledby="titre-apercu">
+        <h2 id="titre-apercu">Aperçu</h2>
+        <div class="nuancier" id="apercu-nuancier"></div>
+        <p class="note">Côté patient (grands caractères) :</p>
+        <div class="vignettes" id="apercu-vignettes"></div>
+        <div id="apercu-question"></div>
+        <p style="margin-top:12px"><span class="bouton-patient" id="apercu-bouton"></span></p>
+        <p class="note">Contextes cliniques (outil interne) :</p>
+        <div id="apercu-pathologies"></div>
+        <p class="note">Extrait de mémo (étude fictive) :</p>
+        <div class="memo" id="apercu-memo"></div>
+      </section>
+    </aside>
+  </div>
+
+  <section class="carte" aria-labelledby="titre-excel">
+    <h2 id="titre-excel"><span class="numero">2</span>Mettre à jour un Excel avec ces paramètres</h2>
+    <p>Après un changement de pathologies, de vignettes, de filtres ou de pôles, l'Excel harmonisé doit être mis à jour
+       (listes déroulantes, lignes de filtres). Déposez l'Excel harmonisé : vous récupérez <strong>le même fichier mis à jour</strong>,
+       à enregistrer à la place de l'ancien (gardez une copie de l'ancien par précaution).</p>
+    <p class="note">Toutes les valeurs sont reprises. Une valeur dont la ligne n'existe plus est recopiée dans « Remarques ».
+       Les notes ajoutées à la main sur les cellules, autres que celle du nom de l'étude, ne sont pas conservées.</p>
+    <div class="rangee">
+      <button type="button" id="bouton-excel">Choisir l'Excel harmonisé</button>
+      <input type="file" id="selecteur-excel" accept=".xlsx" hidden>
+    </div>
+    <div id="zone-depot" class="zone-depot">… ou glissez-déposez le fichier ici (format .xlsx).</div>
+    <p id="etat-excel" class="note" aria-live="polite"></p>
+    <ul class="resultats" id="signalements-excel"></ul>
+  </section>
+
+</div>
+<!--@inclure site/donnees/parametres.json-->
+<!--@inclure outils-src/bibliotheques/exceljs/exceljs.min.js-->
+<!--@inclure src/normalisation.js-->
+<!--@inclure src/excel-vers-grille.js-->
+<!--@inclure src/schema.js-->
+<!--@inclure src/gabarit.js-->
+<!--@inclure src/lecture.js-->
+<!--@inclure src/parametres.js-->
+<!--@inclure outils-src/parametres-ui.js-->
+</body>
+</html>

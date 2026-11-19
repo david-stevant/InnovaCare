@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InnovaCoeur — CHU de Nantes</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,500&display=swap" rel="stylesheet">
+<style>
+/* ==================================================
+   CHU NANTES — COULEURS OFFICIELLES (Livre de Marque)
+   ================================================== */
+:root {
+  /* Couleurs principales */
+  --flot: #00bac6;         /* turquoise CHU */
+  --flot-fonce: #006076;
+  --flot-clair: #4ccfd7;
+  --flot-pale: #e0f6f8;
+  --flamme: #fab316;        /* jaune/or CHU */
+  --flamme-fonce: #b77400;
+  --flamme-pale: #fef5dc;
+  --flair: #ef4d89;         /* rose CHU */
+  --flair-pale: #fde8f0;
+  --flore: #23cd4b;         /* vert CHU */
+  --flore-pale: #e1f9e7;
+  --nuit: #000000;
+  --jour: #ffffff;
+  /* Tons neutres */
+  --gris-900: #1a1a1a;
+  --gris-700: #4a4a4a;
+  --gris-500: #7a7a7a;
+  --gris-300: #b0b0b0;
+  --gris-100: #f2f4f5;
+  /* Effets */
+  --ombre: 0 4px 24px rgba(0,186,198,0.08);
+  --ombre-hover: 0 8px 32px rgba(0,186,198,0.16);
+  --radius: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--gris-900);
+  background: var(--jour);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(155deg, #003d52 0%, #00222e 50%, #001a24 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  overflow: hidden;
+}
+
+/* Ambient glows using CHU colors */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -15%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(250,179,22,0.12) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: glow-drift 10s ease-in-out infinite;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -15%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0,186,198,0.14) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: glow-drift 12s ease-in-out infinite reverse;
+}
+
+.hero-glow-pink {
+  position: absolute;
+  top: 40%;
+  left: 15%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(239,77,137,0.08) 0%, transparent 65%);
+  border-radius: 50%;
+  animation: glow-drift 14s ease-in-out infinite 2s;
+}
+
+@keyframes glow-drift {
+  0%, 100% { transform: scale(1) translate(0,0); opacity: 0.6; }
+  50% { transform: scale(1.15) translate(10px, -10px); opacity: 1; }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 800px;
+}
+
+.badge-chu {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 30px;
+  padding: 8px 20px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 28px;
+  backdrop-filter: blur(8px);
+  letter-spacing: 0.03em;
+}
+
+/* Heart logo — 4 CHU star colors morphed into heart */
+.logo-heart {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 28px;
+  animation: heartbeat 3s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.07); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.04); }
+  56% { transform: scale(1); }
+}
+
+.logo-heart svg { width: 100%; height: 100%; }
+
+.hero h1 {
+  font-size: clamp(2.6rem, 5.5vw, 3.8rem);
+  color: var(--jour);
+  margin-bottom: 8px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.hero h1 .accent { color: var(--flamme); }
+
+.hero .tagline {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: rgba(255,255,255,0.75);
+  font-weight: 300;
+  margin-bottom: 28px;
+  font-style: italic;
+}
+
+.hero .subtitle {
+  font-size: clamp(0.92rem, 1.7vw, 1.05rem);
+  color: rgba(255,255,255,0.55);
+  max-width: 580px;
+  margin: 0 auto 0;
+  line-height: 1.75;
+}
+
+.scroll-arrow {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  animation: bounce-down 2s ease-in-out infinite;
+  cursor: pointer;
+}
+
+.scroll-arrow svg { width: 30px; height: 30px; }
+
+@keyframes bounce-down {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.4; }
+  50% { transform: translateX(-50%) translateY(10px); opacity: 0.9; }
+}
+
+/* ===== SECTIONS ===== */
+section { padding: 80px 24px; }
+
+.container { max-width: 900px; margin: 0 auto; }
+
+/* ===== EDITORIAL ===== */
+.section-edito { background: var(--jour); }
+
+.section-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+  text-align: center;
+  margin-bottom: 12px;
+  color: var(--gris-900);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.section-title .highlight { color: var(--flot); }
+
+.section-subtitle {
+  text-align: center;
+  color: var(--gris-500);
+  font-size: 1.02rem;
+  margin-bottom: 48px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Benefit cards */
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 56px;
+}
+
+.benefit-card {
+  background: var(--jour);
+  border: 1.5px solid #e8ecee;
+  border-radius: var(--radius);
+  padding: 28px 22px;
+  text-align: center;
+  transition: var(--transition);
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.benefit-card.visible { opacity: 1; transform: translateY(0); }
+
+.benefit-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ombre-hover);
+}
+
+.benefit-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  font-size: 1.5rem;
+}
+
+.benefit-card:nth-child(1) .benefit-icon { background: var(--flot-pale); }
+.benefit-card:nth-child(2) .benefit-icon { background: var(--flamme-pale); }
+.benefit-card:nth-child(3) .benefit-icon { background: var(--flore-pale); }
+.benefit-card:nth-child(4) .benefit-icon { background: var(--flair-pale); }
+
+.benefit-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.benefit-card p { font-size: 0.88rem; color: var(--gris-500); line-height: 1.55; }
+
+/* Testimonials */
+.testimonials {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 60px;
+}
+
+.testimonial {
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.testimonial.visible { opacity: 1; transform: translateY(0); }
+
+.testimonial:nth-child(1) { background: var(--flot-pale); }
+.testimonial:nth-child(2) { background: var(--flamme-pale); }
+
+.testimonial::before {
+  content: '❝';
+  font-size: 2.8rem;
+  opacity: 0.2;
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  line-height: 1;
+}
+
+.testimonial:nth-child(1)::before { color: var(--flot); }
+.testimonial:nth-child(2)::before { color: var(--flamme-fonce); }
+
+.testimonial blockquote {
+  font-style: italic;
+  font-size: 0.93rem;
+  line-height: 1.65;
+  color: var(--gris-900);
+  margin-bottom: 14px;
+  padding-top: 14px;
+}
+
+.testimonial .author {
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.testimonial:nth-child(1) .author { color: var(--flot-fonce); }
+.testimonial:nth-child(2) .author { color: var(--flamme-fonce); }
+
+/* CTA block */
+.cta-section {
+  background: linear-gradient(135deg, var(--flot) 0%, #008a94 100%);
+  border-radius: 24px;
+  padding: 48px 32px;
+  text-align: center;
+  color: var(--jour);
+}
+
+.cta-section h2 {
+  font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.cta-section p {
+  font-size: 0.98rem;
+  opacity: 0.85;
+  margin-bottom: 28px;
+}
+
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--flamme);
+  color: var(--gris-900);
+  border: none;
+  padding: 16px 36px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-cta:hover {
+  background: #e8a00e;
+  transform: scale(1.04);
+  box-shadow: 0 8px 24px rgba(250,179,22,0.35);
+}
+
+.btn-cta .timer-badge {
+  background: rgba(0,0,0,0.1);
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+/* ===== SCREENING SECTION ===== */
+.screening-section {
+  background: var(--gris-100);
+  min-height: 100vh;
+  display: none;
+}
+
+.screening-section.active { display: block; }
+
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+
+.step-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #ccd3d8;
+  transition: var(--transition);
+}
+
+.step-dot.active { background: var(--flot); width: 32px; border-radius: 5px; }
+.step-dot.done { background: var(--flore); }
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--flot);
+  font-size: 0.92rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-family: inherit;
+  font-weight: 600;
+  padding: 8px 0;
+}
+
+.btn-back:hover { color: var(--flot-fonce); }
+
+/* Category cards */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.category-card {
+  background: var(--jour);
+  border: 2px solid #e2e8ec;
+  border-radius: var(--radius);
+  padding: 22px 18px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.category-card:hover { border-color: var(--flot-clair); box-shadow: var(--ombre); }
+
+.category-card.selected {
+  border-color: var(--flot);
+  background: var(--flot-pale);
+  box-shadow: 0 0 0 3px rgba(0,186,198,0.12);
+}
+
+.cat-icon {
+  width: 42px; height: 42px; min-width: 42px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  background: var(--gris-100);
+  transition: var(--transition);
+}
+
+.category-card.selected .cat-icon { background: var(--flot); }
+
+.cat-label { font-weight: 700; font-size: 0.92rem; }
+.cat-desc { font-size: 0.8rem; color: var(--gris-500); margin-top: 3px; }
+
+.checkmark {
+  margin-left: auto;
+  min-width: 22px; width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid #ccd3d8;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+  margin-top: 2px;
+}
+
+.category-card.selected .checkmark {
+  background: var(--flot); border-color: var(--flot);
+}
+
+/* Filters area */
+.filters-area {
+  background: var(--jour);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  box-shadow: var(--ombre);
+  margin-bottom: 28px;
+}
+
+.filter-group { margin-bottom: 22px; }
+.filter-group:last-child { margin-bottom: 0; }
+
+.filter-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gris-900);
+}
+
+.filter-label .optional { font-weight: 400; font-size: 0.78rem; color: var(--gris-500); }
+
+.filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-input {
+  padding: 10px 14px;
+  border: 1.5px solid #d5dee5;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  width: 120px;
+  transition: var(--transition);
+  background: var(--jour);
+  color: var(--gris-900);
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: var(--flot);
+  box-shadow: 0 0 0 3px rgba(0,186,198,0.1);
+}
+
+.filter-unit { font-size: 0.86rem; color: var(--gris-500); }
+
+.bmi-display {
+  font-size: 0.86rem;
+  color: var(--flot-fonce);
+  font-weight: 600;
+  padding: 6px 14px;
+  background: var(--flot-pale);
+  border-radius: 8px;
+  display: none;
+}
+
+.bmi-display.visible { display: inline-block; }
+
+/* Toggle pills (traitements) */
+.toggle-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1.5px solid #d5dee5;
+  border-radius: 30px;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+  background: var(--jour);
+}
+
+.toggle-pill:hover { border-color: var(--flot-clair); }
+
+.toggle-pill.active {
+  background: var(--flot);
+  color: var(--jour);
+  border-color: var(--flot);
+}
+
+.toggle-pill .pill-check {
+  width: 16px; height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem;
+}
+
+.toggle-pill.active .pill-check { background: rgba(255,255,255,0.3); }
+
+/* Boolean toggles */
+.bool-toggle {
+  display: inline-flex;
+  border: 1.5px solid #d5dee5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.bool-option {
+  padding: 8px 20px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: var(--transition);
+  user-select: none;
+  background: var(--jour);
+  color: var(--gris-500);
+}
+
+.bool-option:first-child { border-right: 1px solid #d5dee5; }
+.bool-option.active { background: var(--flot); color: var(--jour); }
+
+/* FEVG filter (special patient-friendly) */
+.fevg-toggle {
+  display: inline-flex;
+  border: 1.5px solid #d5dee5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.fevg-option {
+  padding: 8px 18px;
+  cursor: pointer;
+  font-size: 0.86rem;
+  transition: var(--transition);
+  user-select: none;
+  background: var(--jour);
+  color: var(--gris-500);
+  border-right: 1px solid #d5dee5;
+}
+
+.fevg-option:last-child { border-right: none; }
+.fevg-option.active { background: var(--flot); color: var(--jour); }
+
+/* Buttons */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+}
+
+.btn-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  border: none;
+}
+
+.btn-step.primary { background: var(--flot); color: var(--jour); }
+.btn-step.primary:hover { background: #009ca6; box-shadow: 0 4px 16px rgba(0,186,198,0.3); }
+.btn-step.secondary { background: var(--jour); color: var(--gris-900); border: 1.5px solid #d5dee5; }
+.btn-step.secondary:hover { border-color: var(--flot); }
+.btn-step:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  background: var(--flamme);
+  color: var(--gris-900);
+  border: none;
+  border-radius: 50px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-submit:hover {
+  background: #e8a00e;
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(250,179,22,0.3);
+}
+
+/* ===== RESULTS ===== */
+.result-count {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.result-count .number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--flot);
+}
+
+.result-count .label { font-size: 1.05rem; color: var(--gris-500); }
+
+.result-card {
+  background: var(--jour);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 18px;
+  box-shadow: var(--ombre);
+  border-left: 4px solid var(--flot);
+  transition: var(--transition);
+}
+
+.result-card:hover { box-shadow: var(--ombre-hover); }
+
+.result-card h3 { font-size: 1.1rem; font-weight: 800; color: var(--flot-fonce); margin-bottom: 8px; }
+
+.result-card .desc {
+  font-size: 0.93rem;
+  color: var(--gris-700);
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+
+.result-card .details {
+  font-size: 0.86rem;
+  color: var(--gris-500);
+  line-height: 1.55;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: var(--gris-100);
+  border-radius: 10px;
+}
+
+.result-card .details strong { color: var(--gris-700); font-weight: 600; }
+
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-mail {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--flot);
+  color: var(--jour);
+  border: none;
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.btn-mail:hover { background: #009ca6; box-shadow: 0 4px 12px rgba(0,186,198,0.25); }
+
+.btn-speak {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--flot-fonce);
+  border: 1.5px solid var(--flot);
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-speak:hover { background: var(--flot-pale); }
+
+/* No results */
+.no-results {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--jour);
+  border-radius: var(--radius);
+  box-shadow: var(--ombre);
+}
+
+.no-results .emoji { font-size: 3rem; margin-bottom: 16px; }
+.no-results h3 { font-size: 1.15rem; margin-bottom: 12px; }
+.no-results p { color: var(--gris-500); max-width: 500px; margin: 0 auto; line-height: 1.6; }
+
+/* Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal {
+  background: var(--jour);
+  border-radius: var(--radius);
+  padding: 32px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+.modal h3 { font-size: 1.1rem; margin-bottom: 16px; color: var(--flot-fonce); }
+
+.modal textarea {
+  width: 100%;
+  min-height: 200px;
+  border: 1.5px solid #d5dee5;
+  border-radius: 10px;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+  color: var(--gris-900);
+}
+
+.modal textarea:focus { outline: none; border-color: var(--flot); }
+
+.modal-actions { display: flex; gap: 12px; margin-top: 16px; justify-content: flex-end; }
+
+.modal .btn-copy, .modal .btn-send {
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  border: none;
+}
+
+.modal .btn-copy { background: var(--gris-100); color: var(--gris-900); }
+.modal .btn-send { background: var(--flot); color: var(--jour); }
+
+.btn-restart {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 12px 24px;
+  background: var(--jour);
+  border: 1.5px solid #d5dee5;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+.btn-restart:hover { border-color: var(--flot); }
+
+footer {
+  padding: 32px 24px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--gris-500);
+  border-top: 1px solid #e2e8ec;
+  line-height: 1.7;
+}
+
+footer a { color: var(--flot); text-decoration: none; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+  section { padding: 48px 16px; }
+  .category-grid { grid-template-columns: 1fr; }
+  .benefits-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .testimonials { grid-template-columns: 1fr; }
+  .filter-row { flex-direction: column; align-items: stretch; }
+  .filter-input { width: 100%; }
+  .cta-section { padding: 32px 20px; }
+  .filters-area { padding: 22px 16px; }
+  .result-actions { flex-direction: column; }
+  .btn-mail, .btn-speak { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 400px) {
+  .benefits-grid { grid-template-columns: 1fr; }
+}
+
+html { scroll-behavior: smooth; }
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="hero">
+  <div class="hero-glow-pink"></div>
+  <div class="hero-content">
+    <div class="badge-chu">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      CHU de Nantes — Cardiologie
+    </div>
+
+    <div class="logo-heart">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="hg1" x1="0%" y1="0%" x2="50%" y2="100%">
+            <stop offset="0%" stop-color="#00bac6"/>
+            <stop offset="100%" stop-color="#23cd4b"/>
+          </linearGradient>
+          <linearGradient id="hg2" x1="50%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fab316"/>
+            <stop offset="100%" stop-color="#ef4d89"/>
+          </linearGradient>
+        </defs>
+        <!-- Left half of heart -->
+        <path d="M60 100 C60 100 15 72 15 40 C15 24 27 14 40 14 C50 14 57 20 60 28" fill="url(#hg1)" opacity="0.92"/>
+        <!-- Right half of heart -->
+        <path d="M60 100 C60 100 105 72 105 40 C105 24 93 14 80 14 C70 14 63 20 60 28" fill="url(#hg2)" opacity="0.92"/>
+        <!-- Star in center (CHU symbol) -->
+        <g transform="translate(60,46)" opacity="0.9">
+          <rect x="-2.5" y="-14" width="5" height="28" rx="2" fill="white"/>
+          <rect x="-14" y="-2.5" width="28" height="5" rx="2" fill="white"/>
+          <rect x="-2.5" y="-14" width="5" height="28" rx="2" fill="white" transform="rotate(45)"/>
+          <rect x="-14" y="-2.5" width="28" height="5" rx="2" fill="white" transform="rotate(45)"/>
+        </g>
+      </svg>
+    </div>
+
+    <h1>Innova<span class="accent">Cœur</span></h1>
+    <p class="tagline">Innover, c'est aussi notre cœur de métier.</p>
+    <p class="subtitle">Au CHU de Nantes, avançons ensemble : avec vous, pour tous.<br>Participer à l'innovation et la recherche médicale : pourquoi pas vous ?</p>
+  </div>
+
+  <div class="scroll-arrow" onclick="document.getElementById('edito').scrollIntoView({behavior:'smooth'})">
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+  </div>
+</section>
+
+<!-- ===== EDITORIAL ===== -->
+<section class="section-edito" id="edito">
+  <div class="container">
+    <h2 class="section-title fade-in">Pourquoi participer à la <span class="highlight">recherche clinique</span> ?</h2>
+    <p class="section-subtitle fade-in">La recherche clinique, c'est ce qui permet aux traitements de demain d'exister. Chaque patient qui y participe contribue à faire avancer la médecine pour tous.</p>
+
+    <div class="benefits-grid">
+      <div class="benefit-card fade-in">
+        <div class="benefit-icon">🔬</div>
+        <h3>Accéder à l'innovation</h3>
+        <p>Bénéficiez de traitements à la pointe, parfois des années avant leur mise sur le marché.</p>
+      </div>
+      <div class="benefit-card fade-in">
+        <div class="benefit-icon">🤝</div>
+        <h3>Un suivi renforcé</h3>
+        <p>Les patients inclus bénéficient d'un suivi médical particulièrement attentif et régulier.</p>
+      </div>
+      <div class="benefit-card fade-in">
+        <div class="benefit-icon">🌱</div>
+        <h3>Contribuer pour les autres</h3>
+        <p>Aidez les médecins à mieux comprendre les maladies et améliorer les traitements pour les générations futures.</p>
+      </div>
+      <div class="benefit-card fade-in">
+        <div class="benefit-icon">🛡️</div>
+        <h3>Un cadre sécurisé</h3>
+        <p>Chaque étude suit un protocole rigoureux, approuvé par un comité d'éthique, pour garantir votre sécurité.</p>
+      </div>
+    </div>
+
+    <div class="testimonials">
+      <div class="testimonial fade-in">
+        <blockquote>Je croyais être un patient comme un autre. En participant à un essai clinique, j'ai découvert que je pouvais aussi être utile à d'autres, tout en ayant la chance de bénéficier de traitements à la pointe.</blockquote>
+        <div class="author">— Bertrand, 62 ans</div>
+      </div>
+      <div class="testimonial fade-in">
+        <blockquote>Je suis fière d'avoir pu apporter ma contribution dans l'amélioration des connaissances médicales, à la fois pour mon propre bénéfice, mais aussi pour celui de mes enfants et de mes petits-enfants.</blockquote>
+        <div class="author">— Maryse, 81 ans</div>
+      </div>
+    </div>
+
+    <div class="cta-section fade-in">
+      <h2>Existe-t-il un protocole qui pourrait vous concerner ?</h2>
+      <p>En quelques clics, découvrez si une étude en cours correspond à votre situation.</p>
+      <button class="btn-cta" onclick="startScreening()">
+        Faites le test
+        <span class="timer-badge">&lt; 1 min</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREENING ===== -->
+<section class="screening-section" id="screening">
+  <div class="container">
+    <button class="btn-back" onclick="goBackToEdito()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Retour
+    </button>
+
+    <div class="step-indicator" id="stepIndicator">
+      <div class="step-dot active" data-step="1"></div>
+      <div class="step-dot" data-step="2"></div>
+      <div class="step-dot" data-step="3"></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div id="step1" class="step-content">
+      <h2 class="section-title" style="margin-bottom:8px;">Votre situation clinique</h2>
+      <p class="section-subtitle">Sélectionnez la ou les situations qui correspondent à votre cas.</p>
+      <div class="category-grid" id="categoryGrid"></div>
+      <div class="step-nav">
+        <div></div>
+        <button class="btn-step primary" id="btnToStep2" onclick="goToStep(2)" disabled>
+          Continuer
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step2" class="step-content" style="display:none;">
+      <h2 class="section-title" style="margin-bottom:8px;">Quelques précisions</h2>
+      <p class="section-subtitle">Ces informations aident à affiner les résultats. Renseignez uniquement ce que vous souhaitez.</p>
+      <div class="filters-area">
+        <div class="filter-group" id="filterAge">
+          <div class="filter-label">🎂 Votre âge <span class="optional">(facultatif)</span></div>
+          <div class="filter-row">
+            <input type="number" class="filter-input" id="inputAge" placeholder="ex : 65" min="12" max="120">
+            <span class="filter-unit">ans</span>
+          </div>
+        </div>
+
+        <div class="filter-group" id="filterMorpho">
+          <div class="filter-label">📏 Taille et poids <span class="optional">(calcul auto de l'IMC)</span></div>
+          <div class="filter-row">
+            <input type="number" class="filter-input" id="inputTaille" placeholder="ex : 172" min="100" max="250" oninput="updateBMI()">
+            <span class="filter-unit">cm</span>
+            <input type="number" class="filter-input" id="inputPoids" placeholder="ex : 78" min="30" max="300" oninput="updateBMI()">
+            <span class="filter-unit">kg</span>
+            <span class="bmi-display" id="bmiDisplay">IMC : —</span>
+          </div>
+        </div>
+
+        <div class="filter-group" id="filterFEVG">
+          <div class="filter-label">🫀 Votre force de contraction cardiaque est-elle normale ? <span class="optional">(valeur FEVG &gt; 40% sur votre dernière échographie)</span></div>
+          <div class="fevg-toggle" data-filter="fevg">
+            <div class="fevg-option" data-value="oui" onclick="toggleFevg(this)">Oui / normale</div>
+            <div class="fevg-option" data-value="non" onclick="toggleFevg(this)">Non / diminuée</div>
+            <div class="fevg-option" data-value="nsp" onclick="toggleFevg(this)">Je ne sais pas</div>
+          </div>
+        </div>
+
+        <div class="filter-group" id="filterDiabete">
+          <div class="filter-label">🩸 Avez-vous un diabète ?</div>
+          <div class="bool-toggle" data-filter="diabete">
+            <div class="bool-option" data-value="oui" onclick="toggleBool(this)">Oui</div>
+            <div class="bool-option" data-value="non" onclick="toggleBool(this)">Non</div>
+          </div>
+        </div>
+
+        <div class="filter-group" id="filterHTA">
+          <div class="filter-label">💊 Avez-vous de l'hypertension artérielle ?</div>
+          <div class="bool-toggle" data-filter="hta">
+            <div class="bool-option" data-value="oui" onclick="toggleBool(this)">Oui</div>
+            <div class="bool-option" data-value="non" onclick="toggleBool(this)">Non</div>
+          </div>
+        </div>
+
+        <div class="filter-group" id="filterTraitements">
+          <div class="filter-label">💉 Traitements actuels <span class="optional">(cochez ceux que vous prenez)</span></div>
+          <div class="toggle-pills" id="treatmentPills"></div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-step secondary" onclick="goToStep(1)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Précédent
+        </button>
+        <button class="btn-submit" onclick="computeResults()">🔍 Voir les résultats</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="step3" class="step-content" style="display:none;">
+      <div id="resultsArea"></div>
+      <div style="text-align:center;">
+        <button class="btn-restart" onclick="resetAll()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+          Recommencer le test
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal email -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>📧 Texte à copier-coller dans votre e-mail</h3>
+    <textarea id="modalText" readonly></textarea>
+    <div class="modal-actions">
+      <button class="btn-copy" onclick="copyMailText()">📋 Copier</button>
+      <button class="btn-send" onclick="sendMail()">Ouvrir ma messagerie</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <strong>InnovaCoeur</strong> — Outil d'information sur les essais cliniques en cardiologie<br>
+    CHU de Nantes — Service de Cardiologie — Unité de Recherche Clinique<br>
+    <em>Cet outil est fourni à titre informatif. L'éligibilité définitive sera confirmée par votre cardiologue et l'équipe de recherche.</em><br><br>
+    <a href="#hero">Retour en haut</a>
+  </div>
+</footer>
+
+<script>
+// =====================================================================
+// DATA — EXACT InnovaCoeur data from Excel (April 2026)
+// Only protocols with "Faire apparaître dans InnovaCoeur = 1"
+// =====================================================================
+
+const CATEGORIES = [
+  { id: 'ic', icon: '❤️‍🩹', label: 'Antécédent d\'insuffisance cardiaque ou essoufflement à l\'effort', desc: 'Y compris si votre fonction cardiaque a pu se normaliser par la suite' },
+  { id: 'amylose', icon: '🔬', label: 'Amylose cardiaque', desc: 'Amylose ATTR (wild-type ou héréditaire) ou AL' },
+  { id: 'cmh', icon: '💪', label: 'Cardiomyopathie hypertrophique', desc: 'CMH obstructive ou non obstructive' },
+  { id: 'davd', icon: '⚡', label: 'Dysplasie arythmogène du ventricule droit', desc: 'Cardiopathie arythmogène du VD (DAVD/CAVD)' },
+  { id: 'arythmie', icon: '💓', label: 'Arythmie cardiaque / fibrillation atriale', desc: 'Fibrillation atriale ancienne ou récente' },
+  { id: 'hta', icon: '💊', label: 'Hypertension artérielle', desc: 'HTA traitée ou non contrôlée' },
+  { id: 'acr', icon: '🚨', label: 'Arrêt cardiaque récupéré (sportif jeune)', desc: 'Mort subite récupérée lors d\'une pratique sportive' }
+];
+
+const TREATMENTS = [
+  { id: 'betabloquant', label: 'Bêta-bloquant' },
+  { id: 'mra', label: 'MRA (spironolactone…)' },
+  { id: 'entresto', label: 'Entresto (sacubitril/valsartan)' },
+  { id: 'gliflozine', label: 'Gliflozine (dapagliflozine, empagliflozine…)' },
+  { id: 'furosemide', label: 'Furosémide (Lasilix)' },
+  { id: 'anticoagulant', label: 'Anticoagulant' }
+];
+
+const PROTOCOLS = [
+  // === INSUFFISANCE CARDIAQUE ===
+  {
+    id: 'bonfire', name: 'BONFIRE', active: true,
+    categories: ['ic'],
+    phrase: 'Évaluation de l\'arrêt du traitement bêta-bloquant chez les patients ayant présenté une diminution de la force de contraction cardiaque, qui s\'est secondairement normalisée.',
+    details: '1 visite additionnelle au CHU par an seulement.',
+    filters: { fevg: 'oui', treatments_required: ['entresto','mra','betabloquant','gliflozine'] },
+    arc: { name: 'Océane SALOMON', email: 'oceane.salomon@chu-nantes.fr' }
+  },
+  {
+    id: 'easi', name: 'EASi PROTEKT', active: true,
+    categories: ['ic'],
+    phrase: 'Efficacité d\'un traitement visant à empêcher la survenue d\'insuffisance cardiaque chez les patients diabétiques.',
+    details: 'Traitement = 2 comprimés par jour. Suivi sur le CHU tous les 6 mois après le 3ᵉ mois. Indemnités de visite entre 15 et 75 €/visite.',
+    filters: { diabete: true },
+    arc: { name: 'Patricia CHARPENTIER', email: 'patricia.charpentier@chu-nantes.fr' }
+  },
+  {
+    id: 'branch', name: 'BRANCH-HF', active: true,
+    categories: ['ic'],
+    phrase: 'Efficacité d\'un nouveau traitement contre l\'insuffisance cardiaque chez les patients en surpoids.',
+    details: 'Traitement = 3 comprimés par jour pendant 9 mois. Suivi rapproché mais de courte durée (toutes les 2 semaines pendant 2 mois puis tous les 2 à 3 mois, pour 1 an au total).',
+    filters: { age: {min:18, max:80}, fevg: 'oui', bmi: {min:27}, treatments_required: ['gliflozine'] },
+    arc: { name: 'Océane SALOMON', email: 'oceane.salomon@chu-nantes.fr' }
+  },
+  {
+    id: 'elevate', name: 'ELEVATE-HFpEF', active: true,
+    categories: ['ic'],
+    phrase: 'Efficacité d\'une stimulation cardiaque personnalisée par pacemaker chez les patients présentant une insuffisance cardiaque à force de contraction préservée.',
+    details: 'Implantation d\'un stimulateur cardiaque. Suivi tous les 4 à 6 mois pendant 2 ans puis annuel.',
+    filters: { age: {min:40}, fevg: 'oui', treatments_required: ['furosemide'] },
+    arc: { name: 'Bastien OUVRARD', email: 'bastien.ouvrard@chu-nantes.fr' }
+  },
+  {
+    id: 'polaris', name: 'POLARIS', active: true,
+    categories: ['ic'],
+    phrase: 'Efficacité d\'un nouveau traitement chez les patients présentant une insuffisance cardiaque et en situation de surpoids/obésité.',
+    details: null,
+    filters: { fevg: 'oui', bmi: {min:30} },
+    arc: { name: 'Audrey ERNOULD', email: 'audrey.ernould@chu-nantes.fr' }
+  },
+  {
+    id: 'hfrelief', name: 'HF-RELIEF', active: true,
+    categories: ['ic', 'arythmie'],
+    phrase: 'Efficacité d\'une stimulation cardiaque régulière par pacemaker chez les patients présentant une arythmie permanente ancienne (fibrillation atriale).',
+    details: 'Suivi très simple, à 3 mois puis annuel.',
+    filters: { age: {min:65}, fevg: 'oui', bmi: {max:40} },
+    arc: { name: 'Bastien OUVRARD', email: 'bastien.ouvrard@chu-nantes.fr' }
+  },
+  // === AMYLOSE ===
+  {
+    id: 'triton', name: 'TRITON', active: true,
+    categories: ['amylose'],
+    phrase: 'Efficacité d\'un nouveau traitement suppresseur de la protéine TTR chez les patients atteints d\'amylose cardiaque ATTR.',
+    details: 'Traitement = 1 injection sous-cutanée seulement tous les 6 mois. Après 3 premières visites rapprochées, suivi sur le CHU tous les 3 mois.',
+    filters: { age: {max:85} },
+    arc: { name: 'Patricia CHARPENTIER', email: 'patricia.charpentier@chu-nantes.fr' }
+  },
+  {
+    id: 'hear', name: 'Registre HEAR', active: true,
+    categories: ['amylose'],
+    phrase: 'Registre national des patients porteurs d\'une amylose cardiaque (simple recueil de données de suivi anonymisées, pas de traitement ou examen en dehors du suivi habituel).',
+    details: 'Aucune modification du suivi habituel.',
+    filters: {},
+    arc: { name: 'Sophie CLÉRO', email: 'sophie.clero@chu-nantes.fr' }
+  },
+  {
+    id: 'cleopattra', name: 'CLEOPATTRA', active: true,
+    categories: ['amylose'],
+    phrase: 'Efficacité d\'un nouveau traitement visant à éliminer les dépôts d\'amylose, chez les patients présentant une amylose cardiaque ATTR.',
+    details: 'Traitement = 1 injection intra-veineuse tous les mois au CHU.',
+    filters: {},
+    arc: { name: 'Sophie CLÉRO', email: 'sophie.clero@chu-nantes.fr' }
+  },
+  // === CMH ===
+  {
+    id: 'fortitude', name: 'FORTITUDE', active: true,
+    categories: ['cmh'],
+    phrase: 'Efficacité d\'un nouveau traitement chez les patients atteints de cardiomyopathie hypertrophique sans obstruction.',
+    details: 'Traitement = 2 comprimés par jour. Suivi sur le CHU toutes les 6 semaines, mais durée totale de suivi courte (3 mois).',
+    filters: { fevg: 'oui' },
+    arc: { name: 'Patricia CHARPENTIER', email: 'patricia.charpentier@chu-nantes.fr' }
+  },
+  {
+    id: 'remy', name: 'REMY', active: true,
+    categories: ['cmh'],
+    phrase: 'Registre national des patients porteurs d\'une cardiomyopathie hypertrophique obstructive sous traitement innovant (simple recueil de données anonymisées, pas de traitement ou examen en dehors du suivi habituel).',
+    details: 'Aucune modification du suivi habituel.',
+    filters: {},
+    arc: { name: 'Océane SALOMON', email: 'oceane.salomon@chu-nantes.fr' }
+  },
+  // === DAVD ===
+  {
+    id: 'brave', name: 'BRAVE', active: true,
+    categories: ['davd'],
+    phrase: 'Efficacité d\'un traitement sur le ventricule droit et les arythmies chez les patients atteints de dysplasie arythmogène du ventricule droit.',
+    details: 'Traitement = 1 comprimé par jour. Suivi très simple (+1 visite par rapport au suivi habituel).',
+    filters: { age: {min:18} },
+    arc: { name: 'Anaelle RAOUL', email: 'anaelle.raoul@chu-nantes.fr' }
+  },
+  // === RYTHMOLOGIE ===
+  {
+    id: 'edearly', name: 'EDEARLY-AF', active: true,
+    categories: ['arythmie'],
+    phrase: 'Évaluation d\'une stratégie de traitement précoce par ablation chez les patients de 75 ans et plus présentant une fibrillation atriale.',
+    details: null,
+    filters: { age: {min:75} },
+    arc: { name: 'Bastien OUVRARD', email: 'bastien.ouvrard@chu-nantes.fr' }
+  },
+  {
+    id: 'resoudre', name: 'RESOUDRE', active: true,
+    categories: ['acr'],
+    phrase: 'Registre national des morts subites à l\'effort chez des sujets jeunes (simple recueil de données anonymisées, pas de traitement ou examen en dehors du suivi habituel).',
+    details: 'Aucune modification du suivi habituel.',
+    filters: { age: {min:12, max:35} },
+    arc: { name: 'Anaelle RAOUL', email: 'anaelle.raoul@chu-nantes.fr' }
+  },
+  // === HTA ===
+  {
+    id: 'zenith', name: 'ZENITH', active: true,
+    categories: ['hta'],
+    phrase: 'Efficacité d\'un nouveau traitement en 1 prise tous les 6 mois, chez les patients présentant une hypertension artérielle et un risque cardiovasculaire élevé.',
+    details: 'Traitement = 1 injection sous-cutanée tous les 6 mois. Suivi au CHU tous les 3 mois la 1ʳᵉ année puis tous les 6 mois.',
+    filters: { age: {min:18} },
+    arc: { name: 'Léa FONTENEAU', email: 'lea.fonteneau@chu-nantes.fr' }
+  }
+];
+
+// =====================================================================
+// STATE
+// =====================================================================
+let selectedCategories = new Set();
+let selectedTreatments = new Set();
+let filterValues = { age: null, bmi: null, diabete: null, hta: null, fevg: null };
+let currentStep = 1;
+let currentMailData = {};
+
+// =====================================================================
+// INIT
+// =====================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  renderCategories();
+  renderTreatments();
+  initScrollAnimations();
+});
+
+function renderCategories() {
+  document.getElementById('categoryGrid').innerHTML = CATEGORIES.map(c => `
+    <div class="category-card" data-cat="${c.id}" onclick="toggleCategory('${c.id}',this)">
+      <div class="cat-icon">${c.icon}</div>
+      <div><div class="cat-label">${c.label}</div><div class="cat-desc">${c.desc}</div></div>
+      <div class="checkmark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+    </div>`).join('');
+}
+
+function renderTreatments() {
+  document.getElementById('treatmentPills').innerHTML = TREATMENTS.map(t => `
+    <div class="toggle-pill" data-treat="${t.id}" onclick="toggleTreatment('${t.id}',this)">
+      <span class="pill-check">✓</span>${t.label}
+    </div>`).join('');
+}
+
+function initScrollAnimations() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in,.benefit-card,.testimonial').forEach(el => obs.observe(el));
+}
+
+// =====================================================================
+// INTERACTIONS
+// =====================================================================
+function toggleCategory(id, el) {
+  selectedCategories.has(id) ? (selectedCategories.delete(id), el.classList.remove('selected')) : (selectedCategories.add(id), el.classList.add('selected'));
+  document.getElementById('btnToStep2').disabled = selectedCategories.size === 0;
+}
+
+function toggleTreatment(id, el) {
+  selectedTreatments.has(id) ? (selectedTreatments.delete(id), el.classList.remove('active')) : (selectedTreatments.add(id), el.classList.add('active'));
+}
+
+function toggleBool(el) {
+  const parent = el.parentElement;
+  const filter = parent.dataset.filter;
+  if (el.classList.contains('active')) { el.classList.remove('active'); filterValues[filter] = null; return; }
+  parent.querySelectorAll('.bool-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+  filterValues[filter] = el.dataset.value === 'oui';
+}
+
+function toggleFevg(el) {
+  const parent = el.parentElement;
+  if (el.classList.contains('active')) { el.classList.remove('active'); filterValues.fevg = null; return; }
+  parent.querySelectorAll('.fevg-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+  filterValues.fevg = el.dataset.value;
+}
+
+function updateBMI() {
+  const t = parseFloat(document.getElementById('inputTaille').value);
+  const p = parseFloat(document.getElementById('inputPoids').value);
+  const d = document.getElementById('bmiDisplay');
+  if (t > 0 && p > 0) { filterValues.bmi = Math.round(p / ((t/100)**2) * 10) / 10; d.textContent = `IMC : ${filterValues.bmi}`; d.classList.add('visible'); }
+  else { filterValues.bmi = null; d.classList.remove('visible'); }
+}
+
+// =====================================================================
+// NAVIGATION
+// =====================================================================
+function startScreening() {
+  document.getElementById('screening').classList.add('active');
+  setTimeout(() => document.getElementById('screening').scrollIntoView({ behavior: 'smooth' }), 50);
+}
+
+function goBackToEdito() {
+  document.getElementById('screening').classList.remove('active');
+  document.getElementById('edito').scrollIntoView({ behavior: 'smooth' });
+}
+
+function goToStep(step) {
+  if (currentStep === 2) { filterValues.age = parseFloat(document.getElementById('inputAge').value) || null; updateBMI(); }
+  document.querySelectorAll('.step-content').forEach(el => el.style.display = 'none');
+  document.getElementById(`step${step}`).style.display = 'block';
+  document.querySelectorAll('.step-dot').forEach(dot => {
+    const s = parseInt(dot.dataset.step);
+    dot.classList.remove('active','done');
+    if (s === step) dot.classList.add('active');
+    else if (s < step) dot.classList.add('done');
+  });
+  currentStep = step;
+  document.getElementById('screening').scrollIntoView({ behavior: 'smooth' });
+  if (step === 2) updateVisibleFilters();
+}
+
+function updateVisibleFilters() {
+  const rp = PROTOCOLS.filter(p => p.active && p.categories.some(c => selectedCategories.has(c)));
+  let needDiabete = false, needHTA = false, needTreatments = false, needFEVG = false;
+  rp.forEach(p => {
+    if (p.filters.diabete !== undefined) needDiabete = true;
+    if (p.filters.hta !== undefined) needHTA = true;
+    if (p.filters.treatments_required) needTreatments = true;
+    if (p.filters.fevg) needFEVG = true;
+  });
+  document.getElementById('filterFEVG').style.display = needFEVG ? 'block' : 'none';
+  document.getElementById('filterDiabete').style.display = needDiabete ? 'block' : 'none';
+  document.getElementById('filterHTA').style.display = needHTA || selectedCategories.has('hta') ? 'block' : 'none';
+  document.getElementById('filterTraitements').style.display = needTreatments ? 'block' : 'none';
+}
+
+// =====================================================================
+// RESULTS
+// =====================================================================
+function computeResults() {
+  filterValues.age = parseFloat(document.getElementById('inputAge').value) || null;
+  updateBMI();
+
+  const matched = PROTOCOLS.filter(p => {
+    if (!p.active) return false;
+    if (!p.categories.some(c => selectedCategories.has(c))) return false;
+    const f = p.filters;
+
+    // Age
+    if (f.age && filterValues.age !== null) {
+      if (f.age.min !== undefined && filterValues.age < f.age.min) return false;
+      if (f.age.max !== undefined && filterValues.age > f.age.max) return false;
+    }
+
+    // BMI
+    if (f.bmi && filterValues.bmi !== null) {
+      if (f.bmi.min !== undefined && filterValues.bmi < f.bmi.min) return false;
+      if (f.bmi.max !== undefined && filterValues.bmi > f.bmi.max) return false;
+    }
+
+    // FEVG: if protocol requires 'oui' (normal) and patient said 'non', exclude
+    if (f.fevg === 'oui' && filterValues.fevg === 'non') return false;
+
+    // Diabete: if protocol requires diabete and patient said no
+    if (f.diabete === true && filterValues.diabete === false) return false;
+
+    // HTA
+    if (f.hta === true && filterValues.hta === false) return false;
+
+    return true;
+  });
+
+  goToStep(3);
+  renderResults(matched);
+}
+
+function renderResults(protocols) {
+  const area = document.getElementById('resultsArea');
+  const catLabels = [...selectedCategories].map(id => CATEGORIES.find(c => c.id === id)?.label).filter(Boolean);
+  const treatLabels = [...selectedTreatments].map(id => TREATMENTS.find(t => t.id === id)?.label).filter(Boolean);
+
+  if (protocols.length === 0) {
+    area.innerHTML = `
+      <div class="no-results">
+        <div class="emoji">🌟</div>
+        <h3>Pas de protocole correspondant pour le moment</h3>
+        <p>Pas de panique ! La recherche avance à grands pas et de nouveaux protocoles pourraient bientôt vous être proposés. Merci d'avoir utilisé l'outil <strong>InnovaCoeur</strong>.</p>
+        <p style="margin-top:14px;font-size:0.88rem;color:var(--gris-500);">N'hésitez pas à en parler à votre cardiologue lors de votre prochaine consultation.</p>
+      </div>`;
+    return;
+  }
+
+  let html = `<div class="result-count"><div class="number">${protocols.length}</div><div class="label">protocole${protocols.length > 1 ? 's' : ''} pourrai${protocols.length > 1 ? 'en' : ''}t correspondre à votre situation</div></div>`;
+
+  protocols.forEach(p => {
+    const detailsHtml = p.details ? `<div class="details"><strong>En pratique :</strong> ${p.details}</div>` : '';
+    html += `
+      <div class="result-card">
+        <h3>🔬 ${p.name}</h3>
+        <div class="desc">${p.phrase}</div>
+        ${detailsHtml}
+        <div class="result-actions">
+          <button class="btn-mail" onclick="openMailModal('${p.id}')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Contacter l'équipe de recherche
+          </button>
+          <button class="btn-speak">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Parlez-en à votre cardiologue
+          </button>
+        </div>
+      </div>`;
+    currentMailData[p.id] = { arc: p.arc, protocol: p.name, categories: catLabels, treatments: treatLabels, age: filterValues.age, bmi: filterValues.bmi, diabete: filterValues.diabete, hta: filterValues.hta, fevg: filterValues.fevg };
+  });
+
+  area.innerHTML = html;
+}
+
+// =====================================================================
+// EMAIL
+// =====================================================================
+function openMailModal(pid) {
+  const d = currentMailData[pid];
+  if (!d) return;
+  let body = `Bonjour,\n\nJe suis Monsieur / Madame ____________, né(e) le ___/___/______.\n\nJ'ai appris l'existence du protocole ${d.protocol} via l'outil InnovaCoeur et j'aimerais en savoir davantage.\n\n--- Informations renseignées ---\nSituation(s) clinique(s) : ${d.categories.join(', ')}\n`;
+  if (d.age) body += `Âge : ${d.age} ans\n`;
+  if (d.bmi) body += `IMC : ${d.bmi}\n`;
+  if (d.fevg) body += `Force de contraction (FEVG) : ${d.fevg === 'oui' ? 'Normale' : d.fevg === 'non' ? 'Diminuée' : 'Ne sait pas'}\n`;
+  if (d.diabete !== null) body += `Diabète : ${d.diabete ? 'Oui' : 'Non'}\n`;
+  if (d.hta !== null) body += `Hypertension : ${d.hta ? 'Oui' : 'Non'}\n`;
+  if (d.treatments.length > 0) body += `Traitements : ${d.treatments.join(', ')}\n`;
+  body += `\nCordialement`;
+  document.getElementById('modalText').value = body;
+  document.getElementById('modalOverlay').classList.add('active');
+  currentMailData._current = { email: d.arc.email, subject: `InnovaCoeur — Demande d'information — Protocole ${d.protocol}`, body };
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
+
+function copyMailText() {
+  const ta = document.getElementById('modalText');
+  ta.select();
+  navigator.clipboard.writeText(ta.value).then(() => {
+    const btn = document.querySelector('.btn-copy');
+    const o = btn.textContent; btn.textContent = '✅ Copié !';
+    setTimeout(() => btn.textContent = o, 2000);
+  });
+}
+
+function sendMail() {
+  const d = currentMailData._current;
+  if (d) window.open(`mailto:${d.email}?subject=${encodeURIComponent(d.subject)}&body=${encodeURIComponent(d.body)}`, '_blank');
+  closeModal();
+}
+
+// =====================================================================
+// RESET
+// =====================================================================
+function resetAll() {
+  selectedCategories.clear();
+  selectedTreatments.clear();
+  filterValues = { age: null, bmi: null, diabete: null, hta: null, fevg: null };
+  currentMailData = {};
+  document.querySelectorAll('.category-card').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('.toggle-pill').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.bool-option,.fevg-option').forEach(el => el.classList.remove('active'));
+  document.getElementById('inputAge').value = '';
+  document.getElementById('inputTaille').value = '';
+  document.getElementById('inputPoids').value = '';
+  document.getElementById('bmiDisplay').classList.remove('visible');
+  document.getElementById('btnToStep2').disabled = true;
+  goToStep(1);
+}
+</script>
+</body>
+</html>

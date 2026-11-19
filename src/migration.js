@@ -33,6 +33,12 @@
     return { prenom: prenom.join(' '), nom: nom.join(' ') };
   }
 
+  /** Élément d'une liste des paramètres (pathologie, vignette) dont le nom ou un synonyme correspond au texte. */
+  function correspondre(texte, liste) {
+    const simple = N.texteSimple(texte);
+    return liste.find((x) => [x.nom].concat(x.synonymes || []).some((s) => N.texteSimple(s) === simple)) || null;
+  }
+
   function migrer(lecture, parametres, correspondances) {
     const controle = InnovaCare.controles.controler(lecture, parametres, correspondances);
     const etudes = InnovaCare.lectureAncien.toutesLesEtudes(lecture); // complétées par controler (nom, id, indices…)
@@ -224,12 +230,24 @@
       arcsUniques.slice(1, 1 + CAPACITE.arc_backup).forEach((nom, i) => { v['arc_backup_' + (i + 1)] = nom; });
       if (arcsUniques.length > 1 + CAPACITE.arc_backup) noter('Autres ARC cités : ' + arcsUniques.slice(1 + CAPACITE.arc_backup).join(', ') + '.');
 
-      // Anciens « tags » : recopiés tels quels en attendant les listes de l'étape 1.3
-      const pathologies = textes('tag_ecs').flatMap((t) => t.split('+').map((x) => x.trim()).filter(Boolean));
-      pathologies.slice(0, CAPACITE.pathologie).forEach((t, i) => { v['pathologie_' + (i + 1)] = t; });
-      if (pathologies.length > CAPACITE.pathologie) noter('Autres tags : ' + pathologies.slice(CAPACITE.pathologie).join(' + ') + '.');
-      const vignettes = textes('tag_innovacoeur');
-      vignettes.slice(0, CAPACITE.vignette).forEach((t, i) => { v['vignette_' + (i + 1)] = t; });
+      // Anciens « tags » → pathologies et vignettes de la liste des paramètres (par leurs synonymes).
+      // Un tag non reconnu n'est pas deviné : il est gardé en Remarques et signalé.
+      const convertirTags = (champ, liste, cible, capacite, libelle) => {
+        const morceaux = textes(champ).flatMap((t) => t.split('+').map((x) => x.trim()).filter(Boolean));
+        const retenus = [];
+        for (const morceau of morceaux) {
+          const trouve = liste.length ? correspondre(morceau, liste) : null;
+          const valeur = trouve ? trouve.nom : (liste.length ? null : morceau); // liste vide : recopie telle quelle
+          if (valeur === null) {
+            noter(libelle + ' non reconnu : « ' + morceau + ' ».');
+            signaler('verifier', e, libelle, '« ' + morceau + ' » ne correspond à aucune valeur de la liste : à choisir à la main (gardé en Remarques).');
+          } else if (!retenus.includes(valeur)) retenus.push(valeur);
+        }
+        retenus.slice(0, capacite).forEach((t, i) => { v[cible + '_' + (i + 1)] = t; });
+        if (retenus.length > capacite) noter('Autres ' + libelle.toLowerCase() + 's : ' + retenus.slice(capacite).join(', ') + '.');
+      };
+      convertirTags('tag_ecs', parametres.pathologies || [], 'pathologie', CAPACITE.pathologie, 'Tag e-Cardioscope');
+      convertirTags('tag_innovacoeur', parametres.vignettes || [], 'vignette', CAPACITE.vignette, 'Tag InnovaCoeur');
 
       // Affichage
       const drapeau = (champ, cible, libelle) => {
@@ -312,7 +330,7 @@
       rapport.push({ gravite: 'info', pole: '', etude: '', champ: 'Filtres', message: bornesStrictes + ' borne(s) stricte(s) (« > » ou « < ») converties en bornes incluses : « > 40 » devient minimum 40. Écart d\'une unité, à corriger seulement s\'il compte cliniquement.' });
     }
     rapport.push({ gravite: 'info', pole: '', etude: '', champ: 'Affichage', message: '« Afficher aux médecins libéraux » n\'existait pas : mis à « non » partout, à activer étude par étude.' });
-    if (!(parametres.pathologies || []).length) {
+    if (!(parametres.pathologies || []).length || !(parametres.vignettes || []).length) {
       rapport.push({ gravite: 'info', pole: '', etude: '', champ: 'Pathologies, vignettes', message: 'Les anciens « Tag » sont recopiés tels quels. Les listes déroulantes de pathologies et de vignettes arriveront à l\'étape suivante.' });
     }
 
@@ -342,5 +360,5 @@
         'Rapport : ' + resume.rapport.corriger + ' à corriger, ' + resume.rapport.verifier + ' à vérifier, ' + resume.rapport.info + ' pour information']).join('\n');
   }
 
-  InnovaCare.migration = { migrer, resumeCompteurs, decouperNom };
+  InnovaCare.migration = { migrer, resumeCompteurs, decouperNom, correspondre };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

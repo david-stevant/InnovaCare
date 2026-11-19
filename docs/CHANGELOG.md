@@ -2,6 +2,32 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.4.0 — 19 novembre 2026 — Étape 1.3 : paramètres complets et formulaire d'édition
+
+- **Nouvel outil `outils/Parametres.html`** : modification de tous les réglages de l'instance (identité,
+  couleurs, pôles, pathologies, vignettes patient, filtres et traitements, textes, mémos, newsletter),
+  avec aperçu en direct et vérification permanente. Le résultat se télécharge en `parametres.json`.
+  Le même outil **met à jour un Excel harmonisé** après un changement de paramètres, sans perte :
+  une valeur dont la ligne a disparu est gardée en Remarques ; les notes « à ressaisir » et le rapport
+  de migration sont conservés.
+- **`parametres.json` complet** :
+  - 20 contextes cliniques d'e-CardioScope v4, dans le même ordre, plus « Endocardite », tag de l'Excel
+    (à confirmer) ;
+  - 7 vignettes patient d'InnovaCoeur v2 ;
+  - questions et textes patient d'InnovaCoeur v2 repris mot pour mot ;
+  - en-tête et sections des mémos ; réglages de la newsletter.
+- **Mentions de l'établissement retirées des textes repris** (règle 3) : bandeau de la page patient,
+  début du sous-titre, deuxième ligne du pied de page, titre des mémos.
+- **Libellés patient des traitements** : la DCI d'abord, puis le nom commercial entre parenthèses
+  (correction : la v2 commençait par le nom commercial).
+- **Correction de vocabulaire** : « DAVD / CAVG » d'e-CardioScope v4 devient « DAVD / CAVD ».
+- **Excel harmonisé** : listes déroulantes de pathologies et de vignettes. La migration convertit les
+  anciens tags grâce à des synonymes. Sur la copie de développement, seuls « CMI », « HTAP » et « PM »
+  restent à choisir à la main.
+- **`reference/`** : anciens outils ajoutés (mémos v3, e-CardioScope v4, InnovaCoeur v2), avec des DECT
+  fictifs et sans chemin du disque partagé ; un test le vérifie. Provenance dans `reference/SOURCES.md`.
+- **Tests** : 73 tests.
+
 ## Version 0.3.0 — 19 novembre 2026 — Étape 1.2 : gabarit Excel harmonisé et migration
 
 - **Nouvel outil `outils/Migration.html`** : on y dépose l'ancien Excel, il fabrique le **nouvel Excel

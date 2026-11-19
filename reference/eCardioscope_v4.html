@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-CardioScope — Recherche Clinique Cardiologie</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f4f0;
+  --card-bg: #ffffff;
+  --accent: #c0392b;
+  --accent-light: #fdf0ee;
+  --accent2: #2c3e50;
+  --teal: #16a085;
+  --teal-light: #e8f5f2;
+  --blue: #2980b9;
+  --blue-light: #eaf4fb;
+  --gold: #e67e22;
+  --gold-light: #fef5ec;
+  --border: #e5e2d9;
+  --text: #1a1a1a;
+  --muted: #7a7570;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-hover: 0 6px 24px rgba(0,0,0,0.13);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ══════════ HEADER ══════════ */
+.header {
+  background: var(--accent2); color: #fff;
+  padding: 16px 24px 0;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.header-top { display: flex; align-items: center; gap: 14px; padding-bottom: 14px; }
+.header-logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
+.header-logo span { color: #e74c3c; }
+.header-sub { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 300; letter-spacing: 0.5px; text-transform: uppercase; }
+.header-tag { margin-left: auto; font-size: 11px; color: rgba(255,255,255,0.4); font-style: italic; }
+
+/* ══════════ STEP BAR ══════════ */
+.step-bar { display: flex; align-items: stretch; border-top: 1px solid rgba(255,255,255,0.1); }
+.step-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 18px 9px 0; font-size: 12px;
+  color: rgba(255,255,255,0.35); cursor: default; transition: color 0.2s;
+  white-space: nowrap;
+}
+.step-item:first-child { padding-left: 0; }
+.step-item.active { color: #fff; }
+.step-item.done { color: rgba(255,255,255,0.6); cursor: pointer; }
+.step-item.done:hover { color: #fff; }
+.step-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0; transition: all 0.18s;
+}
+.step-item.active .step-num { background: var(--accent); }
+.step-item.done .step-num { background: var(--teal); }
+.step-arrow { color: rgba(255,255,255,0.2); margin-right: 8px; font-size: 12px; }
+
+/* ══════════ LAYOUT ══════════ */
+.container { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+
+/* ══════════ STEP 1 — CONTEXTS ══════════ */
+.context-intro { font-size: 14px; color: var(--muted); margin-bottom: 20px; font-weight: 300; }
+.ctx-group { margin-bottom: 22px; }
+.ctx-group-label {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--muted); margin-bottom: 9px; padding-left: 2px;
+}
+.context-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.ctx-btn {
+  background: var(--card-bg); border: 1.5px solid var(--border);
+  border-radius: 8px; padding: 9px 13px;
+  cursor: pointer; display: flex; align-items: center; gap: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  color: var(--text); transition: all 0.16s; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  white-space: nowrap;
+}
+.ctx-btn:hover { border-color: var(--accent); box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+.ctx-btn.selected { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+.ctx-btn.selected .ctx-icon { background: var(--accent); color: #fff; }
+.ctx-icon {
+  width: 28px; height: 28px; border-radius: 6px; background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0; transition: all 0.16s;
+}
+.step1-actions { display: flex; align-items: center; gap: 14px; margin-top: 12px; }
+
+/* ══════════ STEP 2 — FILTERS ══════════ */
+.filter-section { margin-bottom: 18px; }
+.filter-section-title {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--muted); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.filter-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Extra / boolean filter rows */
+.extra-filter-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 14px; background: var(--card-bg);
+  border: 1.5px solid var(--border); border-radius: 8px;
+  margin-bottom: 8px; flex-wrap: wrap;
+}
+.extra-filter-question {
+  flex: 1; font-size: 13.5px; font-weight: 600; color: var(--text);
+  min-width: 200px;
+}
+.extra-filter-proto {
+  font-size: 11px; color: var(--muted); font-weight: 400;
+  margin-left: auto; white-space: nowrap;
+}
+.yesno-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.yesno-btn {
+  padding: 6px 14px; border-radius: 6px;
+  border: 1.5px solid var(--border); background: var(--bg);
+  font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; color: var(--muted);
+}
+.yesno-btn.yes.active { background: var(--teal-light); border-color: var(--teal); color: var(--teal); }
+.yesno-btn.no.active { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+.yesno-btn:not(.active):hover { border-color: #aaa; color: var(--text); }
+
+/* Numeric filter fields */
+.filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.filter-field { display: flex; flex-direction: column; gap: 5px; }
+.filter-label { font-size: 12px; font-weight: 600; color: var(--accent2); }
+.filter-unit { font-size: 10.5px; color: var(--muted); font-weight: 400; font-style: italic; }
+.filter-input {
+  height: 40px; border: 1.5px solid var(--border); border-radius: 7px;
+  padding: 0 12px; font-family: 'DM Mono', monospace; font-size: 14px;
+  background: #fafaf8; transition: border-color 0.15s; width: 100%;
+}
+.filter-input:focus { outline: none; border-color: var(--teal); background: var(--teal-light); }
+.filter-card {
+  background: var(--card-bg); border-radius: var(--radius);
+  border: 1.5px solid var(--border); padding: 20px 22px;
+  box-shadow: var(--shadow); margin-bottom: 16px;
+}
+.filter-intro { font-size: 13.5px; color: var(--muted); margin-bottom: 18px; line-height: 1.6; }
+.step2-actions { display: flex; align-items: center; gap: 14px; margin-top: 6px; }
+
+/* ══════════ STEP 3 — RESULTS ══════════ */
+.results-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.results-count { font-size: 13px; color: var(--muted); }
+.results-count strong { color: var(--accent); font-size: 18px; }
+
+.protocol-card {
+  background: var(--card-bg); border-radius: var(--radius);
+  border: 1.5px solid var(--border); margin-bottom: 12px;
+  box-shadow: var(--shadow); overflow: hidden;
+}
+.proto-header {
+  padding: 14px 18px 12px; background: var(--accent2); color: #fff;
+}
+.proto-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.proto-synopsis { font-size: 12.5px; color: rgba(255,255,255,0.7); font-weight: 300; line-height: 1.4; margin-bottom: 8px; }
+.proto-meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.proto-tag {
+  font-size: 10.5px; padding: 2px 8px; border-radius: 20px;
+  background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
+  font-weight: 500; border: 1px solid rgba(255,255,255,0.15);
+}
+.filter-badge {
+  font-size: 10.5px; padding: 2px 8px; border-radius: 20px;
+  font-weight: 500; font-family: 'DM Mono', monospace;
+}
+.filter-badge.ok { background: var(--teal-light); color: var(--teal); border: 1px solid #a8d9cf; }
+.filter-badge.warn { background: var(--gold-light); color: var(--gold); border: 1px solid #f0c89c; }
+
+.proto-body { padding: 16px 18px; }
+.proto-section-title {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--muted); margin-bottom: 8px; margin-top: 14px;
+}
+.proto-section-title:first-child { margin-top: 0; }
+.proto-criteria { font-size: 13px; line-height: 1.75; color: var(--text); }
+.proto-criteria .crit-line { display: block; padding-left: 14px; text-indent: -14px; margin-bottom: 2px; }
+.proto-arc {
+  margin-top: 14px; padding: 10px 14px;
+  background: var(--accent-light); border-radius: 7px;
+  font-size: 13px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.proto-arc strong { color: var(--accent); }
+.proto-arc a { color: var(--accent); text-decoration: none; }
+.proto-arc a:hover { text-decoration: underline; }
+
+/* ══════════ BREADCRUMB ══════════ */
+.breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-bottom: 18px; flex-wrap: wrap; }
+.breadcrumb-chip {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px;
+  padding: 3px 10px; font-size: 11.5px; display: flex; align-items: center; gap: 5px;
+}
+.breadcrumb-chip.clickable { cursor: pointer; }
+.breadcrumb-chip.clickable:hover { border-color: var(--accent); color: var(--accent); }
+.breadcrumb-sep { color: var(--border); }
+
+/* ══════════ BUTTONS ══════════ */
+.btn {
+  padding: 10px 20px; border-radius: 8px; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all 0.16s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #a93226; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(192,57,43,0.3); }
+.btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-secondary { background: var(--card-bg); color: var(--text); border: 1.5px solid var(--border); }
+.btn-secondary:hover { background: var(--bg); }
+.btn-teal { background: var(--teal); color: #fff; }
+.btn-teal:hover { background: #148070; transform: translateY(-1px); }
+
+/* ══════════ EMPTY STATE ══════════ */
+.empty-state { text-align: center; padding: 50px 20px; color: var(--muted); }
+.empty-state .icon { font-size: 40px; margin-bottom: 14px; }
+.empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
+
+@media (max-width: 600px) {
+  .context-grid { gap: 6px; }
+  .ctx-btn { font-size: 12px; padding: 8px 10px; }
+  .filter-grid { grid-template-columns: 1fr 1fr; }
+  .header-top { padding: 12px 0; }
+  .container { padding: 14px 14px 50px; }
+  .extra-filter-proto { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="header-logo">e-<span>Cardio</span>Scope</div>
+      <div class="header-sub">Cardiologie CHU Nantes — Recherche Clinique</div>
+    </div>
+    <div class="header-tag">#TeamCoeur · #ChaqueInclusionCompte</div>
+  </div>
+  <div class="step-bar">
+    <div class="step-item active" id="stepbar1" onclick="goToStep(1)">
+      <span class="step-num">1</span> Contexte clinique
+    </div>
+    <span class="step-arrow">›</span>
+    <div class="step-item" id="stepbar2" onclick="goToStep(2)">
+      <span class="step-num">2</span> Filtres clinico-biologiques
+    </div>
+    <span class="step-arrow">›</span>
+    <div class="step-item" id="stepbar3">
+      <span class="step-num">3</span> Protocoles disponibles
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════
+     STEP 1 — CONTEXTE CLINIQUE
+══════════════════════════════════════ -->
+<div id="step1">
+  <p class="context-intro">Sélectionnez le(s) contexte(s) clinique(s) de votre patient — multi-sélection possible :</p>
+
+  <div class="ctx-group">
+    <div class="ctx-group-label">💛 Insuffisance cardiaque &amp; Cardiomyopathies</div>
+    <div class="context-grid">
+      <button class="ctx-btn" data-ctx="IC" onclick="toggleCtx(this)"><span class="ctx-icon">🫀</span>Insuffisance cardiaque</button>
+      <button class="ctx-btn" data-ctx="CMH" onclick="toggleCtx(this)"><span class="ctx-icon">🧬</span>CMH</button>
+      <button class="ctx-btn" data-ctx="DAVD" onclick="toggleCtx(this)"><span class="ctx-icon">🧬</span>DAVD / CAVG</button>
+      <button class="ctx-btn" data-ctx="Amylose" onclick="toggleCtx(this)"><span class="ctx-icon">🔬</span>Amylose cardiaque</button>
+    </div>
+  </div>
+
+  <div class="ctx-group">
+    <div class="ctx-group-label">💙 Rythmologie</div>
+    <div class="context-grid">
+      <button class="ctx-btn" data-ctx="FA" onclick="toggleCtx(this)"><span class="ctx-icon">〰️</span>Fibrillation atriale</button>
+      <button class="ctx-btn" data-ctx="Flutter" onclick="toggleCtx(this)"><span class="ctx-icon">〰️</span>Flutter atrial / Pré-excitation</button>
+      <button class="ctx-btn" data-ctx="TV" onclick="toggleCtx(this)"><span class="ctx-icon">⚡</span>Tachycardie ventriculaire</button>
+      <button class="ctx-btn" data-ctx="ESV" onclick="toggleCtx(this)"><span class="ctx-icon">⚡</span>ESV fréquentes</button>
+      <button class="ctx-btn" data-ctx="ACR" onclick="toggleCtx(this)"><span class="ctx-icon">⚡</span>ACR / Mort subite</button>
+      <button class="ctx-btn" data-ctx="DAI" onclick="toggleCtx(this)"><span class="ctx-icon">🔋</span>DAI prévention primaire</button>
+      <button class="ctx-btn" data-ctx="TAVI" onclick="toggleCtx(this)"><span class="ctx-icon">🔧</span>Post-TAVI</button>
+    </div>
+  </div>
+
+  <div class="ctx-group">
+    <div class="ctx-group-label">🟠 USIC / Hémodynamique / Transversal</div>
+    <div class="context-grid">
+      <button class="ctx-btn" data-ctx="SCA" onclick="toggleCtx(this)"><span class="ctx-icon">🚑</span>SCA / Coronaire</button>
+      <button class="ctx-btn" data-ctx="Choc" onclick="toggleCtx(this)"><span class="ctx-icon">🚨</span>Choc cardiogénique</button>
+      <button class="ctx-btn" data-ctx="Myocardite" onclick="toggleCtx(this)"><span class="ctx-icon">🔬</span>Myocardite / Péricardite</button>
+      <button class="ctx-btn" data-ctx="AVC" onclick="toggleCtx(this)"><span class="ctx-icon">🧠</span>AVC / FOP</button>
+      <button class="ctx-btn" data-ctx="Valvulopathie" onclick="toggleCtx(this)"><span class="ctx-icon">🔧</span>Valvulopathie</button>
+    </div>
+  </div>
+
+  <div class="ctx-group">
+    <div class="ctx-group-label">⚙️ Comorbidités</div>
+    <div class="context-grid">
+      <button class="ctx-btn" data-ctx="Obésité" onclick="toggleCtx(this)"><span class="ctx-icon">⚖️</span>Obésité / Surpoids</button>
+      <button class="ctx-btn" data-ctx="HTA" onclick="toggleCtx(this)"><span class="ctx-icon">🩺</span>HTA</button>
+      <button class="ctx-btn" data-ctx="RisqueCV" onclick="toggleCtx(this)"><span class="ctx-icon">📊</span>Risque cardiovasculaire</button>
+      <button class="ctx-btn" data-ctx="Diabète" onclick="toggleCtx(this)"><span class="ctx-icon">💊</span>Diabète</button>
+    </div>
+  </div>
+
+  <div class="step1-actions">
+    <button class="btn btn-primary" id="btn-step1-next" onclick="goToStep2()" disabled>
+      Suivant — Filtres →
+    </button>
+    <span id="ctx-count-label" style="font-size:12px;color:var(--muted)">Aucun contexte sélectionné</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     STEP 2 — FILTRES CLINICO-BIOLOGIQUES
+══════════════════════════════════════ -->
+<div id="step2" style="display:none">
+  <div class="breadcrumb" id="breadcrumb2"></div>
+
+  <div class="filter-card">
+    <p class="filter-intro">
+      Renseignez les éléments disponibles. Seuls les critères <strong>discriminants</strong> sont affichés. Les filtres se mettent à jour <strong>en temps réel</strong> selon vos réponses.
+    </p>
+
+    <!-- Extra / boolean filters FIRST -->
+    <div id="section-extra" style="display:none">
+      <div class="filter-section">
+        <div class="filter-section-title">Quelques précisions</div>
+        <div id="filter-extra-fields"></div>
+      </div>
+    </div>
+
+    <!-- Numeric filters -->
+    <div id="section-numeric" style="display:none">
+      <div class="filter-section">
+        <div class="filter-section-title">Valeurs biologiques et cliniques</div>
+        <div class="filter-grid" id="filter-fields"></div>
+      </div>
+    </div>
+
+    <div id="no-filters-msg" style="display:none;font-size:13px;color:var(--muted)">
+      Aucun filtre discriminant pour ces contextes — cliquez sur "Voir les protocoles" pour continuer.
+    </div>
+  </div>
+
+  <div class="live-count" id="live-count" style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);padding:9px 15px;background:var(--bg);border-radius:20px;border:1px solid var(--border);margin-bottom:14px;width:fit-content">
+    <strong id="live-n" style="font-size:16px;color:var(--accent)">–</strong> protocole(s) correspond(ent) aux critères actuels
+  </div>
+  <div class="step2-actions">
+    <button class="btn btn-teal" onclick="goToStep3()">Voir les protocoles →</button>
+    <button class="btn btn-secondary" onclick="goToStep(1)">← Retour</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     STEP 3 — RÉSULTATS
+══════════════════════════════════════ -->
+<div id="step3" style="display:none">
+  <div class="breadcrumb" id="breadcrumb3"></div>
+  <div class="results-header">
+    <div class="results-count" id="results-count"></div>
+    <button class="btn btn-secondary" style="margin-left:auto;font-size:12px;padding:7px 14px" onclick="goToStep(1)">← Nouvelle recherche</button>
+  </div>
+  <div id="protocol-list"></div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ════════════════════════════════════════════════════════
+// PROTOCOL DATA
+// ════════════════════════════════════════════════════════
+// ctxTags: list of context keys that trigger this protocol
+// extras: list of {id, question, showIfYes:bool}
+//   if showIfYes=true → protocol shown only when answer=oui
+//   if showIfYes=false → protocol excluded when answer=non
+// filtre_*: numeric filters with {op, val} or {op:'range',min,max}
+
+const PROTOCOLS = [
+  // ── INSUFFISANCE CARDIAQUE ──
+  {
+    name: "BONFIRE",
+    synopsis: "Arrêt vs poursuite des bêta-bloquants dans l'IC à FEVG normalisée",
+    ctxTags: ["IC"],
+    extras: [
+      { id: "bonfire_bb", question: "Patient sous bêta-bloquant + ARA2/IEC/ARNI + gliflozine ?", showIfYes: true }
+    ],
+    filtre_age: null,
+    filtre_fevg: { op: ">", val: 50 },
+    filtre_dfg:  { op: ">", val: 20 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Océane SALOMON", arc_dect: "99001", arc_mail: "oceane.salomon@chu-nantes.fr",
+    criteria: [
+      "Antécédent de FEVG ≤ 45% (même ancien) + FEVG normalisée ≥ 50%",
+      "Sous bêta-bloquants de l'IC depuis ≥ 12 mois + traitement médical optimal de l'ICFER (IEC/ARA2 ou ARNI + gliflozine)",
+      "NYHA 1 ou 2, pas d'hospitalisation pour IC dans les 6 derniers mois"
+    ]
+  },
+  {
+    name: "BRANCH-HF",
+    synopsis: "Inhibiteur de BDK vs placebo dans l'ICFEP avec BMI > 27",
+    ctxTags: ["IC","Obésité","Diabète"],
+    extras: [
+      { id: "branchhf_glif", question: "Patient traité par gliflozine ?", showIfYes: true },
+    ],
+    filtre_age: { op: "range", min: 18, max: 80 },
+    filtre_fevg: { op: ">", val: 40 },
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Océane SALOMON", arc_dect: "99001", arc_mail: "oceane.salomon@chu-nantes.fr",
+    criteria: [
+      "ICFEP diagnostiquée depuis > 3 mois : NYHA 2-3-4, FEVG ≥ 40% (jamais de FEVG < 40% antérieure)",
+      "BMI 27–50 (ou < 27 si + DT2 ou analogue GLP-1)",
+      "Nt-proBNP élevé en RS ou hospitalisation avec furosémide IV < 12 mois",
+      "Traité par gliflozine — Âge 18–80 ans"
+    ]
+  },
+  {
+    name: "LEVEL 2",
+    synopsis: "Lévosimendan per os vs placebo dans l'ICFEP avec HTP post-capillaire",
+    ctxTags: ["IC"],
+    extras: [
+      { id: "level2_htp", question: "Présence d'une HTP significative suspectée en ETT et/ou documentée au KTD ?", showIfYes: true }
+    ],
+    filtre_age: { op: "range", min: 12, max: 85 },
+    filtre_fevg: { op: ">", val: 40 },
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Karine MAUGENDRE", arc_dect: "99003", arc_mail: "karine.maugendre@chu-nantes.fr",
+    criteria: [
+      "NYHA 2–4 et FEVG ≥ 40% — Âge 12 à 85 ans",
+      "HTP groupe 2 au cathétérisme droit : PAPO ≥ 18 + PAPm ≥ 30 + POD ≥ 8 mmHg au repos (ou à l'effort / lever de jambe passif)",
+      "Screening KTD possible jusqu'à 4 mois après"
+    ]
+  },
+  {
+    name: "ARCADIA",
+    synopsis: "Évaluation de l'atteinte cardio-rénale sous dapagliflozine — IC avancée pré-greffe",
+    ctxTags: ["IC"],
+    extras: [
+      { id: "arcadia_ic_adv", question: "IC avancée / pré-greffe (NYHA > 3) ?", showIfYes: true },
+      { id: "arcadia_dapa", question: "Sous dapagliflozine (Forxiga / Xiguo) ?", showIfYes: true }
+    ],
+    filtre_age: null,
+    filtre_fevg: { op: "<", val: 35 },
+    filtre_dfg:  { op: "<", val: 25 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Emilie BOURGEON CONAN", arc_dect: "99006", arc_mail: "emilie.bourgeon-conan@chu-nantes.fr",
+    criteria: [
+      "NYHA > 3 et FEVG < 35%",
+      "Sous traitement optimal incluant dapagliflozine (empagliflozine non éligible)",
+      "Inscrit sur liste de greffe (accès > 6 mois) ou en parcours pré-greffe"
+    ]
+  },
+  {
+    name: "ELEVATE-HFpEF",
+    synopsis: "Stimulation à fréquence personnalisée vs VVI back-up dans l'ICFEP (avec PM)",
+    ctxTags: ["IC"],
+    extras: [
+    ],
+    filtre_age: { op: ">", val: 40 },
+    filtre_fevg: { op: ">", val: 50 },
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Bastien OUVRARD", arc_dect: "99004", arc_mail: "bastien.ouvrard@chu-nantes.fr",
+    criteria: [
+      "FEVG > 50% et âge > 40 ans",
+      "≥ 1 critère : épisode d'IC documenté < 12 mois OU NYHA ≥ 2 + critère d'enrichissement (Nt-proBNP > 400, critères ETT, diurétiques…)",
+      "Tous les patients seront implantés d'un PM avec stimulation physiologique"
+    ]
+  },
+  {
+    name: "POLARIS",
+    synopsis: "Amycrétine (analogue amyline + GLP-1) vs placebo dans l'ICFEP avec obésité",
+    ctxTags: ["IC","Obésité"],
+    extras: [
+    ],
+    filtre_age: null,
+    filtre_fevg: { op: ">", val: 40 },
+    filtre_dfg:  null,
+    filtre_bnp:  { op: ">", val: 100 },
+    filtre_bmi:  { op: ">", val: 30 },
+    arc_name: "Audrey ERNOULD", arc_dect: "99005", arc_mail: "audrey.ernould@chu-nantes.fr",
+    criteria: [
+      "FEVG > 40% + critère de dysfonction diastolique (OG dilatée, HBG…)",
+      "NYHA 2–4 et BMI > 30",
+      "Nt-proBNP > 150 pg/mL (ou > 100 si BMI > 35) en RS / > 300 (ou > 200 si BMI > 35) en FA",
+      "≥ 1 parmi : DFG 15–60, RAC > 30 mg/g, ou hospitalisation pour IC < 12 mois"
+    ]
+  },
+  {
+    name: "HF-RELIEF",
+    synopsis: "Ablation du NAV + PM vs contrôle de fréquence médicamenteux — FA permanente + ICFEP",
+    ctxTags: ["IC","FA"],
+    extras: [
+      { id: "hfrelief_faperm", question: "FA permanente (> 6 mois) ?", showIfYes: true },
+    ],
+    filtre_age: { op: ">", val: 65 },
+    filtre_fevg: null,
+    filtre_dfg:  { op: ">", val: 20 },
+    filtre_bnp: null,
+    filtre_bmi:  { op: "<", val: 40 },
+    arc_name: "Bastien OUVRARD", arc_dect: "99004", arc_mail: "bastien.ouvrard@chu-nantes.fr",
+    criteria: [
+      "FA permanente > 6 mois — QRS < 130 ms — FEVG préservée",
+      "NYHA ≥ 2 — âge > 65 ans — ≥ 1 hospitalisation pour IC dans l'année",
+      "FC contrôlée < 110 bpm sur 24h"
+    ]
+  },
+  {
+    name: "DILEMMA",
+    synopsis: "Intérêt du DAI en prévention primaire chez les patients ≥ 70 ans",
+    ctxTags: ["IC","DAI"],
+    extras: [],
+    filtre_age: { op: "≥", val: 70 },
+    filtre_fevg: { op: "≤", val: 35 },
+    filtre_dfg:  null,
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Bastien OUVRARD", arc_dect: "99004", arc_mail: "bastien.ouvrard@chu-nantes.fr",
+    criteria: [
+      "Âge ≥ 70 ans avec indication théorique de DAI en prévention primaire (y compris question CRT-P vs CRT-D)",
+      "FEVG ≤ 35% — NYHA II ou III",
+      "Traitement optimisé de l'insuffisance cardiaque depuis ≥ 3 mois"
+    ]
+  },
+  // ── CMH ──
+  {
+    name: "FORTITUDE",
+    synopsis: "Ninerafaxstat vs placebo dans la CMH non obstructive symptomatique",
+    ctxTags: ["CMH"],
+    extras: [
+      { id: "fortitude_nonobst", question: "CMH non obstructive (gradient < 30 mmHg au repos et Valsalva) ?", showIfYes: true }
+    ],
+    filtre_age: null,
+    filtre_fevg: { op: ">", val: 55 },
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp:  { op: ">", val: 125 },
+    filtre_bmi:  { op: "≤", val: 35 },
+    arc_name: "Sophie CLÉRO", arc_dect: "99007", arc_mail: "sophie.clero@chu-nantes.fr",
+    criteria: [
+      "CMH non obstructive : gradient < 30 mmHg au repos et à la manœuvre de Valsalva",
+      "Épaisseur ≥ 15 mm (ou ≥ 13 mm si apparenté ou mutation identifiée)",
+      "Symptomatique NYHA 2–3 et FEVG > 55%",
+      "Nt-proBNP ≥ 125 pg/mL (≥ 300 si FA)"
+    ]
+  },
+  {
+    name: "REMY",
+    synopsis: "Registre national SFC des CMH — focus nouvelles thérapeutiques",
+    ctxTags: ["CMH"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Océane SALOMON", arc_dect: "99001", arc_mail: "oceane.salomon@chu-nantes.fr",
+    criteria: [
+      "Toute CMH sarcomérique (en particulier patients sous nouvelles thérapeutiques : mavacamten, ninerafaxstat…)",
+      "Registre en soins courants"
+    ]
+  },
+  {
+    name: "LA-HCM",
+    synopsis: "Rivaroxaban vs stratégie standard dans la CMH avec strain OG altéré en rythme sinusal",
+    ctxTags: ["CMH"],
+    extras: [],
+    filtre_age: { op: "range", min: 40, max: 80 },
+    filtre_fevg: null,
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Patricia CHARPENTIER", arc_dect: "99002", arc_mail: "patricia.charpentier@chu-nantes.fr",
+    criteria: [
+      "CMH sarcomérique (mutée ou non) — âge 40 à 80 ans — poids 50 à 120 kg",
+      "Rythme sinusal",
+      "Strain OG réservoir ≤ 20% (en conditions normales, hors congestion ou HTA non contrôlée)"
+    ]
+  },
+  // ── DAVD ──
+  {
+    name: "BRAVE",
+    synopsis: "Spironolactone vs placebo sur la détérioration du VD et les arythmies dans la DAVD",
+    ctxTags: ["DAVD"],
+    extras: [],
+    filtre_age: { op: ">", val: 18 },
+    filtre_fevg: { op: ">", val: 40 },
+    filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Anaelle RAOUL", arc_dect: "99008", arc_mail: "anaelle.raoul@chu-nantes.fr",
+    criteria: [
+      "Diagnostic de DAVD selon les critères de la Task Force",
+      "FEVG > 40% — Adulte ≥ 18 ans",
+      "Sous traitement médical optimisé comprenant des bêta-bloquants"
+    ]
+  },
+  // ── AMYLOSE ──
+  {
+    name: "TRITON (ALN-TTRSC04)",
+    synopsis: "Nucrésiran (ARN interférent, silencer TTR) vs placebo dans l'amylose ATTR",
+    ctxTags: ["Amylose"],
+    extras: [],
+    filtre_age: { op: "≤", val: 85 },
+    filtre_fevg: null,
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp:  { op: "range", min: 300, max: 8500 },
+    filtre_bmi: null,
+    arc_name: "Patricia CHARPENTIER", arc_dect: "99002", arc_mail: "patricia.charpentier@chu-nantes.fr",
+    criteria: [
+      "Amylose ATTR (wildtype ou héréditaire) — âge ≤ 85 ans",
+      "Nt-proBNP entre 300 et 8 500 pg/mL en RS (ou 600–8 500 en FA)",
+      "ATCD d'IC : ≥ 1 hospitalisation pour IC OU traitement diurétique stable > 1 mois",
+      "Pouvant recevoir un stabilisateur (tafamidis/acoramidis)",
+      "Cliniquement stable (pas d'hospitalisation CV dans les 6 dernières semaines)"
+    ]
+  },
+  {
+    name: "Registre HEAR",
+    synopsis: "Registre national des amyloses cardiaques — simple non-opposition",
+    ctxTags: ["Amylose"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Sophie CLÉRO", arc_dect: "99007", arc_mail: "sophie.clero@chu-nantes.fr",
+    criteria: [
+      "Tout diagnostic d'amylose cardiaque (ATTRwt, ATTRv ou AL) — diagnostic ancien ou récent",
+      "Simple signature d'une non-opposition. Aucune contrainte supplémentaire.",
+      "💡 Objectif : viser l'exhaustivité — penser à proposer à tous vos patients amyloses !"
+    ]
+  },
+  {
+    name: "CLEOPATTRA",
+    synopsis: "Anticorps déplétteur de TTR (IV mensuel) vs placebo dans l'amylose ATTR",
+    ctxTags: ["Amylose"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null,
+    filtre_bnp:  { op: "≥", val: 1000 },
+    filtre_bmi: null,
+    arc_name: "Sophie CLÉRO", arc_dect: "99007", arc_mail: "sophie.clero@chu-nantes.fr",
+    criteria: [
+      "Amylose ATTRwt ou ATTRv — pas de limite d'âge",
+      "NYHA 1–4 sous diurétique de l'anse + ≥ 1 parmi : ATCD décompensation cardiaque, congestion clinique",
+      "Nt-proBNP ≥ 1 000 pg/mL au screening",
+      "Traitement médical stabilisé depuis ≥ 1 mois"
+    ]
+  },
+  // ── FA ──
+  {
+    name: "EDEARLY-AF",
+    synopsis: "Ablation endocavitaire (IVP) vs prise en charge conventionnelle chez les patients ≥ 75 ans",
+    ctxTags: ["FA"],
+    extras: [],
+    filtre_age: { op: "≥", val: 75 },
+    filtre_fevg: null,
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Bastien OUVRARD", arc_dect: "99004", arc_mail: "bastien.ouvrard@chu-nantes.fr",
+    criteria: [
+      "FA paroxystique (ou récidivante ou persistante précoce) diagnostiquée pour la première fois < 12 mois",
+      "Âge ≥ 75 ans"
+    ]
+  },
+  // ── FLUTTER ──
+  {
+    name: "Li-ARVC",
+    synopsis: "Inflammation locale dans la DAVD — recrutement de contrôles uniquement",
+    ctxTags: ["Flutter"],
+    extras: [],
+    filtre_age: { op: "range", min: 55, max: 84 },
+    filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Anaelle RAOUL", arc_dect: "99008", arc_mail: "anaelle.raoul@chu-nantes.fr",
+    criteria: [
+      "Contrôles uniquement (quota DAVD atteint)",
+      "≥ 18 ans, sans cardiopathie, admis pour ablation d'un faisceau de Kent / flutter commun",
+      "Hommes de : 55–65 ans / 60–70 ans / 74–84 ans"
+    ]
+  },
+  // ── TV ──
+  {
+    name: "EPIC-VT",
+    synopsis: "Ablation endocardique vs endo-épicardique des TV sur cardiopathie ischémique",
+    ctxTags: ["TV","SCA"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Bastien OUVRARD", arc_dect: "99004", arc_mail: "bastien.ouvrard@chu-nantes.fr",
+    criteria: [
+      "1ère ablation par radiofréquence d'une TV sur cardiopathie ischémique",
+      "Porteur d'un DAI avec télésurveillance active"
+    ]
+  },
+  {
+    name: "Cardurion 202",
+    synopsis: "CRD-4730 vs placebo dans la TV polymorphe catécholaminergique (mutation RYR2)",
+    ctxTags: ["TV"],
+    extras: [],
+    filtre_age: { op: ">", val: 18 },
+    filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Anaelle RAOUL", arc_dect: "99008", arc_mail: "anaelle.raoul@chu-nantes.fr",
+    criteria: [
+      "Adulte ≥ 18 ans avec mutation pathogène sur le gène RYR2",
+      "ESV > 10/min ou bigéminisme",
+      "Sous ≥ 1 antiarythmique (bêta-bloquants autorisés, hors amiodarone) en dose stable depuis ≥ 4 semaines"
+    ]
+  },
+  // ── ESV ──
+  {
+    name: "SUPPRESS",
+    synopsis: "Traitement antiarythmique vs abstention pour les ESV fréquentes asymptomatiques",
+    ctxTags: ["ESV"],
+    extras: [],
+    filtre_age: { op: "range", min: 18, max: 85 },
+    filtre_fevg: { op: "≥", val: 55 },
+    filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Bastien OUVRARD", arc_dect: "99004", arc_mail: "bastien.ouvrard@chu-nantes.fr",
+    criteria: [
+      "Âge 18–85 ans — ESV > 10% — Patient asymptomatique",
+      "FEVG normale (> 55%)"
+    ]
+  },
+  // ── ACR ──
+  {
+    name: "RESOUDRE",
+    synopsis: "Registre prospectif national — morts subites chez les sportifs de 12 à 35 ans",
+    ctxTags: ["ACR"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Anaelle RAOUL", arc_dect: "99008", arc_mail: "anaelle.raoul@chu-nantes.fr",
+    criteria: [
+      "12–35 ans, sans pathologie cardiovasculaire connue",
+      "ACR brutal non traumatique pendant ou dans l'heure suivant une pratique sportive"
+    ]
+  },
+  // ── TAVI ──
+  {
+    name: "Come-TAVI",
+    synopsis: "Holter 28 jours vs algorithme guidé par EEP — BBG de novo post-TAVI",
+    ctxTags: ["TAVI"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Bastien OUVRARD", arc_dect: "99004", arc_mail: "bastien.ouvrard@chu-nantes.fr",
+    criteria: [
+      "BBG de novo persistant à J1 post-TAVI (QRS ≥ 120 ms)",
+      "Pas d'indication formelle à un PM pour autre raison"
+    ]
+  },
+  {
+    name: "LBAP-TAVI",
+    synopsis: "Stimulation aire branche gauche vs stimulation VD classique après TAVI",
+    ctxTags: ["TAVI"],
+    extras: [],
+    filtre_age: null,
+    filtre_fevg: { op: "≥", val: 50 },
+    filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Bastien OUVRARD", arc_dect: "99004", arc_mail: "bastien.ouvrard@chu-nantes.fr",
+    criteria: [
+      "TAVI implanté dans les 3 derniers mois — FEVG préservée (> 50%)",
+      "Indication au PM selon les recommandations (BAV ou autre trouble conductif)"
+    ]
+  },
+  {
+    name: "POPULAR-ATLANTIS",
+    synopsis: "Stratégie d'anticoagulation post-TAVI",
+    ctxTags: ["TAVI","Valvulopathie"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null,
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "TAVI récent",
+      "DFG > 30 mL/min/1.73m²",
+      "Contacter l'ARC pour les critères complets"
+    ]
+  },
+  {
+    name: "MASTER TAVI",
+    synopsis: "TAVI dans les polyvalvulopathies",
+    ctxTags: ["TAVI","Valvulopathie"],
+    extras: [
+      { id: "poly_question", question: "Polyvalvulopathie ?", showIfYes: true }
+    ],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "TAVI dans le contexte de polyvalvulopathie",
+      "Contacter l'ARC pour les critères complets"
+    ]
+  },
+  // ── SCA ──
+  {
+    name: "Dyna-MI",
+    synopsis: "Scintigraphie myocardique dynamique vs FFR invasive — SCA pluritronculaire",
+    ctxTags: ["SCA"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "SCA (ST+ ou non ST+) avec atteinte coronaire pluritronculaire",
+      "Au moins une sténose non coupable > 50% jugée revascularisable"
+    ]
+  },
+  {
+    name: "HOMI-LUNG-HAP",
+    synopsis: "Interactions hôte-microbiome après pneumopathie chez les patients avec SCA",
+    ctxTags: ["SCA"],
+    extras: [],
+    filtre_age: { op: "range", min: 40, max: 80 },
+    filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "Hospitalisé pour SCA (40–80 ans)",
+      "Inclusion dans les 7 jours suivant l'hospitalisation"
+    ]
+  },
+  {
+    name: "VICTORION Rides",
+    synopsis: "Inclisiran vs placebo introduit précocement après revascularisation pour SCA",
+    ctxTags: ["SCA","RisqueCV"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null,
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Léa FONTENEAU", arc_dect: "99010", arc_mail: "lea.fonteneau@chu-nantes.fr",
+    criteria: [
+      "Patient majeur hospitalisé pour SCA athéromateux (ST+ ou ST-)",
+      "Inclusion le lendemain de la revascularisation",
+      "LDL-C ≥ 0,7 g/L sous statine haute intensité ≥ 4 semaines, ou ≥ 1 g/L sous statine faible intensité, ou ≥ 1,25 g/L sans statine"
+    ]
+  },
+  {
+    name: "PROJET DESTIVA",
+    synopsis: "Application numérique DESTIVA pour la prévention secondaire cardiovasculaire",
+    ctxTags: ["SCA","RisqueCV","AVC"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Léa FONTENEAU", arc_dect: "99010", arc_mail: "lea.fonteneau@chu-nantes.fr",
+    criteria: [
+      "Patient majeur avec événement cardio-neurovasculaire qualifiant < 30 jours",
+      "IDM, revascularisation coronaire, AVC ischémique, endartériectomie carotidienne ou revascularisation AOMI"
+    ]
+  },
+  // ── CHOC ──
+  {
+    name: "LEVOHEARTSHOCK",
+    synopsis: "Lévosimendan vs placebo en addition d'inotropes dans le choc cardiogénique",
+    ctxTags: ["Choc"],
+    extras: [],
+    filtre_age: { op: ">", val: 18 },
+    filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "Patient majeur en choc cardiogénique",
+      "Sous noradrénaline (MAP ≥ 65 mmHg depuis 3h–24h) et/ou dobutamine ≥ 5 µg/kg/min depuis 3h–24h",
+      "Hypoperfusion tissulaire : ≥ 1 signe (lactate ≥ 2 mmol/l, marbrures, TRC > 3 sec, oligurie, ScVO2 ≤ 60%)"
+    ]
+  },
+  {
+    name: "ULYSS",
+    synopsis: "Étude dans le choc cardiogénique",
+    ctxTags: ["Choc"],
+    extras: [],
+    filtre_age: { op: "range", min: 18, max: 80 },
+    filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "Âge 18–80 ans",
+      "Choc cardiogénique",
+      "Contacter l'ARC pour les critères complets"
+    ]
+  },
+  // ── MYOCARDITE ──
+  {
+    name: "ARGO",
+    synopsis: "Colchicine vs placebo pour réduire le rehaussement tardif à l'IRM dans la myocardite aiguë",
+    ctxTags: ["Myocardite"],
+    extras: [],
+    filtre_age: { op: "range", min: 18, max: 65 },
+    filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Léa FONTENEAU", arc_dect: "99010", arc_mail: "lea.fonteneau@chu-nantes.fr",
+    criteria: [
+      "Adulte 18–65 ans, hospitalisé pour myocardite aiguë (symptômes ≤ 21 jours)",
+      "Diagnostic confirmé par IRM cardiaque (critères de Lake Louise)"
+    ]
+  },
+  {
+    name: "EACVI INFLAME",
+    synopsis: "Registre imagerie des atteintes cardiaques inflammatoires",
+    ctxTags: ["Myocardite","SCA","Valvulopathie"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Léa FONTENEAU", arc_dect: "99010", arc_mail: "lea.fonteneau@chu-nantes.fr",
+    criteria: [
+      "Patient majeur adressé en IRM ou TEP cardiaque pour suspicion d'atteinte CV liée à :",
+      "myocardite, péricardite, MINOCA, Tako-Tsubo ou cardiomyopathie inflammatoire"
+    ]
+  },
+  // ── AVC ──
+  {
+    name: "CLOSE 2",
+    synopsis: "Fermeture du FOP vs traitement médical dans l'AVC cryptogénique",
+    ctxTags: ["AVC"],
+    extras: [],
+    filtre_age: { op: "range", min: 60, max: 80 },
+    filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "Âge 60–80 ans",
+      "AVC cryptogénique avec FOP documenté"
+    ]
+  },
+  // ── VALVULOPATHIE ──
+  {
+    name: "MULTIVALVE",
+    synopsis: "Étude sur les polyvalvulopathies",
+    ctxTags: ["Valvulopathie"],
+    extras: [
+      { id: "poly_question", question: "Polyvalvulopathie ?", showIfYes: true }
+    ],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "Polyvalvulopathie",
+      "Contacter l'ARC pour les critères complets"
+    ]
+  },
+  {
+    name: "ATA-301 ATACIGUAT",
+    synopsis: "Ataciguat dans la sténose aortique modérée",
+    ctxTags: ["Valvulopathie"],
+    extras: [
+      { id: "ata301_rao", question: "Rétrécissement aortique modéré ?", showIfYes: true }
+    ],
+    filtre_age: null, filtre_fevg: null, filtre_dfg: null, filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Alexandra AUVRIGNON", arc_dect: "99009", arc_mail: "alexandra.auvrignon@chu-nantes.fr",
+    criteria: [
+      "Sténose aortique modérée",
+      "Contacter l'ARC pour les critères complets"
+    ]
+  },
+  // ── COMORBIDITÉS ──
+  {
+    name: "EASi PROTEKT",
+    synopsis: "Vicadrostat + empagliflozine vs placebo chez les diabétiques à haut risque CV",
+    ctxTags: ["Diabète","RisqueCV","SCA"],
+    extras: [],
+    filtre_age: null, filtre_fevg: null,
+    filtre_dfg:  { op: ">", val: 20 },
+    filtre_bnp:  { op: "<", val: 1200 },
+    filtre_bmi: null,
+    arc_name: "Patricia CHARPENTIER", arc_dect: "99002", arc_mail: "patricia.charpentier@chu-nantes.fr",
+    criteria: [
+      "Diabète de type 2 ET HTA (≥ 1 traitement) ET ATCD de MCV établie",
+      "+ au moins 1 critère parmi : insuline, Nt-proBNP > 125, HVG ECG/ETT, ATCD de FA/flutter, PA ≥ 140/90 sous ≥ 2 traitements, UACR > 200 mg/g"
+    ]
+  },
+  {
+    name: "ZENITH",
+    synopsis: "Zilbésiran vs placebo — HTA résistante à haut risque cardiovasculaire",
+    ctxTags: ["HTA","RisqueCV"],
+    extras: [],
+    filtre_age: { op: ">", val: 18 },
+    filtre_fevg: null,
+    filtre_dfg:  { op: ">", val: 30 },
+    filtre_bnp: null, filtre_bmi: null,
+    arc_name: "Léa FONTENEAU", arc_dect: "99010", arc_mail: "lea.fonteneau@chu-nantes.fr",
+    criteria: [
+      "Sous ≥ 2 anti-HTA dont un diurétique, avec PAS ≥ 145 mmHg en consultation",
+      "Âge ≥ 55 ans à haut risque CV OU âge ≥ 18 ans avec maladie CV avérée",
+      "Haut risque CV : ≥ 2 facteurs parmi : âge ≥ 70 ans, DFGe < 60, albumine/créat > 300, tabagisme actif, FA traitée, CAC > 100, NT-proBNP > 125, DT2 ou IMC ≥ 30"
+    ]
+  },
+];
+
+// ════════════════════════════════════════════════════════
+// STATE — persistent filter values (survive step navigation)
+// ════════════════════════════════════════════════════════
+let selectedContexts = new Set();
+let filteredProtocols = [];
+let filterValues = { age: null, fevg: null, dfg: null, bnp: null, bmi: null };
+let extraValues = {}; // id → 'oui' | 'non' | null
+
+// ════════════════════════════════════════════════════════
+// STEP 1
+// ════════════════════════════════════════════════════════
+function toggleCtx(btn) {
+  const ctx = btn.dataset.ctx;
+  selectedContexts.has(ctx) ? selectedContexts.delete(ctx) : selectedContexts.add(ctx);
+  btn.classList.toggle('selected', selectedContexts.has(ctx));
+  updateStep1UI();
+}
+function updateStep1UI() {
+  const n = selectedContexts.size;
+  document.getElementById('btn-step1-next').disabled = n === 0;
+  document.getElementById('ctx-count-label').textContent =
+    n === 0 ? 'Aucun contexte sélectionné' : n === 1 ? '1 contexte sélectionné' : `${n} contextes sélectionnés`;
+}
+
+// ════════════════════════════════════════════════════════
+// STEP 2
+// ════════════════════════════════════════════════════════
+function goToStep2() {
+  // Match protocols
+  filteredProtocols = [...new Map(
+    PROTOCOLS.filter(p => p.ctxTags.some(t => selectedContexts.has(t)))
+             .map(p => [p.name, p])
+  ).values()];
+
+  buildFilterFields();
+  buildBreadcrumb('breadcrumb2', false);
+  showStep(2);
+  updateLiveFilters();
+}
+
+function buildFilterFields() {
+  // ── Extras (boolean) dédupliqués par id ──
+  const extraContainer = document.getElementById('filter-extra-fields');
+  extraContainer.innerHTML = '';
+
+  const seen = new Map(); // id → {question, showIfYes, protos:[]}
+  filteredProtocols.forEach(p => {
+    (p.extras || []).forEach(e => {
+      if (!seen.has(e.id)) seen.set(e.id, { question: e.question, showIfYes: e.showIfYes, protos: [] });
+      seen.get(e.id).protos.push(p.name);
+    });
+  });
+
+  const secExtra = document.getElementById('section-extra');
+  secExtra.style.display = seen.size > 0 ? 'block' : 'none';
+
+  seen.forEach((info, id) => {
+    const saved = extraValues[id] || null;
+    const protos = info.protos.join(', ');
+    const row = document.createElement('div');
+    row.className = 'extra-filter-row';
+    row.id = 'extra-row-' + id;
+    row.innerHTML = `
+      <span class="extra-filter-question">${info.question}</span>
+      <span class="extra-filter-proto">(${protos})</span>
+      <div class="yesno-btns">
+        <button class="yesno-btn yes ${saved === 'oui' ? 'active' : ''}"
+          onclick="setExtra('${id}','oui',this)">Oui ✓</button>
+        <button class="yesno-btn no ${saved === 'non' ? 'active' : ''}"
+          onclick="setExtra('${id}','non',this)">Non ✗</button>
+      </div>`;
+    extraContainer.appendChild(row);
+  });
+
+  // ── Numeric ──
+  const numContainer = document.getElementById('filter-fields');
+  numContainer.innerHTML = '';
+  const FIELDS = [
+    {id:'age',  label:'Âge',        unit:'ans',            ph:'ex : 72', fkey:'filtre_age'},
+    {id:'fevg', label:'FEVG',       unit:'%',              ph:'ex : 45', fkey:'filtre_fevg'},
+    {id:'dfg',  label:'DFG (eGFR)',unit:'mL/min/1,73m²', ph:'ex : 38', fkey:'filtre_dfg'},
+    {id:'bnp',  label:'Nt-proBNP', unit:'pg/mL',          ph:'ex : 850',fkey:'filtre_bnp'},
+    {id:'bmi',  label:'IMC / BMI', unit:'kg/m²',          ph:'ex : 32', fkey:'filtre_bmi'},
+  ];
+  const hasAny = fkey => filteredProtocols.some(p => p[fkey] !== null);
+  let anyField = false;
+  FIELDS.forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'filter-field';
+    div.id = 'num-field-' + f.id;
+    div.innerHTML = `
+      <label class="filter-label">${f.label} <span class="filter-unit">(${f.unit})</span></label>
+      <input class="filter-input" type="number" step="any" placeholder="${f.ph}"
+        id="input-${f.id}" value="${filterValues[f.id] !== null ? filterValues[f.id] : ''}"
+        oninput="saveNumeric('${f.id}', this.value)">`;
+    numContainer.appendChild(div);
+    if (hasAny(f.fkey)) anyField = true;
+  });
+  document.getElementById('section-numeric').style.display = anyField ? 'block' : 'none';
+  document.getElementById('no-filters-msg').style.display = (!anyField && seen.size === 0) ? 'block' : 'none';
+}
+
+function setExtra(id, val, btn) {
+  if (extraValues[id] === val) {
+    extraValues[id] = null;
+    btn.closest('.yesno-btns').querySelectorAll('.yesno-btn').forEach(b => b.classList.remove('active'));
+  } else {
+    extraValues[id] = val;
+    btn.closest('.yesno-btns').querySelectorAll('.yesno-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  updateLiveFilters();
+}
+
+function saveNumeric(id, val) {
+  filterValues[id] = val !== '' ? parseFloat(val) : null;
+  updateLiveFilters();
+}
+
+// Mise à jour dynamique temps réel
+function updateLiveFilters() {
+  const fkeyMap = {age:'filtre_age',fevg:'filtre_fevg',dfg:'filtre_dfg',bnp:'filtre_bnp',bmi:'filtre_bmi'};
+
+  // Protocoles encore éligibles
+  const eligible = filteredProtocols.filter(p => isEligible(p));
+
+  // Compteur live
+  const liveN = document.getElementById('live-n');
+  if (liveN) liveN.textContent = eligible.length;
+
+  // -- Quels extras sont encore utiles ?
+  // Utile = appartient à un protocole potentiellement éligible, ou réponse déjà donnée
+  const usefulExtras = new Set();
+  filteredProtocols.forEach(p => {
+    // Tester si ce protocole n'est éliminé QUE par cet extra (garder visible si répondu)
+    (p.extras || []).forEach(e => {
+      const passWithoutExtra = passesFiltersExcept(p, 'extra', e.id);
+      if (passWithoutExtra || extraValues[e.id]) usefulExtras.add(e.id);
+    });
+  });
+  document.querySelectorAll('.extra-filter-row[id]').forEach(row => {
+    const id = row.id.replace('extra-row-','');
+    row.style.display = usefulExtras.has(id) ? '' : 'none';
+  });
+  const anyExtraVisible = document.querySelector('#filter-extra-fields .extra-filter-row:not([style*="none"])') !== null;
+  document.getElementById('section-extra').style.display = anyExtraVisible ? 'block' : 'none';
+
+  // -- Quels champs numériques sont encore utiles ?
+  Object.entries(fkeyMap).forEach(([fid, fkey]) => {
+    const useful = filteredProtocols.some(p => {
+      return p[fkey] !== null && passesFiltersExcept(p, 'num', fid);
+    });
+    const el = document.getElementById('num-field-' + fid);
+    if (el) el.style.display = useful ? '' : 'none';
+  });
+  const anyNumVisible = Object.keys(fkeyMap).some(fid => {
+    const el = document.getElementById('num-field-' + fid);
+    return el && el.style.display !== 'none';
+  });
+  document.getElementById('section-numeric').style.display = anyNumVisible ? 'block' : 'none';
+}
+
+// Teste si p passe tous les filtres SAUF le critère spécifié
+function passesFiltersExcept(p, excludeType, excludeId) {
+  const fkeyMap = {age:'filtre_age',fevg:'filtre_fevg',dfg:'filtre_dfg',bnp:'filtre_bnp',bmi:'filtre_bmi'};
+  // Extras
+  for (const e of (p.extras || [])) {
+    if (excludeType === 'extra' && e.id === excludeId) continue;
+    const ans = extraValues[e.id];
+    if (ans === null || ans === undefined) continue;
+    if (e.showIfYes && ans === 'non') return false;
+  }
+  // Numériques
+  for (const [fid, fkey] of Object.entries(fkeyMap)) {
+    if (excludeType === 'num' && fid === excludeId) continue;
+    const v = filterValues[fid];
+    if (v !== null && p[fkey] !== null && !checkFilter(v, p[fkey])) return false;
+  }
+  return true;
+}
+
+// ════════════════════════════════════════════════════════
+// STEP 3
+// ════════════════════════════════════════════════════════
+function goToStep3() {
+  const eligible = filteredProtocols.filter(p => isEligible(p));
+  buildBreadcrumb('breadcrumb3', true);
+  renderProtocols(eligible);
+  showStep(3);
+}
+
+function isEligible(p) {
+  // Numeric filters
+  const pairs = [
+    [filterValues.age,  p.filtre_age],
+    [filterValues.fevg, p.filtre_fevg],
+    [filterValues.dfg,  p.filtre_dfg],
+    [filterValues.bnp,  p.filtre_bnp],
+    [filterValues.bmi,  p.filtre_bmi],
+  ];
+  for (const [v, f] of pairs) {
+    if (v !== null && f !== null && !checkFilter(v, f)) return false;
+  }
+  // Extra boolean
+  for (const e of (p.extras || [])) {
+    const ans = extraValues[e.id];
+    if (ans === null || ans === undefined) continue;
+    if (e.showIfYes && ans === 'non') return false;
+    if (!e.showIfYes && ans === 'non') return false;
+  }
+  return true;
+}
+
+function checkFilter(v, f) {
+  if (f.op === '>') return v > f.val;
+  if (f.op === '≥' || f.op === '>=') return v >= f.val;
+  if (f.op === '<') return v < f.val;
+  if (f.op === '≤' || f.op === '<=') return v <= f.val;
+  if (f.op === 'range') return v >= f.min && v <= f.max;
+  return true;
+}
+
+function filterLabel(f) {
+  if (!f) return '';
+  if (f.op === 'range') return `${f.min}–${f.max}`;
+  return `${f.op} ${f.val}`;
+}
+
+function renderProtocols(protocols) {
+  const list = document.getElementById('protocol-list');
+  const countEl = document.getElementById('results-count');
+  list.innerHTML = '';
+  countEl.innerHTML = `<strong>${protocols.length}</strong> protocole${protocols.length !== 1 ? 's' : ''} disponible${protocols.length !== 1 ? 's' : ''}`;
+
+  if (protocols.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><h3>Aucun protocole ne correspond aux critères renseignés</h3><p>Modifiez les valeurs biologiques ou revenez à l'étape 2 pour ajuster les filtres.</p></div>`;
+    return;
+  }
+
+  protocols.forEach(p => {
+    // Build filter badges
+    const numBadges = [
+      [filterValues.age,  p.filtre_age,  'Âge'],
+      [filterValues.fevg, p.filtre_fevg, 'FEVG'],
+      [filterValues.dfg,  p.filtre_dfg,  'DFG'],
+      [filterValues.bnp,  p.filtre_bnp,  'BNP'],
+      [filterValues.bmi,  p.filtre_bmi,  'BMI'],
+    ].filter(([v, f]) => v !== null && f !== null)
+     .map(([v, f, lbl]) => {
+       const ok = checkFilter(v, f);
+       return `<span class="filter-badge ${ok ? 'ok' : 'warn'}">${lbl} ${filterLabel(f)} : ${v}</span>`;
+     });
+
+    const extraBadges = (p.extras || [])
+      .filter(e => extraValues[e.id])
+      .map(e => {
+        const ans = extraValues[e.id];
+        const ok = ans === 'oui';
+        return `<span class="filter-badge ${ok ? 'ok' : 'warn'}">${e.id.split('_').pop()} → ${ans}</span>`;
+      });
+
+    const allBadges = [...numBadges, ...extraBadges].join('');
+    const tagsHTML = p.ctxTags.map(t => `<span class="proto-tag">${t}</span>`).join('');
+    const criteriaHTML = p.criteria.map(c => `<span class="crit-line">• ${c}</span>`).join('');
+
+    const card = document.createElement('div');
+    card.className = 'protocol-card';
+    card.innerHTML = `
+      <div class="proto-header">
+        <div class="proto-name">🔬 ${p.name}</div>
+        <div class="proto-synopsis">${p.synopsis}</div>
+        <div class="proto-meta-row">
+          ${tagsHTML}
+          ${allBadges}
+        </div>
+      </div>
+      <div class="proto-body">
+        <div class="proto-section-title">Principaux critères d'inclusion</div>
+        <div class="proto-criteria">${criteriaHTML}</div>
+        <div class="proto-arc">
+          📞 <strong>${p.arc_name}</strong> — DECT ${p.arc_dect} —
+          <a href="mailto:${p.arc_mail}">${p.arc_mail}</a>
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// ════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════
+function showStep(n) {
+  [1, 2, 3].forEach(i => {
+    document.getElementById('step' + i).style.display = i === n ? 'block' : 'none';
+    const bar = document.getElementById('stepbar' + i);
+    if (bar) {
+      bar.className = 'step-item' + (i === n ? ' active' : i < n ? ' done' : '');
+    }
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToStep(n) {
+  if (n === 1) { showStep(1); return; }
+  if (n === 2 && selectedContexts.size > 0) { goToStep2(); return; }
+}
+
+function buildBreadcrumb(id, withStep2Link) {
+  const el = document.getElementById(id);
+  const chips = [...selectedContexts].map(c =>
+    `<span class="breadcrumb-chip clickable" onclick="goToStep(1)">🏷 ${c}</span>`
+  ).join('<span class="breadcrumb-sep">·</span>');
+  const step2link = withStep2Link
+    ? `<span class="breadcrumb-sep">·</span><span class="breadcrumb-chip clickable" onclick="goToStep(2)">⚗️ Modifier les filtres</span>`
+    : '';
+  el.innerHTML = chips + step2link;
+}
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+showStep(1);
+</script>
+</body>
+</html>
