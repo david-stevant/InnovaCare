@@ -133,6 +133,7 @@
       "id": "polaris",
       "pole": "ic",
       "modules": [
+        "professionnel",
         "patient"
       ],
       "valeurs": {
@@ -196,6 +197,7 @@
       "id": "fortitude",
       "pole": "cardiomyopathies",
       "modules": [
+        "professionnel",
         "patient"
       ],
       "valeurs": {
@@ -224,9 +226,36 @@
       "maj": "2026-11-19"
     },
     {
+      "id": "lion-heart",
+      "pole": "cardiomyopathies",
+      "modules": [
+        "professionnel"
+      ],
+      "valeurs": {
+        "nom": "LION-HEART",
+        "statut": "ouvert",
+        "pathologie_1": "CMH",
+        "thematique": "CMH obstructive",
+        "design": "Phase 3 rando 2:1 multicentrique",
+        "inclusion_1": "CMH obstructive symptomatique (NYHA 2-3) FEVG > 60 et gradient d'obstruction > 30mmHg au repos et/ou > 50mmHg au Valsalva",
+        "inclusion_2": "BMI < 35",
+        "inclusion_3": "questionnaire QOL Kansas City Cardiomyopathy Questionnaire-Clinical Summary Score\n(KCCQ-CSS) ≥35 and ≤90",
+        "inclusion_4": "échogène",
+        "inclusion_5": "EEVO2 : maximale  (RER) ≥1.05 et pic VO2 <90% predicted on the screening CPET and ≥14 ml/kg/min",
+        "duree_suivi": "6 mois de traitement + 1 de surveillance",
+        "rythme_visites": "visite toutes les 2 semaines pendant 3 mois puis 1/mois",
+        "question_specifique": "CMH obstructive",
+        "fevg_min": 60,
+        "imc_max": 35
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
       "id": "registre-national-des-amyloses-cardiaques-hear",
       "pole": "cardiomyopathies",
       "modules": [
+        "professionnel",
         "patient"
       ],
       "valeurs": {
@@ -278,6 +307,7 @@
       "id": "cleopattra-novo-nordisk",
       "pole": "cardiomyopathies",
       "modules": [
+        "professionnel",
         "patient"
       ],
       "valeurs": {
@@ -348,6 +378,32 @@
         "details_pratiques": "Aucune modification du suivi habituel",
         "vignette_1": "Cardiomyopathie hypertrophique",
         "ttt_inhib_myosine": "requis"
+      },
+      "contacts": {},
+      "maj": "2026-11-19"
+    },
+    {
+      "id": "la-hcm",
+      "pole": "cardiomyopathies",
+      "modules": [
+        "professionnel"
+      ],
+      "valeurs": {
+        "nom": "LA-HCM",
+        "statut": "ouvert",
+        "pathologie_1": "CMH",
+        "thematique": "CMH - Strain OG",
+        "design": "randomisation 1;1",
+        "inclusion_1": "40 à 80 ans avec diagnostic de CMH sarcomérique (génétique + ou -)",
+        "inclusion_2": "50 à 120kg",
+        "inclusion_3": "Rythme sinusal",
+        "inclusion_4": "Strain OG réservoir altéré ≤20% (en conditions normales sans congestion ni HTA non contrôlée)",
+        "debut_inclusion": "2026-06-01",
+        "duree_suivi": "2 ans",
+        "rythme_visites": "1 / 6 mois",
+        "age_min": 40,
+        "age_max": 80,
+        "dfg_min": 30
       },
       "contacts": {},
       "maj": "2026-11-19"
