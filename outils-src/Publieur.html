@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publieur — InnovaCare</title>
+<!--@inclure outils-src/bibliotheques/dm-sans/dm-sans-latin.woff2 "DM Sans"-->
+<!--@inclure outils-src/style-commun.css-->
+<style>
+  .changements li { margin: 4px 0; }
+  .champs-modifies { color: var(--encre-douce); font-size: 15px; }
+  input[type="password"] { font: inherit; padding: 8px 10px; border: 1px solid var(--trait); border-radius: 6px; width: 100%; max-width: 420px; }
+</style>
+</head>
+<body>
+<div class="page page-large">
+
+  <header class="entete">
+    <h1>Publieur</h1>
+    <p>Lit l'Excel harmonisé, vérifie sa cohérence, puis publie <strong>uniquement les informations publiques</strong>
+       (fichier protocoles.json) sur le site. L'Excel lui-même n'est jamais envoyé.</p>
+  </header>
+
+  <section class="carte" aria-labelledby="t1">
+    <h2 id="t1"><span class="numero">1</span>Choisir l'Excel harmonisé</h2>
+    <div class="rangee">
+      <button type="button" id="bouton-choisir">Choisir l'Excel</button>
+      <button type="button" id="bouton-recharger" class="secondaire" hidden>Recharger</button>
+      <input type="file" id="selecteur-excel" accept=".xlsx" hidden>
+    </div>
+    <div id="zone-depot" class="zone-depot">… ou glissez-déposez le fichier ici (format .xlsx).</div>
+    <p id="etat" class="note" aria-live="polite"></p>
+  </section>
+
+  <div id="suite" hidden>
+    <section class="carte" aria-labelledby="t2">
+      <h2 id="t2"><span class="numero">2</span>Contrôles</h2>
+      <p id="resume-controles"></p>
+      <details id="details-controles"><summary>Voir le détail</summary><ul class="resultats" id="liste-controles"></ul></details>
+    </section>
+
+    <section class="carte" aria-labelledby="t3">
+      <h2 id="t3"><span class="numero">3</span>Changements par rapport à la version en ligne</h2>
+      <p id="etat-en-ligne" class="note" aria-live="polite"></p>
+      <div class="rangee" id="rangee-manuelle" hidden>
+        <button type="button" id="bouton-ancien" class="secondaire">Déposer le protocoles.json actuel</button>
+        <input type="file" id="selecteur-ancien" accept=".json" hidden>
+      </div>
+      <div id="changements"></div>
+    </section>
+
+    <section class="carte" aria-labelledby="t4">
+      <h2 id="t4"><span class="numero">4</span>Publier</h2>
+      <p class="note">La publication utilise un « jeton » GitHub personnel, limité à ce dépôt (voir docs/GUIDE_PORTEUR.md).
+         Il est gardé dans ce navigateur uniquement.</p>
+      <label for="jeton">Jeton GitHub</label>
+      <input type="password" id="jeton" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+      <div class="rangee">
+        <button type="button" id="bouton-publier">Publier</button>
+        <button type="button" id="bouton-oublier" class="secondaire">Oublier le jeton</button>
+      </div>
+      <ul class="resultats" id="resultat-publication" aria-live="polite"></ul>
+    </section>
+
+    <section class="carte" aria-labelledby="t5">
+      <h2 id="t5"><span class="numero">5</span>Secours : publication manuelle</h2>
+      <p>Si la publication échoue : téléchargez le fichier, puis déposez-le sur github.com à l'emplacement
+         <code id="chemin-manuel"></code> (mode d'emploi dans docs/GUIDE_PORTEUR.md, « Si la publication échoue »).</p>
+      <div class="rangee"><button type="button" id="bouton-telecharger" class="secondaire">Télécharger protocoles.json</button></div>
+    </section>
+  </div>
+
+</div>
+<!--@inclure site/donnees/parametres.json-->
+<!--@inclure outils-src/bibliotheques/exceljs/exceljs.min.js-->
+<!--@inclure src/normalisation.js-->
+<!--@inclure src/excel-vers-grille.js-->
+<!--@inclure src/schema.js-->
+<!--@inclure src/gabarit.js-->
+<!--@inclure src/lecture.js-->
+<!--@inclure src/export-public.js-->
+<!--@inclure src/publication.js-->
+<!--@inclure src/memoire-fichier.js-->
+<!--@inclure outils-src/publieur-ui.js-->
+</body>
+</html>
