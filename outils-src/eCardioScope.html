@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Catalogue des études — outil interne</title>
+<!--@inclure outils-src/bibliotheques/dm-sans/dm-sans-latin.woff2 "DM Sans"-->
+<!--@inclure outils-src/style-commun.css-->
+<style>
+  /* Outil interne : dense mais lisible (cahier des charges, § 9). */
+  body { font-size: 16px; }
+  .page.page-catalogue { max-width: 1280px; }
+  .barre-fichier { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+  .barre-fichier .note { margin: 0; }
+  .outils-tri { background: var(--fond); padding: 10px 0 8px; border-bottom: 1px solid var(--trait); }
+  @media (min-width: 900px) { .outils-tri { position: sticky; top: 0; z-index: 5; } }
+  @media (max-width: 600px) { .recherche select { flex: 1 1 100%; } .puce { padding: 3px 9px; font-size: 13px; } }
+  .recherche { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .recherche input[type="search"] { flex: 1 1 280px; font: inherit; padding: 9px 12px; border: 2px solid var(--trait); border-radius: 10px; min-width: 0; }
+  .recherche input[type="search"]:focus { border-color: var(--turquoise); outline: none; }
+  .recherche select { font: inherit; font-size: 15px; padding: 8px; border: 1px solid var(--trait); border-radius: 8px; background: #fff; max-width: 100%; }
+  .puces-statut { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
+  .puce { border: 1px solid var(--trait); background: #fff; color: var(--encre); border-radius: 20px; padding: 4px 12px; font: inherit; font-size: 14px; cursor: pointer; }
+  .puce[aria-pressed="true"] { background: var(--encre); border-color: var(--encre); color: #fff; }
+  .puce:focus-visible, .carte-etude:focus-visible { outline: 3px solid var(--turquoise); outline-offset: 2px; }
+  .nombre-etudes { margin-left: auto; font-weight: 700; }
+  .case-masquees { font-size: 14px; display: inline-flex; gap: 6px; align-items: center; margin-left: 8px; }
+  .bascule-vue { display: inline-flex; border: 1px solid var(--trait); border-radius: 8px; overflow: hidden; }
+  .bascule-vue button { border: 0; border-radius: 0; padding: 6px 12px; font-size: 14px; background: #fff; color: var(--encre); }
+  .bascule-vue button[aria-pressed="true"] { background: var(--turquoise-fonce); color: #fff; }
+
+  .grille-etudes { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-top: 14px; }
+  .carte-etude { text-align: left; font: inherit; color: inherit; background: var(--carte); border: 1px solid var(--trait); border-left: 6px solid var(--couleur-statut, var(--trait)); border-radius: 10px; padding: 12px 14px; cursor: pointer; display: flex; flex-direction: column; gap: 6px; }
+  .carte-etude:hover { box-shadow: 0 4px 16px rgba(0,0,0,.09); }
+  .carte-etude .tete { display: flex; gap: 8px; align-items: flex-start; }
+  .carte-etude .nom { font-weight: 700; font-size: 18px; flex: 1; overflow-wrap: anywhere; }
+  .carte-etude .them { color: var(--encre-douce); font-size: 15px; }
+  .carte-etude .meta { font-size: 14px; color: var(--encre-douce); }
+  .carte-etude .contact { font-size: 14px; }
+  .badge { display: inline-block; border-radius: 12px; padding: 1px 9px; font-size: 13px; font-weight: 600; white-space: nowrap; background: var(--fond-statut, #eee); color: var(--encre); }
+  .etiquettes { display: flex; flex-wrap: wrap; gap: 4px; }
+  .etiquette { font-size: 13px; border: 1px solid var(--trait); border-radius: 12px; padding: 0 8px; background: var(--fond); }
+  .alerte-ligne { font-size: 13px; color: var(--echec-texte); font-weight: 600; }
+  .jauge { height: 8px; background: #e7eef0; border-radius: 6px; overflow: hidden; }
+  .jauge span { display: block; height: 100%; background: var(--vert); }
+  .jauge-texte { font-size: 13px; color: var(--encre-douce); }
+
+  table.tableau-etudes { width: 100%; border-collapse: collapse; background: #fff; margin-top: 14px; font-size: 15px; }
+  .tableau-etudes th, .tableau-etudes td { border-bottom: 1px solid var(--trait); padding: 7px 8px; text-align: left; vertical-align: top; }
+  .tableau-etudes th button { all: unset; cursor: pointer; font-weight: 700; }
+  .tableau-etudes th button:focus-visible { outline: 2px solid var(--turquoise); }
+  .tableau-etudes tbody tr { cursor: pointer; }
+  .tableau-etudes td:last-child { white-space: nowrap; }
+  .tableau-etudes tbody tr:hover { background: #f0f9fa; }
+  .defilement { overflow-x: auto; }
+
+  dialog.fiche { width: min(920px, calc(100vw - 24px)); max-height: calc(100vh - 24px); border: 0; border-radius: 14px; padding: 0; box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+  dialog.fiche::backdrop { background: rgba(23,49,58,.45); }
+  .fiche-entete { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--trait); padding: 12px 18px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .fiche-entete h2 { margin: 0; font-size: 24px; flex: 1 1 260px; overflow-wrap: anywhere; }
+  .fiche-corps { padding: 6px 18px 18px; }
+  .fiche-corps h3 { font-size: 15px; text-transform: uppercase; letter-spacing: .05em; color: var(--turquoise-fonce); margin: 16px 0 4px; }
+  .fiche-corps dl { display: grid; grid-template-columns: minmax(150px, 260px) 1fr; gap: 3px 14px; margin: 0; }
+  .fiche-corps dt { color: var(--encre-douce); font-size: 14px; }
+  .fiche-corps dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .fiche-corps .interne { font-size: 11px; font-weight: 700; color: var(--echec-texte); border: 1px solid currentColor; border-radius: 6px; padding: 0 4px; margin-left: 4px; vertical-align: 1px; }
+  @media (max-width: 600px) { .fiche-corps dl { grid-template-columns: 1fr; } .fiche-corps dd { margin-bottom: 6px; } }
+
+  .vide { margin-top: 24px; text-align: center; color: var(--encre-douce); }
+
+  /* Impression : seule la fiche ouverte, sur une page. */
+  @media print {
+    body.impression-fiche > *:not(dialog) { display: none !important; }
+    body.impression-fiche dialog.fiche { position: static; display: block; width: auto; max-height: none; box-shadow: none; }
+    .fiche-entete button { display: none; }
+    .fiche-entete { position: static; }
+    body { font-size: 11pt; background: #fff; }
+    .fiche-corps h3 { margin-top: 8px; }
+    .fiche-corps dl { grid-template-columns: 200px 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page page-catalogue">
+
+  <header class="entete">
+    <h1 id="titre-outil">Catalogue des études</h1>
+    <p id="sous-titre">Outil interne : toutes les informations de l'Excel des études, y compris les critères d'exclusion et les DECT.
+       Rien ne quitte cet ordinateur.</p>
+  </header>
+
+  <section class="carte" aria-labelledby="t-fichier">
+    <h2 id="t-fichier" class="visuellement-cache">Excel des études</h2>
+    <div class="barre-fichier">
+      <button type="button" id="bouton-choisir">Ouvrir l'Excel des études</button>
+      <button type="button" id="bouton-recharger" class="secondaire" hidden>Recharger</button>
+      <input type="file" id="selecteur-excel" accept=".xlsx" hidden>
+      <p id="etat" class="note" aria-live="polite">Choisissez le fichier <strong id="nom-excel-attendu">…_ETUDES.xlsx</strong> du disque partagé (ou glissez-le sur la page).</p>
+    </div>
+  </section>
+
+  <div id="catalogue" hidden>
+    <div class="outils-tri">
+      <div class="recherche">
+        <label class="visuellement-cache" for="texte">Rechercher</label>
+        <input type="search" id="texte" placeholder="Rechercher : nom, molécule, critère, ARC…" autocomplete="off">
+        <label class="visuellement-cache" for="filtre-pole">Pôle</label>
+        <select id="filtre-pole"><option value="">Tous les pôles</option></select>
+        <label class="visuellement-cache" for="filtre-pathologie">Pathologie</label>
+        <select id="filtre-pathologie"><option value="">Toutes les pathologies</option></select>
+        <label class="visuellement-cache" for="filtre-arc">ARC</label>
+        <select id="filtre-arc"><option value="">Tous les ARC</option></select>
+        <span class="bascule-vue" role="group" aria-label="Affichage">
+          <button type="button" id="vue-cartes" aria-pressed="true">Cartes</button>
+          <button type="button" id="vue-tableau" aria-pressed="false">Tableau</button>
+        </span>
+      </div>
+      <div class="puces-statut" id="puces-statut" role="group" aria-label="Statut"></div>
+    </div>
+    <div id="resultats" aria-live="polite"></div>
+  </div>
+
+  <footer class="pied-outil" data-version="@@VERSION_OUTIL@@">Catalogue des études — version @@VERSION_OUTIL@@</footer>
+
+</div>
+
+<dialog class="fiche" id="fiche" aria-labelledby="fiche-titre">
+  <div class="fiche-entete">
+    <h2 id="fiche-titre"></h2>
+    <span id="fiche-statut"></span>
+    <button type="button" id="bouton-imprimer" class="secondaire">Imprimer cette fiche</button>
+    <button type="button" id="bouton-fermer">Fermer</button>
+  </div>
+  <div class="fiche-corps" id="fiche-corps"></div>
+</dialog>
+
+<!--@inclure site/donnees/parametres.json-->
+<!--@inclure outils-src/bibliotheques/exceljs/exceljs.min.js-->
+<!--@inclure src/normalisation.js-->
+<!--@inclure src/excel-vers-grille.js-->
+<!--@inclure src/schema.js-->
+<!--@inclure src/gabarit.js-->
+<!--@inclure src/lecture.js-->
+<!--@inclure src/memoire-fichier.js-->
+<!--@inclure src/catalogue.js-->
+<!--@inclure outils-src/ecardioscope-ui.js-->
+</body>
+</html>

@@ -133,6 +133,8 @@ ul.liste-tags { margin: 0; padding-left: 20px; }
 }
 /* Pied de page : nom et version de l'outil (à comparer avec la liste affichée par le Publieur). */
 footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douce); text-align: center; }
+/* Texte lu par les lecteurs d'écran mais invisible à l'écran (libellés de champs). */
+.visuellement-cache { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -186,7 +188,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     </section>
   </div>
 
-  <footer class="pied-outil" data-version="b7103f0a">Migration vers l'Excel harmonisé — version b7103f0a</footer>
+  <footer class="pied-outil" data-version="bf5c3ce1">Migration vers l'Excel harmonisé — version bf5c3ce1</footer>
 
 </div>
 <script type="application/json" id="donnees-parametres">
@@ -509,6 +511,28 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "Diabète",
         "DT2"
       ]
+    },
+    {
+      "id": "cmi",
+      "emoji": "",
+      "nom": "CMI",
+      "groupe": "ic_cmp",
+      "synonymes": [
+        "CMI",
+        "Cardiomyopathie ischémique",
+        "Cardiopathie ischémique"
+      ]
+    },
+    {
+      "id": "cmd",
+      "emoji": "",
+      "nom": "CMD",
+      "groupe": "ic_cmp",
+      "synonymes": [
+        "CMD",
+        "Cardiomyopathie dilatée",
+        "Cardiopathie dilatée"
+      ]
     }
   ],
   "vignettes": [
@@ -617,7 +641,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": "Votre force de contraction cardiaque est-elle normale ?",
+      "question_patient": "Votre force de contraction cardiaque est-elle normale (FEVG > 50%) ?",
       "emoji": "🫀",
       "aide_patient": "valeur FEVG > 40% sur votre dernière échographie",
       "seuil_patient": 40,
@@ -690,7 +714,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": "Avez-vous un diabète ?",
+      "question_patient": "Avez-vous un diabète et/ou un traitement contre le diabète ?",
       "emoji": "🩸"
     },
     {
@@ -703,7 +727,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": "Avez-vous de l'hypertension artérielle ?",
+      "question_patient": "Avez-vous de l'hypertension artérielle et/ou un traitement contre l'hypertension artérielle ?",
       "emoji": "💊"
     },
     {
@@ -716,7 +740,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": null,
+      "question_patient": "Etes-vous porteur d'un stimulateur cardiaque (pacemaker) ou d'un défibrillateur cardiaque ?",
       "a_rediger": true
     },
     {
@@ -730,7 +754,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": null,
+      "question_patient": "Avez-vous déjà été hospitalisé pour de l'insuffisance cardiaque ? (œdème pulmonaire, œdèmes des jambes...)",
       "a_rediger": true
     },
     {
@@ -814,7 +838,9 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       ],
       "noms_commerciaux": [
         "Forxiga",
-        "Jardiance"
+        "Jardiance",
+        "Synjardy",
+        "Xigduo"
       ],
       "synonymes": [
         "gliflozine",
@@ -858,10 +884,14 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       "type": "requis",
       "famille": "traitement",
       "dci": [
-        "rivaroxaban"
+        "rivaroxaban",
+        "apixaban",
+        "dabigatran"
       ],
       "noms_commerciaux": [
-        "Xarelto"
+        "Xarelto",
+        "Eliquis",
+        "Pradaxa"
       ],
       "synonymes": [
         "anticoagulant",
@@ -894,7 +924,8 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "patient"
       ],
       "libelle_patient": null,
-      "a_rediger": true
+      "a_rediger": true,
+      "question_patient": "Traitement pour l'hypertension artérielle se terminant par -pril ou -sartan ?"
     },
     {
       "id": "ttt_inhib_myosine",
@@ -902,10 +933,12 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       "type": "requis",
       "famille": "traitement",
       "dci": [
-        "mavacamten"
+        "mavacamten",
+        "aficamten"
       ],
       "noms_commerciaux": [
-        "Camzyos"
+        "Camzyos",
+        "Myqorzo"
       ],
       "synonymes": [],
       "visibilite": "professionnel",

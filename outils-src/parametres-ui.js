@@ -273,7 +273,35 @@
   function modifie() {
     nonEnregistre = true;
     clearTimeout(minuterie);
-    minuterie = setTimeout(() => { verifier(); apercu(); }, 150);
+    minuterie = setTimeout(() => { verifier(); apercu(); garderBrouillon(); }, 150);
+  }
+
+  // --- Brouillon automatique (src/brouillon.js) ----------------------------------------
+
+  const stockage = (() => { try { return window.localStorage; } catch (e) { return null; } })();
+  function garderBrouillon() { if (stockage && nonEnregistre) IC.brouillon.garder(stockage, P); }
+
+  /** Affiche le bandeau si un brouillon existe et diffère des réglages affichés. */
+  function afficherBrouillon() {
+    const b = stockage && IC.brouillon.retrouver(stockage);
+    const utile = !!b && !IC.parametres.identiques(b.parametres, P);
+    $('bandeau-brouillon').hidden = !utile;
+    if (utile) $('texte-brouillon').textContent = 'Des modifications non enregistrées dans l\'Excel, du ' + IC.brouillon.quand(b.date) + ', ont été retrouvées.';
+  }
+
+  function reprendreBrouillon() {
+    const b = stockage && IC.brouillon.retrouver(stockage);
+    if (!b) { afficherBrouillon(); return; }
+    P = JSON.parse(JSON.stringify(b.parametres));
+    nonEnregistre = true;
+    nomFichier = 'brouillon du ' + IC.brouillon.quand(b.date) + (excel ? ', à enregistrer dans l\'Excel « ' + excel.nom + ' »' : ' (ouvrez l\'Excel pour l\'y enregistrer)');
+    toutRedessiner();
+  }
+
+  function effacerBrouillon() {
+    if (!window.confirm('Effacer définitivement ces modifications non enregistrées ?')) return;
+    if (stockage) IC.brouillon.effacer(stockage);
+    afficherBrouillon();
   }
 
   function verifier() {
@@ -345,7 +373,7 @@
     $('origine').textContent = 'Réglages affichés : ' + nomFichier + '.';
     $('nom-excel-attendu').textContent = nomExcelAttendu();
   }
-  const toutRedessiner = () => { afficherOrigine(); dessinerRubriques(); verifier(); apercu(); };
+  const toutRedessiner = () => { afficherOrigine(); dessinerRubriques(); verifier(); apercu(); afficherBrouillon(); };
 
   function telechargerBlob(contenu, type, nom) {
     const lien = el('a', { href: URL.createObjectURL(new Blob([contenu], { type })), download: nom });
@@ -354,13 +382,13 @@
     setTimeout(() => { URL.revokeObjectURL(lien.href); lien.remove(); }, 1000);
   }
   const TYPE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-  const aujourdhui = () => new Date().toISOString().slice(0, 10);
 
   function telechargerJson() {
     const problemes = verifier();
     if (problemes.length && !window.confirm(problemes.length + ' problème(s) détecté(s) (voir la liste). Télécharger quand même ?')) return;
-    telechargerBlob(JSON.stringify(P, null, 2) + '\n', 'application/json', 'parametres.json');
-    $('message-fichier').textContent = 'parametres.json téléchargé (dossier « Téléchargements »).';
+    const nom = IC.brouillon.nomDate('parametres', '.json');
+    telechargerBlob(JSON.stringify(P, null, 2) + '\n', 'application/json', nom);
+    $('message-fichier').textContent = '« ' + nom + ' » téléchargé (dossier « Téléchargements »).';
   }
 
   async function chargerJson(fichier) {
@@ -368,6 +396,7 @@
       P = JSON.parse(await fichier.text());
       nomFichier = '« ' + fichier.name + ' » (pas encore enregistrés dans l\'Excel)';
       nonEnregistre = true;
+      garderBrouillon();
       toutRedessiner();
       $('message-fichier').textContent = 'Fichier ouvert. Pensez à « Enregistrer dans l\'Excel ».';
     } catch (erreur) {
@@ -480,7 +509,9 @@
       const { contenu, signalements } = IC.lecture.versContenu(lu, P);
       const tampon = await IC.gabarit.creerClasseur(window.ExcelJS, P, contenu).xlsx.writeBuffer();
       const base = excel.nom.replace(/\.xlsx$/i, '');
-      telechargerBlob(octets, TYPE_EXCEL, base + '_sauvegarde_' + aujourdhui() + '.xlsx');
+      // Nom impossible à confondre avec le bon fichier : la sauvegarde est l'ANCIENNE version.
+      const nomSauvegarde = IC.brouillon.nomDate('ANCIENNE_VERSION_' + base, '.xlsx');
+      telechargerBlob(octets, TYPE_EXCEL, nomSauvegarde);
       const bilan = lu.etudes.length + ' études et ' + lu.annuaire.length + ' personnes reprises.';
       if (ecriturePermise) {
         const r = await IC.memoireFichier.ecrire(excel.poignee, tampon);
@@ -492,17 +523,19 @@
           liste.appendChild(el('li', null, el('button', { type: 'button', className: 'secondaire petit', textContent: 'Télécharger plutôt le fichier mis à jour', onclick: () => telechargerBlob(tampon, TYPE_EXCEL, excel.nom) })));
           return;
         }
+        if (stockage) IC.brouillon.effacer(stockage);
         etat.className = 'etat-ok';
-        etat.textContent = '✔ Enregistré dans « ' + excel.nom + ' ». ' + bilan + ' Une copie de l\'ancienne version a été téléchargée (« ' + base + '_sauvegarde_… »).';
+        etat.textContent = '✔ Enregistré dans « ' + excel.nom + ' ». ' + bilan + ' Rien d\'autre à faire. Dans « Téléchargements », « ' + nomSauvegarde + ' » est l\'ancienne version, gardée par précaution : ne pas la remettre dans le dossier.';
       } else {
         telechargerBlob(tampon, TYPE_EXCEL, excel.nom);
         etat.className = 'etat-ok';
-        etat.textContent = '✔ ' + bilan + ' Ce navigateur ne peut pas écrire directement dans le fichier : le fichier mis à jour a été téléchargé sous le même nom. Remplacez l\'Excel du disque partagé par celui-ci (une copie de l\'ancien a aussi été téléchargée).';
+        etat.textContent = '✔ ' + bilan + ' Ce navigateur ne peut pas écrire directement dans le fichier : deux fichiers ont été téléchargés. Déplacez dans le dossier des outils, à la place de l\'ancien, celui qui s\'appelle exactement « ' + excel.nom + ' » (si Windows l\'a renommé « … (1).xlsx », retirez le « (1) »). L\'autre, « ' + nomSauvegarde + ' », est l\'ancienne version : ne pas l\'utiliser.';
       }
       excel.parametres = JSON.parse(JSON.stringify(P));
       nonEnregistre = false;
       nomFichier = 'ceux de l\'Excel « ' + excel.nom + ' » (' + lu.etudes.length + ' études)';
       afficherOrigine();
+      afficherBrouillon();
       const anomalies = lu.anomalies.filter((a) => a.type === 'libelle_inconnu');
       for (const a of anomalies) liste.appendChild(el('li', { className: 'alerte' }, '! ' + a.onglet + ' ' + (a.adresse || '') + ' : ' + a.message + ' Ses valeurs ont été gardées en Remarques.'));
       for (const x of signalements) liste.appendChild(el('li', { className: 'alerte' }, '! ' + x.etude + ' : ' + x.message));
@@ -528,6 +561,8 @@
     $('bouton-recharger-excel').addEventListener('click', rechargerExcel);
     $('selecteur-excel').addEventListener('change', (e) => { if (e.target.files[0]) ouvrirExcel(e.target.files[0], null); });
     $('bouton-enregistrer').addEventListener('click', enregistrer);
+    $('bouton-reprendre').addEventListener('click', reprendreBrouillon);
+    $('bouton-effacer-brouillon').addEventListener('click', effacerBrouillon);
     // Toute saisie dans les rubriques = modification à enregistrer.
     ['input', 'change'].forEach((n) => $('rubriques').addEventListener(n, () => { nonEnregistre = true; }));
     $('rubriques').addEventListener('click', (e) => { if (e.target.tagName === 'BUTTON') nonEnregistre = true; });

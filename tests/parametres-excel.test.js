@@ -150,7 +150,44 @@ test('versions des outils : outils/versions.json à jour, chaque outil affiche s
 });
 
 test('règle 5 : aucun nom d\'instance écrit en dur dans les sources des outils', () => {
-  for (const nom of ['Publieur.html', 'Parametres.html', 'publieur-ui.js', 'parametres-ui.js', 'migration-ui.js']) {
+  for (const nom of ['Publieur.html', 'Parametres.html', 'eCardioScope.html', 'publieur-ui.js', 'parametres-ui.js', 'migration-ui.js', 'ecardioscope-ui.js']) {
     assert.ok(!/InnovaCoeur/.test(readFileSync(join(RACINE, 'outils-src', nom), 'utf8')), nom);
   }
+});
+
+// --- Brouillon automatique de l'outil Paramètres (src/brouillon.js) ----------------------
+
+function stockageFictif() {
+  const m = new Map();
+  return { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)), removeItem: (k) => m.delete(k), m };
+}
+
+test('brouillon : gardé, retrouvé à l\'identique avec sa date, puis effacé', () => {
+  const s = stockageFictif();
+  assert.equal(IC.brouillon.retrouver(s), null);
+  const p = copie(PARAM);
+  p.textes.site.bandeau_test = 'Phrase modifiée, non enregistrée.';
+  const date = new Date(2026, 10, 19, 21, 34);
+  assert.ok(IC.brouillon.garder(s, p, date));
+  const b = IC.brouillon.retrouver(s);
+  assert.deepEqual(b.parametres, p);
+  assert.equal(IC.brouillon.quand(b.date), '19/11 à 21:34');
+  IC.brouillon.effacer(s);
+  assert.equal(IC.brouillon.retrouver(s), null);
+});
+
+test('brouillon illisible ou stockage refusé : ignoré sans erreur', () => {
+  const s = stockageFictif();
+  s.setItem(IC.brouillon.CLE, '{pas du json');
+  assert.equal(IC.brouillon.retrouver(s), null);
+  s.setItem(IC.brouillon.CLE, JSON.stringify({ date: 'n\'importe quoi', parametres: PARAM }));
+  assert.equal(IC.brouillon.retrouver(s), null);
+  const refuse = { getItem() { throw new Error('refusé'); }, setItem() { throw new Error('refusé'); }, removeItem() { throw new Error('refusé'); } };
+  assert.equal(IC.brouillon.garder(refuse, PARAM), false);
+  assert.equal(IC.brouillon.retrouver(refuse), null);
+  assert.doesNotThrow(() => IC.brouillon.effacer(refuse));
+});
+
+test('nom daté du parametres.json téléchargé (plus de « (1) », « (2) »)', () => {
+  assert.equal(IC.brouillon.nomDate('parametres', '.json', new Date(2026, 10, 19, 9, 5)), 'parametres_2026-11-19_09h05.json');
 });

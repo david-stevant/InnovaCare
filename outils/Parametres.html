@@ -133,12 +133,15 @@ ul.liste-tags { margin: 0; padding-left: 20px; }
 }
 /* Pied de page : nom et version de l'outil (à comparer avec la liste affichée par le Publieur). */
 footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douce); text-align: center; }
+/* Texte lu par les lecteurs d'écran mais invisible à l'écran (libellés de champs). */
+.visuellement-cache { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 <style>
   .mise-en-page { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; align-items: start; }
   @media (max-width: 1000px) { .mise-en-page { grid-template-columns: 1fr; } }
   .colonne-apercu { position: sticky; top: 12px; }
   @media (max-width: 1000px) { .colonne-apercu { position: static; } }
+  .bandeau-brouillon { border: 2px solid var(--or, #fab316); background: #fff7e0; border-radius: 10px; padding: 8px 14px; margin-top: 10px; }
   details.rubrique { background: var(--carte); border: 1px solid var(--trait); border-radius: 12px; margin-bottom: 12px; padding: 4px 16px; }
   details.rubrique > summary { cursor: pointer; font-weight: 700; font-size: 19px; padding: 10px 0; }
   details.rubrique > p.note { margin-top: 0; }
@@ -194,6 +197,14 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     </div>
     <div id="zone-depot" class="zone-depot">… ou glissez-déposez le fichier ici (format .xlsx).</div>
     <p id="origine" class="note" aria-live="polite"></p>
+    <div id="bandeau-brouillon" class="bandeau-brouillon" hidden>
+      <p><strong id="texte-brouillon"></strong><br>
+         Si vous voulez les ranger dans l'Excel : ouvrez d'abord l'Excel ci-dessus, puis cliquez sur « Reprendre ».</p>
+      <div class="rangee">
+        <button type="button" id="bouton-reprendre">Reprendre ces modifications</button>
+        <button type="button" id="bouton-effacer-brouillon" class="secondaire">Les effacer</button>
+      </div>
+    </div>
   </section>
 
   <div class="mise-en-page">
@@ -245,7 +256,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     <p id="message-fichier" class="note" aria-live="polite"></p>
   </details>
 
-  <footer class="pied-outil" data-version="0f89f076">Paramètres de l'instance — version 0f89f076</footer>
+  <footer class="pied-outil" data-version="ff5f7bab">Paramètres de l'instance — version ff5f7bab</footer>
 
 </div>
 <script type="application/json" id="donnees-parametres">
@@ -568,6 +579,28 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "Diabète",
         "DT2"
       ]
+    },
+    {
+      "id": "cmi",
+      "emoji": "",
+      "nom": "CMI",
+      "groupe": "ic_cmp",
+      "synonymes": [
+        "CMI",
+        "Cardiomyopathie ischémique",
+        "Cardiopathie ischémique"
+      ]
+    },
+    {
+      "id": "cmd",
+      "emoji": "",
+      "nom": "CMD",
+      "groupe": "ic_cmp",
+      "synonymes": [
+        "CMD",
+        "Cardiomyopathie dilatée",
+        "Cardiopathie dilatée"
+      ]
     }
   ],
   "vignettes": [
@@ -676,7 +709,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": "Votre force de contraction cardiaque est-elle normale ?",
+      "question_patient": "Votre force de contraction cardiaque est-elle normale (FEVG > 50%) ?",
       "emoji": "🫀",
       "aide_patient": "valeur FEVG > 40% sur votre dernière échographie",
       "seuil_patient": 40,
@@ -749,7 +782,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": "Avez-vous un diabète ?",
+      "question_patient": "Avez-vous un diabète et/ou un traitement contre le diabète ?",
       "emoji": "🩸"
     },
     {
@@ -762,7 +795,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": "Avez-vous de l'hypertension artérielle ?",
+      "question_patient": "Avez-vous de l'hypertension artérielle et/ou un traitement contre l'hypertension artérielle ?",
       "emoji": "💊"
     },
     {
@@ -775,7 +808,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": null,
+      "question_patient": "Etes-vous porteur d'un stimulateur cardiaque (pacemaker) ou d'un défibrillateur cardiaque ?",
       "a_rediger": true
     },
     {
@@ -789,7 +822,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": null,
+      "question_patient": "Avez-vous déjà été hospitalisé pour de l'insuffisance cardiaque ? (œdème pulmonaire, œdèmes des jambes...)",
       "a_rediger": true
     },
     {
@@ -873,7 +906,9 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       ],
       "noms_commerciaux": [
         "Forxiga",
-        "Jardiance"
+        "Jardiance",
+        "Synjardy",
+        "Xigduo"
       ],
       "synonymes": [
         "gliflozine",
@@ -917,10 +952,14 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       "type": "requis",
       "famille": "traitement",
       "dci": [
-        "rivaroxaban"
+        "rivaroxaban",
+        "apixaban",
+        "dabigatran"
       ],
       "noms_commerciaux": [
-        "Xarelto"
+        "Xarelto",
+        "Eliquis",
+        "Pradaxa"
       ],
       "synonymes": [
         "anticoagulant",
@@ -953,7 +992,8 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "patient"
       ],
       "libelle_patient": null,
-      "a_rediger": true
+      "a_rediger": true,
+      "question_patient": "Traitement pour l'hypertension artérielle se terminant par -pril ou -sartan ?"
     },
     {
       "id": "ttt_inhib_myosine",
@@ -961,10 +1001,12 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       "type": "requis",
       "famille": "traitement",
       "dci": [
-        "mavacamten"
+        "mavacamten",
+        "aficamten"
       ],
       "noms_commerciaux": [
-        "Camzyos"
+        "Camzyos",
+        "Myqorzo"
       ],
       "synonymes": [],
       "visibilite": "professionnel",
@@ -2651,6 +2693,63 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 </script>
 <script>
 // =============================================================================
+// brouillon.js — garder les modifications de l'outil Paramètres en cours de route
+// =============================================================================
+// Une modification non enregistrée était perdue si la page se fermait. Le brouillon
+// est rangé dans la mémoire locale du navigateur (« localStorage », sur ce poste
+// seulement ; ce n'est pas un cookie, rien n'est envoyé). Il ne contient que des
+// réglages, jamais de donnée patient. Il est effacé après un enregistrement réussi
+// dans l'Excel. Toutes les fonctions reçoivent le « stockage » en argument : on peut
+// ainsi les tester sans navigateur.
+// =============================================================================
+(function (racine) {
+  'use strict';
+  const InnovaCare = racine.InnovaCare || (racine.InnovaCare = {});
+
+  const CLE = 'innovacare-brouillon-parametres';
+
+  /** Range le brouillon. Renvoie true si c'est fait (le navigateur peut refuser). */
+  function garder(stockage, parametres, date) {
+    try {
+      stockage.setItem(CLE, JSON.stringify({ date: (date || new Date()).toISOString(), parametres }));
+      return true;
+    } catch (erreur) { return false; }
+  }
+
+  /** Renvoie { date: Date, parametres } ou null (aucun brouillon, ou brouillon illisible). */
+  function retrouver(stockage) {
+    try {
+      const brut = stockage.getItem(CLE);
+      if (!brut) return null;
+      const lu = JSON.parse(brut);
+      const date = new Date(lu.date);
+      if (!lu.parametres || typeof lu.parametres !== 'object' || !Array.isArray(lu.parametres.poles) || isNaN(date)) return null;
+      return { date, parametres: lu.parametres };
+    } catch (erreur) { return null; }
+  }
+
+  function effacer(stockage) {
+    try { stockage.removeItem(CLE); } catch (erreur) { /* rien à faire */ }
+  }
+
+  /** « 19/11 à 21:34 » */
+  function quand(date) {
+    const deux = (n) => String(n).padStart(2, '0');
+    return deux(date.getDate()) + '/' + deux(date.getMonth() + 1) + ' à ' + deux(date.getHours()) + ':' + deux(date.getMinutes());
+  }
+
+  /** Nom daté d'un fichier téléchargé : parametres_2026-11-19_21h34.json (évite les « (1) », « (2) »). */
+  function nomDate(base, extension, date) {
+    const d = date || new Date();
+    const deux = (n) => String(n).padStart(2, '0');
+    return base + '_' + d.getFullYear() + '-' + deux(d.getMonth() + 1) + '-' + deux(d.getDate()) + '_' + deux(d.getHours()) + 'h' + deux(d.getMinutes()) + extension;
+  }
+
+  InnovaCare.brouillon = { CLE, garder, retrouver, effacer, quand, nomDate };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>
+// =============================================================================
 // parametres-ui.js — formulaire d'édition de parametres.json, avec aperçu
 // =============================================================================
 // Le formulaire est décrit par la liste RUBRIQUES ci-dessous : pour ajouter un
@@ -2925,7 +3024,35 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function modifie() {
     nonEnregistre = true;
     clearTimeout(minuterie);
-    minuterie = setTimeout(() => { verifier(); apercu(); }, 150);
+    minuterie = setTimeout(() => { verifier(); apercu(); garderBrouillon(); }, 150);
+  }
+
+  // --- Brouillon automatique (src/brouillon.js) ----------------------------------------
+
+  const stockage = (() => { try { return window.localStorage; } catch (e) { return null; } })();
+  function garderBrouillon() { if (stockage && nonEnregistre) IC.brouillon.garder(stockage, P); }
+
+  /** Affiche le bandeau si un brouillon existe et diffère des réglages affichés. */
+  function afficherBrouillon() {
+    const b = stockage && IC.brouillon.retrouver(stockage);
+    const utile = !!b && !IC.parametres.identiques(b.parametres, P);
+    $('bandeau-brouillon').hidden = !utile;
+    if (utile) $('texte-brouillon').textContent = 'Des modifications non enregistrées dans l\'Excel, du ' + IC.brouillon.quand(b.date) + ', ont été retrouvées.';
+  }
+
+  function reprendreBrouillon() {
+    const b = stockage && IC.brouillon.retrouver(stockage);
+    if (!b) { afficherBrouillon(); return; }
+    P = JSON.parse(JSON.stringify(b.parametres));
+    nonEnregistre = true;
+    nomFichier = 'brouillon du ' + IC.brouillon.quand(b.date) + (excel ? ', à enregistrer dans l\'Excel « ' + excel.nom + ' »' : ' (ouvrez l\'Excel pour l\'y enregistrer)');
+    toutRedessiner();
+  }
+
+  function effacerBrouillon() {
+    if (!window.confirm('Effacer définitivement ces modifications non enregistrées ?')) return;
+    if (stockage) IC.brouillon.effacer(stockage);
+    afficherBrouillon();
   }
 
   function verifier() {
@@ -2997,7 +3124,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('origine').textContent = 'Réglages affichés : ' + nomFichier + '.';
     $('nom-excel-attendu').textContent = nomExcelAttendu();
   }
-  const toutRedessiner = () => { afficherOrigine(); dessinerRubriques(); verifier(); apercu(); };
+  const toutRedessiner = () => { afficherOrigine(); dessinerRubriques(); verifier(); apercu(); afficherBrouillon(); };
 
   function telechargerBlob(contenu, type, nom) {
     const lien = el('a', { href: URL.createObjectURL(new Blob([contenu], { type })), download: nom });
@@ -3006,13 +3133,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     setTimeout(() => { URL.revokeObjectURL(lien.href); lien.remove(); }, 1000);
   }
   const TYPE_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-  const aujourdhui = () => new Date().toISOString().slice(0, 10);
 
   function telechargerJson() {
     const problemes = verifier();
     if (problemes.length && !window.confirm(problemes.length + ' problème(s) détecté(s) (voir la liste). Télécharger quand même ?')) return;
-    telechargerBlob(JSON.stringify(P, null, 2) + '\n', 'application/json', 'parametres.json');
-    $('message-fichier').textContent = 'parametres.json téléchargé (dossier « Téléchargements »).';
+    const nom = IC.brouillon.nomDate('parametres', '.json');
+    telechargerBlob(JSON.stringify(P, null, 2) + '\n', 'application/json', nom);
+    $('message-fichier').textContent = '« ' + nom + ' » téléchargé (dossier « Téléchargements »).';
   }
 
   async function chargerJson(fichier) {
@@ -3020,6 +3147,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       P = JSON.parse(await fichier.text());
       nomFichier = '« ' + fichier.name + ' » (pas encore enregistrés dans l\'Excel)';
       nonEnregistre = true;
+      garderBrouillon();
       toutRedessiner();
       $('message-fichier').textContent = 'Fichier ouvert. Pensez à « Enregistrer dans l\'Excel ».';
     } catch (erreur) {
@@ -3132,7 +3260,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       const { contenu, signalements } = IC.lecture.versContenu(lu, P);
       const tampon = await IC.gabarit.creerClasseur(window.ExcelJS, P, contenu).xlsx.writeBuffer();
       const base = excel.nom.replace(/\.xlsx$/i, '');
-      telechargerBlob(octets, TYPE_EXCEL, base + '_sauvegarde_' + aujourdhui() + '.xlsx');
+      // Nom impossible à confondre avec le bon fichier : la sauvegarde est l'ANCIENNE version.
+      const nomSauvegarde = IC.brouillon.nomDate('ANCIENNE_VERSION_' + base, '.xlsx');
+      telechargerBlob(octets, TYPE_EXCEL, nomSauvegarde);
       const bilan = lu.etudes.length + ' études et ' + lu.annuaire.length + ' personnes reprises.';
       if (ecriturePermise) {
         const r = await IC.memoireFichier.ecrire(excel.poignee, tampon);
@@ -3144,17 +3274,19 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           liste.appendChild(el('li', null, el('button', { type: 'button', className: 'secondaire petit', textContent: 'Télécharger plutôt le fichier mis à jour', onclick: () => telechargerBlob(tampon, TYPE_EXCEL, excel.nom) })));
           return;
         }
+        if (stockage) IC.brouillon.effacer(stockage);
         etat.className = 'etat-ok';
-        etat.textContent = '✔ Enregistré dans « ' + excel.nom + ' ». ' + bilan + ' Une copie de l\'ancienne version a été téléchargée (« ' + base + '_sauvegarde_… »).';
+        etat.textContent = '✔ Enregistré dans « ' + excel.nom + ' ». ' + bilan + ' Rien d\'autre à faire. Dans « Téléchargements », « ' + nomSauvegarde + ' » est l\'ancienne version, gardée par précaution : ne pas la remettre dans le dossier.';
       } else {
         telechargerBlob(tampon, TYPE_EXCEL, excel.nom);
         etat.className = 'etat-ok';
-        etat.textContent = '✔ ' + bilan + ' Ce navigateur ne peut pas écrire directement dans le fichier : le fichier mis à jour a été téléchargé sous le même nom. Remplacez l\'Excel du disque partagé par celui-ci (une copie de l\'ancien a aussi été téléchargée).';
+        etat.textContent = '✔ ' + bilan + ' Ce navigateur ne peut pas écrire directement dans le fichier : deux fichiers ont été téléchargés. Déplacez dans le dossier des outils, à la place de l\'ancien, celui qui s\'appelle exactement « ' + excel.nom + ' » (si Windows l\'a renommé « … (1).xlsx », retirez le « (1) »). L\'autre, « ' + nomSauvegarde + ' », est l\'ancienne version : ne pas l\'utiliser.';
       }
       excel.parametres = JSON.parse(JSON.stringify(P));
       nonEnregistre = false;
       nomFichier = 'ceux de l\'Excel « ' + excel.nom + ' » (' + lu.etudes.length + ' études)';
       afficherOrigine();
+      afficherBrouillon();
       const anomalies = lu.anomalies.filter((a) => a.type === 'libelle_inconnu');
       for (const a of anomalies) liste.appendChild(el('li', { className: 'alerte' }, '! ' + a.onglet + ' ' + (a.adresse || '') + ' : ' + a.message + ' Ses valeurs ont été gardées en Remarques.'));
       for (const x of signalements) liste.appendChild(el('li', { className: 'alerte' }, '! ' + x.etude + ' : ' + x.message));
@@ -3180,6 +3312,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('bouton-recharger-excel').addEventListener('click', rechargerExcel);
     $('selecteur-excel').addEventListener('change', (e) => { if (e.target.files[0]) ouvrirExcel(e.target.files[0], null); });
     $('bouton-enregistrer').addEventListener('click', enregistrer);
+    $('bouton-reprendre').addEventListener('click', reprendreBrouillon);
+    $('bouton-effacer-brouillon').addEventListener('click', effacerBrouillon);
     // Toute saisie dans les rubriques = modification à enregistrer.
     ['input', 'change'].forEach((n) => $('rubriques').addEventListener(n, () => { nonEnregistre = true; }));
     $('rubriques').addEventListener('click', (e) => { if (e.target.tagName === 'BUTTON') nonEnregistre = true; });
