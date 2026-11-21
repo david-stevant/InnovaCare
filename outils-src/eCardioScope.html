@@ -109,6 +109,8 @@
   .carte-resultat .actions { margin-top: 8px; }
   .aide-screening { color: var(--encre-douce); font-size: 15px; }
   button.petit { padding: 4px 10px; font-size: 14px; }
+  .apercu-memo { background: #fff; border: 1px solid var(--trait); border-radius: 12px; padding: 16px 20px; margin-top: 12px; overflow-wrap: anywhere; }
+  .a-completer { margin-top: 12px; }
 
   /* Impression : seule la fiche ouverte, sur une page. */
   @media print {
@@ -145,6 +147,7 @@
   <div class="onglets" role="tablist" aria-label="Vues">
     <button type="button" role="tab" id="onglet-screening" aria-controls="screening" aria-selected="true">Screening</button>
     <button type="button" role="tab" id="onglet-catalogue" aria-controls="catalogue" aria-selected="false">Catalogue</button>
+    <button type="button" role="tab" id="onglet-memos" aria-controls="memos" aria-selected="false">Mémos</button>
   </div>
 
   <div id="screening" role="tabpanel" aria-labelledby="onglet-screening">
@@ -169,6 +172,24 @@
     <div class="compte-collant" id="compte-collant" hidden><span id="compte-collant-texte"></span><a href="#resultats-screening">voir ↓</a></div>
   </div>
 
+  <div id="memos" role="tabpanel" aria-labelledby="onglet-memos" hidden>
+    <div class="panneau">
+      <div class="recherche">
+        <label for="memo-section">Contenu :</label>
+        <select id="memo-section"><option value="">Tout le mémo</option></select>
+        <label class="case-masquees"><input type="checkbox" id="memo-sans-dect"> Sans DECT (pour une diffusion hors du service)</label>
+      </div>
+      <div class="rangee">
+        <button type="button" id="bouton-copier-mail">Copier pour un mail</button>
+        <button type="button" id="bouton-copier-brut" class="secondaire">Copier en texte brut</button>
+        <span id="message-memo" class="note" aria-live="polite"></span>
+      </div>
+      <p class="note">Contenu repris tel quel de l'Excel (études « ouvert » affichées dans l'outil interne) ; seuls les seuils chiffrés sont mis en gras.</p>
+    </div>
+    <div id="memo-a-completer"></div>
+    <div class="apercu-memo" id="apercu-memo" tabindex="-1"></div>
+  </div>
+
   <div id="catalogue" role="tabpanel" aria-labelledby="onglet-catalogue" hidden>
     <div class="outils-tri">
       <div class="recherche">
@@ -191,7 +212,7 @@
   </div>
   </div>
 
-  <footer class="pied-outil" data-version="@@VERSION_OUTIL@@">Outil interne : screening et catalogue — version @@VERSION_OUTIL@@</footer>
+  <footer class="pied-outil" data-version="@@VERSION_OUTIL@@">Outil interne : screening, catalogue et mémos — version @@VERSION_OUTIL@@</footer>
 
 </div>
 
@@ -215,6 +236,7 @@
 <!--@inclure src/memoire-fichier.js-->
 <!--@inclure src/catalogue.js-->
 <!--@inclure src/eligibilite.js-->
+<!--@inclure src/memos.js-->
 <!--@inclure outils-src/ecardioscope-ui.js-->
 </body>
 </html>

@@ -6,7 +6,8 @@
 // 3. Onglet « Screening » : contexte clinique, puis seulement les critères utiles, résultats
 //    en direct (moteur partagé src/eligibilite.js, logique d'e-CardioScope v4).
 // 4. Onglet « Catalogue » : les études en cartes ou en tableau, avec recherche et filtres.
-// 5. Fiche détaillée imprimable (tous les champs, contacts avec DECT).
+// 5. Onglet « Mémos » : mémo des études ouvertes au format validé (src/memos.js), à copier.
+// 6. Fiche détaillée imprimable (tous les champs, contacts avec DECT).
 // Les valeurs saisies pour un patient restent dans la page (variable « sc ») : jamais gardées.
 // CONFIDENTIALITÉ : données internes. Aucun envoi, aucun stockage dans le navigateur
 // (seule la « poignée » du fichier est retenue, pas son contenu). Rien n'est inventé :
@@ -86,6 +87,7 @@
       $('espace').hidden = false;
       dessiner();
       dessinerScreening();
+      dessinerMemo();
       afficherOnglet(ongletCourant);
     } catch (erreur) {
       console.error(erreur);
@@ -236,7 +238,7 @@
 
   function afficherOnglet(nom) {
     ongletCourant = nom;
-    for (const n of ['screening', 'catalogue']) {
+    for (const n of ['screening', 'catalogue', 'memos']) {
       $('onglet-' + n).setAttribute('aria-selected', String(n === nom));
       $(n).hidden = n !== nom;
     }
@@ -395,7 +397,7 @@
     if (e.thematique) carte.appendChild(el('div', { className: 'them' }, e.thematique));
     const science = [N.enTexte(v.intervention), N.enTexte(v.design)].filter(Boolean).join(' — ');
     if (science) carte.appendChild(el('div', null, science));
-    const criteres = [1, 2, 3, 4, 5].map((n) => N.enTexte(v['inclusion_' + n])).filter(Boolean);
+    const criteres = [1, 2, 3, 4, 5].map((n) => IC.memos.sansPuce(N.enTexte(v['inclusion_' + n]))).filter(Boolean);
     if (criteres.length) carte.appendChild(el('ul', null, ...criteres.map((c) => el('li', null, c))));
     const pastilles = evaluation.criteres.filter((c) => c.statut !== 'exclu').map((c) => {
       const libelle = c.id.startsWith('question:') ? c.libelle : c.libelle + ' ' + c.seuil;
@@ -418,6 +420,67 @@
     sc.tousLesContextes = true;
     dessinerScreening();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // --- Mémos ---------------------------------------------------------------------------------
+
+  let memoCourant = null;
+
+  function dessinerMemo() {
+    if (!cat) return;
+    const choix = $('memo-section');
+    const tout = IC.memos.construire(cat.etudes, P);
+    const garde = choix.value;
+    choix.textContent = '';
+    choix.appendChild(el('option', { value: '' }, 'Tout le mémo'));
+    for (const t of tout.sectionsDisponibles) choix.appendChild(el('option', { value: t }, t));
+    choix.value = tout.sectionsDisponibles.includes(garde) ? garde : '';
+    memoCourant = IC.memos.construire(cat.etudes, P, { section: choix.value, avecDect: !$('memo-sans-dect').checked });
+    // Le HTML du mémo échappe tout le texte venu de l'Excel (src/memos.js) : il peut être affiché tel quel.
+    $('apercu-memo').innerHTML = memoCourant.sections.length ? IC.memos.versHtml(memoCourant) : '<p>Aucune étude ouverte à afficher.</p>';
+    const manques = IC.memos.aCompleter(memoCourant);
+    const zone = $('memo-a-completer');
+    zone.textContent = '';
+    if (manques.length) {
+      const d = el('details', { className: 'a-completer carte' }, el('summary', null, 'À compléter dans l\'Excel (' + manques.length + ')'));
+      d.appendChild(el('ul', null, ...manques.map((x) => el('li', null, x.nom + ' (' + x.section + ') : ' + x.manque.join(' et ') + ' manquant'))));
+      zone.appendChild(d);
+    }
+    $('message-memo').textContent = '';
+  }
+
+  /** Copie dans le presse-papiers ; à défaut, sélectionne l'aperçu et demande Ctrl+C. */
+  async function copier(enHtml) {
+    if (!memoCourant || !memoCourant.sections.length) return;
+    const brut = IC.memos.versMarkdown(memoCourant);
+    const message = $('message-memo');
+    try {
+      if (enHtml && window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+        const html = IC.memos.versHtml(memoCourant);
+        await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([brut], { type: 'text/plain' }) })]);
+      } else if (!enHtml && navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(brut);
+      } else { throw new Error('presse-papiers indisponible'); }
+      message.textContent = enHtml ? '✔ Copié : collez-le dans un nouveau message (Ctrl+V).' : '✔ Texte brut copié.';
+    } catch (erreur) {
+      if (enHtml) {
+        const zone = $('apercu-memo');
+        const plage = document.createRange();
+        plage.selectNodeContents(zone);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(plage);
+        const ok = document.execCommand && document.execCommand('copy');
+        message.textContent = ok ? '✔ Copié : collez-le dans un nouveau message (Ctrl+V).' : 'Le mémo est sélectionné : faites Ctrl+C, puis collez-le dans votre message.';
+      } else {
+        const t = el('textarea', { value: brut, readOnly: true });
+        document.body.appendChild(t);
+        t.select();
+        const ok = document.execCommand && document.execCommand('copy');
+        t.remove();
+        message.textContent = ok ? '✔ Texte brut copié.' : 'La copie automatique est refusée par le navigateur : utilisez « Copier pour un mail ».';
+      }
+    }
   }
 
   // --- Fiche détaillée ---------------------------------------------------------------------
@@ -507,6 +570,11 @@
     $('onglet-screening').addEventListener('click', () => afficherOnglet('screening'));
     $('onglet-catalogue').addEventListener('click', () => afficherOnglet('catalogue'));
     $('bouton-nouveau').addEventListener('click', nouveauPatient);
+    $('onglet-memos').addEventListener('click', () => afficherOnglet('memos'));
+    $('memo-section').addEventListener('change', dessinerMemo);
+    $('memo-sans-dect').addEventListener('change', dessinerMemo);
+    $('bouton-copier-mail').addEventListener('click', () => copier(true));
+    $('bouton-copier-brut').addEventListener('click', () => copier(false));
     $('vue-tableau').addEventListener('click', () => { etat.vue = 'tableau'; dessiner(); });
     $('bouton-fermer').addEventListener('click', fermerFiche);
     $('bouton-imprimer').addEventListener('click', imprimer);

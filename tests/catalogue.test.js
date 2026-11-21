@@ -103,7 +103,7 @@ test('copie de dev migrée : 62 études lues, contacts retrouvés, recherche et 
 });
 
 test('confidentialité : l\'outil interne n\'envoie rien et ne garde aucune donnée dans le navigateur', () => {
-  for (const nom of ['outils-src/ecardioscope-ui.js', 'src/catalogue.js', 'src/eligibilite.js']) {
+  for (const nom of ['outils-src/ecardioscope-ui.js', 'src/catalogue.js', 'src/eligibilite.js', 'src/memos.js']) {
     const code = readFileSync(join(RACINE, nom), 'utf8').replace(/\/\/.*$/gm, '');
     assert.ok(!/\bfetch\s*\(|XMLHttpRequest|sendBeacon|WebSocket|localStorage|sessionStorage|document\.cookie/.test(code), nom);
   }
