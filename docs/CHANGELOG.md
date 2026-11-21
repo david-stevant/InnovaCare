@@ -2,6 +2,20 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.9.0 — 21 novembre 2026 — Phase 2.3 : mémos générés par l'outil interne
+
+- **Onglet « Mémos »** dans `outils/eCardioScope.html` : le mémo des études ouvertes, au format des
+  mémos CardioScope v3 (sections par pôles, nom — thématique, intervention et design, critères
+  d'inclusion principaux, ARC avec DECT et e-mail), toujours à jour à partir de l'Excel.
+  - « Tout le mémo » ou une section ; case « Sans DECT » pour une diffusion hors du service.
+  - « Copier pour un mail » (texte mis en forme pour Outlook) et « Copier en texte brut » (Markdown).
+  - Encadré « À compléter dans l'Excel » : études ouvertes sans critère principal ou sans ARC.
+- **Contenu repris tel quel de l'Excel** : seuls les seuils chiffrés passent en gras et le tiret tapé en
+  début de critère est retiré ; tout texte de l'Excel est « échappé » (il ne peut pas casser la mise en page).
+  Les études mises en avant viennent en tête de leur section.
+- **Code partagé** `src/memos.js`, qui servira aussi à la version publique (sans DECT) et à la newsletter.
+- **Tests** : 130 tests, dont 9 pour les mémos.
+
 ## Version 0.8.0 — 21 novembre 2026 — Phase 2.2 : screening dans l'outil interne
 
 - **Onglet « Screening »** dans `outils/eCardioScope.html` (ouvert par défaut ; « Catalogue » à côté).

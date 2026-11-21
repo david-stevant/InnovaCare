@@ -239,3 +239,21 @@ Seules les études au statut « ouvert » et affichées dans l'outil interne son
    études non affichées » les montre.
 3. Clic sur une étude : **fiche complète** (tous les champs remplis, contacts avec DECT et e-mail).
    Les informations internes portent la mention « interne ». « Imprimer cette fiche » tient sur une page.
+
+### Onglet « Mémos »
+
+Le mémo des études ouvertes, au format des mémos CardioScope, fabriqué à partir de l'Excel : il est
+toujours à jour, sans recopie.
+
+1. **Contenu** : « Tout le mémo » ou une seule section (les sections et leurs pôles se règlent dans
+   l'outil Paramètres, rubrique « Sections des mémos »).
+2. **« Sans DECT »** : pour envoyer le mémo hors du service ; les numéros de poste disparaissent.
+3. **« Copier pour un mail »**, puis Ctrl+V dans un nouveau message Outlook : titres, gras et listes
+   sont conservés. **« Copier en texte brut »** donne la version texte (Markdown), comme les anciens mémos.
+4. L'encadré **« À compléter dans l'Excel »** liste les études ouvertes sans critère d'inclusion
+   principal ou sans ARC : à transmettre aux ARC concernés.
+
+Le texte vient de l'Excel tel quel (nom, thématique, intervention vs comparateur, design, critères
+d'inclusion principaux, ARC n° 1). Seuls les seuils chiffrés sont mis en gras automatiquement, et le
+tiret tapé en début de critère est retiré (la liste a déjà ses puces). Pour améliorer une phrase du
+mémo, on la corrige dans l'Excel.

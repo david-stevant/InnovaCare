@@ -239,6 +239,8 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
   .carte-resultat .actions { margin-top: 8px; }
   .aide-screening { color: var(--encre-douce); font-size: 15px; }
   button.petit { padding: 4px 10px; font-size: 14px; }
+  .apercu-memo { background: #fff; border: 1px solid var(--trait); border-radius: 12px; padding: 16px 20px; margin-top: 12px; overflow-wrap: anywhere; }
+  .a-completer { margin-top: 12px; }
 
   /* Impression : seule la fiche ouverte, sur une page. */
   @media print {
@@ -275,6 +277,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
   <div class="onglets" role="tablist" aria-label="Vues">
     <button type="button" role="tab" id="onglet-screening" aria-controls="screening" aria-selected="true">Screening</button>
     <button type="button" role="tab" id="onglet-catalogue" aria-controls="catalogue" aria-selected="false">Catalogue</button>
+    <button type="button" role="tab" id="onglet-memos" aria-controls="memos" aria-selected="false">Mémos</button>
   </div>
 
   <div id="screening" role="tabpanel" aria-labelledby="onglet-screening">
@@ -299,6 +302,24 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     <div class="compte-collant" id="compte-collant" hidden><span id="compte-collant-texte"></span><a href="#resultats-screening">voir ↓</a></div>
   </div>
 
+  <div id="memos" role="tabpanel" aria-labelledby="onglet-memos" hidden>
+    <div class="panneau">
+      <div class="recherche">
+        <label for="memo-section">Contenu :</label>
+        <select id="memo-section"><option value="">Tout le mémo</option></select>
+        <label class="case-masquees"><input type="checkbox" id="memo-sans-dect"> Sans DECT (pour une diffusion hors du service)</label>
+      </div>
+      <div class="rangee">
+        <button type="button" id="bouton-copier-mail">Copier pour un mail</button>
+        <button type="button" id="bouton-copier-brut" class="secondaire">Copier en texte brut</button>
+        <span id="message-memo" class="note" aria-live="polite"></span>
+      </div>
+      <p class="note">Contenu repris tel quel de l'Excel (études « ouvert » affichées dans l'outil interne) ; seuls les seuils chiffrés sont mis en gras.</p>
+    </div>
+    <div id="memo-a-completer"></div>
+    <div class="apercu-memo" id="apercu-memo" tabindex="-1"></div>
+  </div>
+
   <div id="catalogue" role="tabpanel" aria-labelledby="onglet-catalogue" hidden>
     <div class="outils-tri">
       <div class="recherche">
@@ -321,7 +342,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
   </div>
   </div>
 
-  <footer class="pied-outil" data-version="47196edf">Outil interne : screening et catalogue — version 47196edf</footer>
+  <footer class="pied-outil" data-version="49128045">Outil interne : screening, catalogue et mémos — version 49128045</footer>
 
 </div>
 
@@ -2911,6 +2932,153 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 </script>
 <script>
 // =============================================================================
+// memos.js — mémos des études ouvertes, au format validé des mémos CardioScope v3
+// =============================================================================
+// Contenu tiré de l'Excel MOT POUR MOT (règle 4) : nom, thématique, intervention vs
+// comparateur, design, critères d'inclusion principaux, contact de l'ARC n° 1 (annuaire).
+// Seule mise en forme automatique : les seuils chiffrés passent en gras (« ≥ 40 % »).
+// Le DECT est interne : il n'apparaît que dans l'outil local, et peut être retiré
+// (case « Sans DECT ») pour une diffusion hors du service.
+// Textes (titre, émojis, sections…) : parametres.memos. Rien n'est envoyé.
+// =============================================================================
+(function (racine) {
+  'use strict';
+  const InnovaCare = racine.InnovaCare || (racine.InnovaCare = {});
+  const N = InnovaCare.normalisation;
+
+  // Seuil = comparateur + nombre (+ unité usuelle) : « ≥ 40 % », « > 3 », « < 1,5 cm² », « ≤ 85 ans ».
+  const SEUIL = /(?:≥|≤|>=|<=|>|<)\s?\d+(?:[.,]\d+)?(?:\s?(?:%|ans|mois|semaines|jours|mmHg|mL\/min(?:\/1,73\s?m²)?|pg\/mL|ng\/L|ng\/mL|mg\/g|mg\/dL|g\/m²|mL\/m²|kg\/m²|kg|cm²|cm|mm|m|ms|bpm))?(?![\d\w])/g;
+
+  /** Découpe un texte en morceaux { texte, gras } : les seuils chiffrés sont « gras ». */
+  function morceaux(texte) {
+    const resultat = [];
+    let dernier = 0;
+    for (const m of texte.matchAll(SEUIL)) {
+      if (m.index > dernier) resultat.push({ texte: texte.slice(dernier, m.index), gras: false });
+      resultat.push({ texte: m[0], gras: true });
+      dernier = m.index + m[0].length;
+    }
+    if (dernier < texte.length) resultat.push({ texte: texte.slice(dernier), gras: false });
+    return resultat;
+  }
+
+  /** « FEVG ≥ 40 % » → « FEVG **≥ 40 %** » (Markdown). */
+  const seuilsEnGras = (texte) => morceaux(texte).map((m) => (m.gras ? '**' + m.texte + '**' : m.texte)).join('');
+
+  /**
+   * Structure du mémo. etudes : résultat de catalogue.preparer(…).etudes.
+   * options : { section: titre d'une section (sinon tout le mémo), avecDect: true par défaut }.
+   */
+  function construire(etudes, parametres, options) {
+    const o = Object.assign({ avecDect: true, section: '' }, options);
+    const m = parametres.memos || {};
+    const retenues = InnovaCare.eligibilite.candidates(etudes);
+    const sections = (m.sections || []).map((s) => ({ titre: s.titre, emoji: s.emoji || '', poles: s.poles || [], etudes: [] }));
+    const autres = { titre: 'Autres', emoji: '', poles: [], etudes: [], orpheline: true };
+    for (const e of retenues) (sections.find((s) => s.poles.includes(e.pole)) || autres).etudes.push(e);
+    if (autres.etudes.length) sections.push(autres);
+    for (const s of sections) {
+      // Mises en avant d'abord, puis l'ordre des colonnes de l'Excel (ordre d'origine conservé).
+      s.etudes = s.etudes.map((e, i) => [e, i]).sort((a, b) => (b[0].enAvant - a[0].enAvant) || (a[1] - b[1])).map(([e]) => fiche(e, o.avecDect));
+    }
+    const choisies = sections.filter((s) => s.etudes.length && (!o.section || s.titre === o.section));
+    return {
+      titre: m.titre || '', hashtags: m.hashtags || '', pied: m.pied || '',
+      emojis: { etude: m.emoji_etude || '', design: m.emoji_design || '', criteres: m.emoji_criteres || '', contact: m.emoji_contact || '' },
+      libelleCriteres: m.libelle_criteres || '',
+      sections: choisies,
+      sectionsDisponibles: sections.filter((s) => s.etudes.length).map((s) => s.titre),
+    };
+  }
+
+  /** « - critère » ou « • critère » → « critère » (mise en forme seulement, le texte reste intact). */
+  const sansPuce = (t) => t.replace(/^\s*[-–•*]\s*/, '');
+
+  function fiche(e, avecDect) {
+    const v = e.valeurs;
+    const arc = e.contacts.arc_1;
+    const contact = arc ? [arc.nom, avecDect && arc.dect ? 'DECT ' + arc.dect : '', arc.email || ''].filter(Boolean) : [];
+    return {
+      nom: e.nom,
+      thematique: e.thematique,
+      science: [N.enTexte(v.intervention), N.enTexte(v.design)].filter(Boolean).join(' — '),
+      // Le tiret ou la puce que l'ARC a tapé en début de critère est retiré : la liste a déjà ses puces.
+      criteres: [1, 2, 3, 4, 5].map((n) => sansPuce(N.enTexte(v['inclusion_' + n]))).filter(Boolean),
+      contact,
+      sansArc: !arc,
+    };
+  }
+
+  /** Études à compléter dans l'Excel : sans critère d'inclusion principal, ou sans ARC n° 1. */
+  function aCompleter(memo) {
+    const manques = [];
+    for (const s of memo.sections) {
+      for (const e of s.etudes) {
+        const quoi = [!e.criteres.length ? 'critère d\'inclusion principal' : '', e.sansArc ? 'ARC n° 1' : ''].filter(Boolean);
+        if (quoi.length) manques.push({ nom: e.nom, section: s.titre, manque: quoi });
+      }
+    }
+    return manques;
+  }
+
+  // --- Texte brut (Markdown, format v3) --------------------------------------------------
+
+  function versMarkdown(memo) {
+    const L = [];
+    const em = memo.emojis;
+    if (memo.titre) L.push('# 📋 ' + memo.titre);
+    if (memo.hashtags) L.push(memo.hashtags);
+    L.push('', '---');
+    for (const s of memo.sections) {
+      L.push('', '## ' + (s.emoji ? s.emoji + ' ' : '') + s.titre.toUpperCase(), '', '---');
+      for (const e of s.etudes) {
+        L.push('', '### ' + (em.etude ? em.etude + ' ' : '') + e.nom + (e.thematique ? ' — ' + e.thematique : ''));
+        if (e.science) L.push('', (em.design ? em.design + ' ' : '') + seuilsEnGras(e.science));
+        if (e.criteres.length) {
+          L.push('', (em.criteres ? em.criteres + ' ' : '') + '**' + memo.libelleCriteres + '**');
+          for (const c of e.criteres) L.push('- ' + seuilsEnGras(c).replace(/\n+/g, ' '));
+        }
+        if (e.contact.length) L.push('', (em.contact ? em.contact + ' ' : '') + e.contact.join(' — '));
+        L.push('', '---');
+      }
+    }
+    if (memo.pied) L.push('', '*' + memo.pied + '*');
+    return L.join('\n') + '\n';
+  }
+
+  // --- Texte mis en forme (HTML simple, styles intégrés : passe dans Outlook) -------------
+
+  const echapper = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const enHtml = (t) => morceaux(t).map((m) => (m.gras ? '<strong>' + echapper(m.texte) + '</strong>' : echapper(m.texte))).join('').replace(/\n/g, '<br>');
+
+  function versHtml(memo) {
+    const em = memo.emojis;
+    const police = 'font-family:Calibri,Arial,sans-serif;';
+    const H = ['<div style="' + police + 'font-size:11pt;color:#17313a">'];
+    if (memo.titre) H.push('<h1 style="font-size:18pt;margin:0 0 4px">📋 ' + echapper(memo.titre) + '</h1>');
+    if (memo.hashtags) H.push('<p style="margin:0 0 12px;color:#51666d">' + echapper(memo.hashtags) + '</p>');
+    for (const s of memo.sections) {
+      H.push('<h2 style="font-size:15pt;margin:18px 0 6px;border-bottom:2px solid #00bac6">' + echapper((s.emoji ? s.emoji + ' ' : '') + s.titre.toUpperCase()) + '</h2>');
+      for (const e of s.etudes) {
+        H.push('<h3 style="font-size:12.5pt;margin:12px 0 2px">' + echapper((em.etude ? em.etude + ' ' : '') + e.nom) + (e.thematique ? ' — ' + echapper(e.thematique) : '') + '</h3>');
+        if (e.science) H.push('<p style="margin:2px 0">' + echapper(em.design ? em.design + ' ' : '') + enHtml(e.science) + '</p>');
+        if (e.criteres.length) {
+          H.push('<p style="margin:6px 0 2px">' + echapper(em.criteres ? em.criteres + ' ' : '') + '<strong>' + echapper(memo.libelleCriteres) + '</strong></p>');
+          H.push('<ul style="margin:0 0 4px 18px;padding:0">' + e.criteres.map((c) => '<li>' + enHtml(c) + '</li>').join('') + '</ul>');
+        }
+        if (e.contact.length) H.push('<p style="margin:4px 0 8px">' + echapper((em.contact ? em.contact + ' ' : '') + e.contact.join(' — ')) + '</p>');
+      }
+    }
+    if (memo.pied) H.push('<p style="margin-top:16px;color:#51666d"><em>' + echapper(memo.pied) + '</em></p>');
+    H.push('</div>');
+    return H.join('\n');
+  }
+
+  InnovaCare.memos = { construire, versMarkdown, versHtml, aCompleter, seuilsEnGras, morceaux, sansPuce };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>
+// =============================================================================
 // ecardioscope-ui.js — interface de l'outil interne : catalogue des études
 // =============================================================================
 // 1. Ouvre l'Excel des études (le navigateur s'en souvient : bouton « Recharger »).
@@ -2918,7 +3086,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 // 3. Onglet « Screening » : contexte clinique, puis seulement les critères utiles, résultats
 //    en direct (moteur partagé src/eligibilite.js, logique d'e-CardioScope v4).
 // 4. Onglet « Catalogue » : les études en cartes ou en tableau, avec recherche et filtres.
-// 5. Fiche détaillée imprimable (tous les champs, contacts avec DECT).
+// 5. Onglet « Mémos » : mémo des études ouvertes au format validé (src/memos.js), à copier.
+// 6. Fiche détaillée imprimable (tous les champs, contacts avec DECT).
 // Les valeurs saisies pour un patient restent dans la page (variable « sc ») : jamais gardées.
 // CONFIDENTIALITÉ : données internes. Aucun envoi, aucun stockage dans le navigateur
 // (seule la « poignée » du fichier est retenue, pas son contenu). Rien n'est inventé :
@@ -2998,6 +3167,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       $('espace').hidden = false;
       dessiner();
       dessinerScreening();
+      dessinerMemo();
       afficherOnglet(ongletCourant);
     } catch (erreur) {
       console.error(erreur);
@@ -3148,7 +3318,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   function afficherOnglet(nom) {
     ongletCourant = nom;
-    for (const n of ['screening', 'catalogue']) {
+    for (const n of ['screening', 'catalogue', 'memos']) {
       $('onglet-' + n).setAttribute('aria-selected', String(n === nom));
       $(n).hidden = n !== nom;
     }
@@ -3307,7 +3477,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     if (e.thematique) carte.appendChild(el('div', { className: 'them' }, e.thematique));
     const science = [N.enTexte(v.intervention), N.enTexte(v.design)].filter(Boolean).join(' — ');
     if (science) carte.appendChild(el('div', null, science));
-    const criteres = [1, 2, 3, 4, 5].map((n) => N.enTexte(v['inclusion_' + n])).filter(Boolean);
+    const criteres = [1, 2, 3, 4, 5].map((n) => IC.memos.sansPuce(N.enTexte(v['inclusion_' + n]))).filter(Boolean);
     if (criteres.length) carte.appendChild(el('ul', null, ...criteres.map((c) => el('li', null, c))));
     const pastilles = evaluation.criteres.filter((c) => c.statut !== 'exclu').map((c) => {
       const libelle = c.id.startsWith('question:') ? c.libelle : c.libelle + ' ' + c.seuil;
@@ -3330,6 +3500,67 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     sc.tousLesContextes = true;
     dessinerScreening();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // --- Mémos ---------------------------------------------------------------------------------
+
+  let memoCourant = null;
+
+  function dessinerMemo() {
+    if (!cat) return;
+    const choix = $('memo-section');
+    const tout = IC.memos.construire(cat.etudes, P);
+    const garde = choix.value;
+    choix.textContent = '';
+    choix.appendChild(el('option', { value: '' }, 'Tout le mémo'));
+    for (const t of tout.sectionsDisponibles) choix.appendChild(el('option', { value: t }, t));
+    choix.value = tout.sectionsDisponibles.includes(garde) ? garde : '';
+    memoCourant = IC.memos.construire(cat.etudes, P, { section: choix.value, avecDect: !$('memo-sans-dect').checked });
+    // Le HTML du mémo échappe tout le texte venu de l'Excel (src/memos.js) : il peut être affiché tel quel.
+    $('apercu-memo').innerHTML = memoCourant.sections.length ? IC.memos.versHtml(memoCourant) : '<p>Aucune étude ouverte à afficher.</p>';
+    const manques = IC.memos.aCompleter(memoCourant);
+    const zone = $('memo-a-completer');
+    zone.textContent = '';
+    if (manques.length) {
+      const d = el('details', { className: 'a-completer carte' }, el('summary', null, 'À compléter dans l\'Excel (' + manques.length + ')'));
+      d.appendChild(el('ul', null, ...manques.map((x) => el('li', null, x.nom + ' (' + x.section + ') : ' + x.manque.join(' et ') + ' manquant'))));
+      zone.appendChild(d);
+    }
+    $('message-memo').textContent = '';
+  }
+
+  /** Copie dans le presse-papiers ; à défaut, sélectionne l'aperçu et demande Ctrl+C. */
+  async function copier(enHtml) {
+    if (!memoCourant || !memoCourant.sections.length) return;
+    const brut = IC.memos.versMarkdown(memoCourant);
+    const message = $('message-memo');
+    try {
+      if (enHtml && window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+        const html = IC.memos.versHtml(memoCourant);
+        await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([brut], { type: 'text/plain' }) })]);
+      } else if (!enHtml && navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(brut);
+      } else { throw new Error('presse-papiers indisponible'); }
+      message.textContent = enHtml ? '✔ Copié : collez-le dans un nouveau message (Ctrl+V).' : '✔ Texte brut copié.';
+    } catch (erreur) {
+      if (enHtml) {
+        const zone = $('apercu-memo');
+        const plage = document.createRange();
+        plage.selectNodeContents(zone);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(plage);
+        const ok = document.execCommand && document.execCommand('copy');
+        message.textContent = ok ? '✔ Copié : collez-le dans un nouveau message (Ctrl+V).' : 'Le mémo est sélectionné : faites Ctrl+C, puis collez-le dans votre message.';
+      } else {
+        const t = el('textarea', { value: brut, readOnly: true });
+        document.body.appendChild(t);
+        t.select();
+        const ok = document.execCommand && document.execCommand('copy');
+        t.remove();
+        message.textContent = ok ? '✔ Texte brut copié.' : 'La copie automatique est refusée par le navigateur : utilisez « Copier pour un mail ».';
+      }
+    }
   }
 
   // --- Fiche détaillée ---------------------------------------------------------------------
@@ -3419,6 +3650,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('onglet-screening').addEventListener('click', () => afficherOnglet('screening'));
     $('onglet-catalogue').addEventListener('click', () => afficherOnglet('catalogue'));
     $('bouton-nouveau').addEventListener('click', nouveauPatient);
+    $('onglet-memos').addEventListener('click', () => afficherOnglet('memos'));
+    $('memo-section').addEventListener('change', dessinerMemo);
+    $('memo-sans-dect').addEventListener('change', dessinerMemo);
+    $('bouton-copier-mail').addEventListener('click', () => copier(true));
+    $('bouton-copier-brut').addEventListener('click', () => copier(false));
     $('vue-tableau').addEventListener('click', () => { etat.vue = 'tableau'; dessiner(); });
     $('bouton-fermer').addEventListener('click', fermerFiche);
     $('bouton-imprimer').addEventListener('click', imprimer);
