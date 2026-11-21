@@ -3,8 +3,11 @@
 // =============================================================================
 // 1. Ouvre l'Excel des études (le navigateur s'en souvient : bouton « Recharger »).
 // 2. Lit les réglages rangés dans l'Excel (sinon ceux intégrés à l'outil).
-// 3. Affiche les études en cartes ou en tableau, avec recherche et filtres.
-// 4. Fiche détaillée imprimable (tous les champs, contacts avec DECT).
+// 3. Onglet « Screening » : contexte clinique, puis seulement les critères utiles, résultats
+//    en direct (moteur partagé src/eligibilite.js, logique d'e-CardioScope v4).
+// 4. Onglet « Catalogue » : les études en cartes ou en tableau, avec recherche et filtres.
+// 5. Fiche détaillée imprimable (tous les champs, contacts avec DECT).
+// Les valeurs saisies pour un patient restent dans la page (variable « sc ») : jamais gardées.
 // CONFIDENTIALITÉ : données internes. Aucun envoi, aucun stockage dans le navigateur
 // (seule la « poignée » du fichier est retenue, pas son contenu). Rien n'est inventé :
 // un champ vide n'apparaît pas.
@@ -21,6 +24,9 @@
   let cat = null;               // résultat de IC.catalogue.preparer
   const etat = { texte: '', pole: '', pathologie: '', arc: '', statuts: [], masquees: false, vue: 'cartes', tri: 'nom', sens: 'asc' };
   let statutsParDefautPoses = false;
+  const E = IC.eligibilite;
+  const sc = { contextes: new Set(), reponses: {}, tousLesContextes: true }; // screening en cours (patient) : mémoire de la page seulement
+  let ongletCourant = 'screening';
 
   function el(balise, proprietes, ...enfants) {
     const noeud = document.createElement(balise);
@@ -33,8 +39,8 @@
 
   function appliquerIdentite() {
     const nomOutil = (P.modules && P.modules.interne) || 'Outil interne';
-    $('titre-outil').textContent = nomOutil + ' — catalogue des études';
-    document.title = nomOutil + ' — catalogue';
+    $('titre-outil').textContent = nomOutil;
+    document.title = nomOutil + ' — screening et catalogue';
     const attendu = $('nom-excel-attendu'); // disparaît une fois l'Excel lu (message remplacé)
     if (attendu) attendu.textContent = ((P.specialite && P.specialite.instance) || 'InnovaCare') + '_ETUDES.xlsx';
     for (const [nom, valeur] of Object.entries(P.couleurs || {})) document.documentElement.style.setProperty('--' + nom, valeur);
@@ -77,8 +83,10 @@
       $('etat').textContent = '« ' + fichier.name + ' » lu à ' + heure + ' : ' + cat.etudes.length + ' études.'
         + (lus.parametres ? '' : ' (Réglages de départ de l\'outil : cet Excel ne contient pas encore les siens.)');
       preparerFiltres();
-      $('catalogue').hidden = false;
+      $('espace').hidden = false;
       dessiner();
+      dessinerScreening();
+      afficherOnglet(ongletCourant);
     } catch (erreur) {
       console.error(erreur);
       $('etat').textContent = 'Le fichier n\'a pas pu être lu (' + erreur.message + ').';
@@ -224,6 +232,194 @@
     zone.appendChild(etat.vue === 'tableau' ? tableau(liste) : el('div', { className: 'grille-etudes' }, ...liste.map(carte)));
   }
 
+  // --- Onglets -----------------------------------------------------------------------------
+
+  function afficherOnglet(nom) {
+    ongletCourant = nom;
+    for (const n of ['screening', 'catalogue']) {
+      $('onglet-' + n).setAttribute('aria-selected', String(n === nom));
+      $(n).hidden = n !== nom;
+    }
+  }
+
+  // --- Screening -----------------------------------------------------------------------------
+
+  const filtresInternes = () => E.filtresDuModule(P, 'interne');
+  const candidates = () => E.candidates(cat.etudes);
+  const etudesDuContexte = () => E.selon(candidates(), [...sc.contextes]);
+  const repondu = (v) => v !== undefined && v !== null && v !== '';
+
+  function dessinerScreening() {
+    if (!cat) return;
+    // Un contexte qui n'existe plus (Excel modifié) est oublié.
+    const existants = new Set(E.contextes(candidates(), P).flatMap((g) => g.pathologies.map((p) => p.nom)));
+    for (const c of [...sc.contextes]) if (!existants.has(c)) sc.contextes.delete(c);
+    dessinerContextes();
+    dessinerFiltresScreening();
+    mettreAJourScreening();
+  }
+
+  // Une fois un contexte choisi, la liste se replie (seuls les choisis restent) : les critères
+  // du patient remontent à l'écran, sans défilement. « Ajouter ou changer » la déplie.
+  function dessinerContextes() {
+    const zone = $('contextes');
+    zone.textContent = '';
+    const replie = sc.contextes.size > 0 && !sc.tousLesContextes;
+    if (replie) {
+      const ligne = el('div', { className: 'groupe-contextes' });
+      for (const nom of sc.contextes) {
+        const b = el('button', { type: 'button', className: 'contexte', title: 'Retirer ce contexte' }, nom + ' ✕');
+        b.setAttribute('aria-pressed', 'true');
+        b.addEventListener('click', () => { sc.contextes.delete(nom); if (!sc.contextes.size) sc.tousLesContextes = true; dessinerContextes(); dessinerFiltresScreening(); mettreAJourScreening(); });
+        ligne.appendChild(b);
+      }
+      const plus = el('button', { type: 'button', className: 'secondaire petit' }, 'Ajouter ou changer de contexte');
+      plus.addEventListener('click', () => { sc.tousLesContextes = true; dessinerContextes(); });
+      ligne.appendChild(plus);
+      zone.appendChild(ligne);
+      return;
+    }
+    if (sc.contextes.size) {
+      const fin = el('button', { type: 'button', className: 'petit', style: 'margin-bottom:6px' }, 'Valider le contexte (' + sc.contextes.size + ')');
+      fin.addEventListener('click', () => { sc.tousLesContextes = false; dessinerContextes(); });
+      zone.appendChild(fin);
+    }
+    for (const g of E.contextes(candidates(), P)) {
+      if (g.groupe) zone.appendChild(el('h4', null, (g.emoji ? g.emoji + ' ' : '') + g.groupe));
+      const ligne = el('div', { className: 'groupe-contextes' });
+      for (const p of g.pathologies) {
+        const choisi = sc.contextes.has(p.nom);
+        const b = el('button', { type: 'button', className: 'contexte', disabled: !p.nombre && !choisi },
+          (p.emoji ? p.emoji + ' ' : '') + p.nom + ' ', el('small', null, '(' + p.nombre + ')'));
+        b.setAttribute('aria-pressed', String(choisi));
+        b.addEventListener('click', () => {
+          const ajout = !sc.contextes.has(p.nom);
+          if (ajout) sc.contextes.add(p.nom); else sc.contextes.delete(p.nom);
+          // Premier choix : la liste se replie aussitôt (un seul clic pour le cas le plus courant).
+          if (ajout && sc.contextes.size === 1) sc.tousLesContextes = false;
+          dessinerContextes();
+          dessinerFiltresScreening();
+          mettreAJourScreening();
+        });
+        ligne.appendChild(b);
+      }
+      zone.appendChild(ligne);
+    }
+  }
+
+  /** Une ligne par critère que fixe au moins une étude du contexte ; leur visibilité suit ensuite les réponses. */
+  function dessinerFiltresScreening() {
+    const zone = $('filtres-screening');
+    zone.textContent = '';
+    const etudes = etudesDuContexte();
+    $('panneau-filtres').hidden = !etudes.length;
+    if (!etudes.length) return;
+    const tous = E.filtresUtiles(etudes, filtresInternes(), {}); // sans réponse : tout ce que fixe une étude
+    const dejaRepondus = filtresInternes().filter((f) => repondu(sc.reponses[f.id]) && !tous.filtres.includes(f));
+    const filtres = tous.filtres.concat(dejaRepondus);
+    const bornes = filtres.filter((f) => f.type === 'bornes');
+    const requis = filtres.filter((f) => f.type !== 'bornes' && f.famille !== 'traitement');
+    const traitements = filtres.filter((f) => f.type !== 'bornes' && f.famille === 'traitement');
+    for (const f of bornes) {
+      const id = 'saisie-' + f.id;
+      const champ = el('input', { type: 'number', id, step: 'any', inputMode: 'decimal', value: repondu(sc.reponses[f.id]) ? sc.reponses[f.id] : '' });
+      champ.addEventListener('input', () => { sc.reponses[f.id] = champ.value === '' ? null : Number(champ.value); mettreAJourScreening(); });
+      zone.appendChild(el('div', { className: 'champ-num', id: 'ligne-' + f.id }, el('label', { htmlFor: id }, f.libelle + (f.unite ? ' (' + f.unite + ')' : '')), champ));
+    }
+    const ouiNon = (id, libelle, sousTitre) => {
+      const boutons = el('span', { className: 'oui-non', role: 'group', ariaLabel: libelle });
+      for (const [valeur, texte] of [['oui', 'Oui'], ['non', 'Non']]) {
+        const b = el('button', { type: 'button', className: valeur }, texte);
+        b.setAttribute('aria-pressed', String(sc.reponses[id] === valeur));
+        b.addEventListener('click', () => {
+          sc.reponses[id] = sc.reponses[id] === valeur ? null : valeur; // second clic : on efface
+          for (const x of boutons.children) x.setAttribute('aria-pressed', String(sc.reponses[id] === x.className));
+          mettreAJourScreening();
+        });
+        boutons.appendChild(b);
+      }
+      return el('div', { className: 'ligne-oui-non', id: 'ligne-' + id }, el('span', null, libelle, sousTitre ? el('small', null, sousTitre) : null), boutons);
+    };
+    if (requis.length) zone.appendChild(el('h4', null, 'Antécédents et terrain'));
+    for (const f of requis) zone.appendChild(ouiNon(f.id, f.libelle));
+    if (traitements.length) zone.appendChild(el('h4', { id: 'titre-traitements' }, 'Traitements en cours'));
+    for (const f of traitements) zone.appendChild(ouiNon(f.id, f.libelle, (f.dci || []).join(', ')));
+    if (tous.questions.length) zone.appendChild(el('h4', { id: 'titre-questions' }, 'Questions propres aux études'));
+    for (const q of tous.questions) zone.appendChild(ouiNon(q.id, q.libelle, q.etudes.join(', ')));
+  }
+
+  /** Recalcule les résultats et masque les critères devenus inutiles (sans redessiner les champs : la saisie continue). */
+  function mettreAJourScreening() {
+    const etudes = etudesDuContexte();
+    const zone = $('resultats-screening');
+    for (const n of [...zone.children]) if (n.id !== 't-resultats') n.remove();
+    $('compte-collant').hidden = !etudes.length;
+    if (!etudes.length) {
+      zone.appendChild(el('p', { className: 'aide-screening' }, sc.contextes.size ? 'Aucune étude ouverte pour ce contexte.' : 'Choisissez un contexte clinique pour voir les études ouvertes.'));
+      return;
+    }
+    const filtres = filtresInternes();
+    const utiles = E.filtresUtiles(etudes, filtres, sc.reponses);
+    const visibles = new Set(utiles.filtres.map((f) => f.id).concat(utiles.questions.map((q) => q.id)));
+    for (const ligne of $('filtres-screening').querySelectorAll('[id^="ligne-"]')) ligne.hidden = !visibles.has(ligne.id.slice(6));
+    for (const titre of $('filtres-screening').querySelectorAll('h4')) {
+      let n = titre.nextElementSibling, visible = false;
+      while (n && n.tagName !== 'H4') { if (!n.hidden) visible = true; n = n.nextElementSibling; }
+      titre.hidden = !visible;
+    }
+    const evaluations = etudes.map((e) => ({ e, r: E.evaluer(e, filtres, sc.reponses) }));
+    const retenues = IC.catalogue.trier(evaluations.filter((x) => x.r.eligible).map((x) => x.e), 'nom');
+    const ecartees = evaluations.filter((x) => !x.r.eligible);
+    const texte = retenues.length + ' étude' + (retenues.length > 1 ? 's' : '') + ' proposée' + (retenues.length > 1 ? 's' : '');
+    zone.appendChild(el('div', { className: 'bandeau-compte' }, el('strong', null, texte), el('span', { className: 'aide-screening' }, 'sur ' + etudes.length + ' ouverte' + (etudes.length > 1 ? 's' : '') + ' dans ce contexte')));
+    $('compte-collant-texte').textContent = texte;
+    const parId = new Map(evaluations.map((x) => [x.e, x.r]));
+    for (const e of retenues) zone.appendChild(carteResultat(e, parId.get(e)));
+    if (!retenues.length) zone.appendChild(el('p', { className: 'vide' }, 'Aucune étude ne correspond aux réponses. Une valeur non renseignée n\'écarte jamais une étude.'));
+    if (ecartees.length) {
+      const d = el('details', null, el('summary', null, 'Études écartées (' + ecartees.length + ')'));
+      const ul = el('ul');
+      for (const x of ecartees) {
+        const raisons = x.r.criteres.filter((c) => c.statut === 'exclu').map((c) => c.libelle + (c.id.startsWith('question:') ? ' : non' : ' : ' + c.seuil));
+        ul.appendChild(el('li', null, x.e.nom + ' — ' + raisons.join(' ; ')));
+      }
+      d.appendChild(ul);
+      zone.appendChild(d);
+    }
+  }
+
+  function carteResultat(e, evaluation) {
+    const v = e.valeurs;
+    const carte = el('article', { className: 'carte-resultat' });
+    carte.appendChild(el('h4', null, (e.enAvant ? '★ ' : '') + e.nom));
+    if (e.thematique) carte.appendChild(el('div', { className: 'them' }, e.thematique));
+    const science = [N.enTexte(v.intervention), N.enTexte(v.design)].filter(Boolean).join(' — ');
+    if (science) carte.appendChild(el('div', null, science));
+    const criteres = [1, 2, 3, 4, 5].map((n) => N.enTexte(v['inclusion_' + n])).filter(Boolean);
+    if (criteres.length) carte.appendChild(el('ul', null, ...criteres.map((c) => el('li', null, c))));
+    const pastilles = evaluation.criteres.filter((c) => c.statut !== 'exclu').map((c) => {
+      const libelle = c.id.startsWith('question:') ? c.libelle : c.libelle + ' ' + c.seuil;
+      return el('span', { className: 'pastille' + (c.statut === 'ok' ? ' ok' : '') }, c.statut === 'ok' ? '✓ ' + libelle : libelle + ' — à vérifier');
+    });
+    if (pastilles.length) carte.appendChild(el('div', { className: 'pastilles' }, ...pastilles));
+    for (const [id, prefixe] of [['arc_1', '📞 ARC : '], ['investigateur', 'PI : ']]) {
+      const c = e.contacts[id];
+      if (c) carte.appendChild(el('div', { className: 'contact' }, prefixe + [c.nom, c.dect ? 'DECT ' + c.dect : '', c.email || ''].filter(Boolean).join(' · ')));
+    }
+    const bouton = el('button', { type: 'button', className: 'secondaire petit' }, 'Fiche complète');
+    bouton.addEventListener('click', () => ouvrirFiche(e));
+    carte.appendChild(el('div', { className: 'actions' }, bouton));
+    return carte;
+  }
+
+  function nouveauPatient() {
+    sc.contextes.clear();
+    sc.reponses = {};
+    sc.tousLesContextes = true;
+    dessinerScreening();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   // --- Fiche détaillée ---------------------------------------------------------------------
 
   function ouvrirFiche(e) {
@@ -308,6 +504,9 @@
     $('filtre-pathologie').addEventListener('change', (e) => { etat.pathologie = e.target.value; dessiner(); });
     $('filtre-arc').addEventListener('change', (e) => { etat.arc = e.target.value; dessiner(); });
     $('vue-cartes').addEventListener('click', () => { etat.vue = 'cartes'; dessiner(); });
+    $('onglet-screening').addEventListener('click', () => afficherOnglet('screening'));
+    $('onglet-catalogue').addEventListener('click', () => afficherOnglet('catalogue'));
+    $('bouton-nouveau').addEventListener('click', nouveauPatient);
     $('vue-tableau').addEventListener('click', () => { etat.vue = 'tableau'; dessiner(); });
     $('bouton-fermer').addEventListener('click', fermerFiche);
     $('bouton-imprimer').addEventListener('click', imprimer);

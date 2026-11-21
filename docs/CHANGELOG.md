@@ -2,6 +2,20 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.8.0 — 21 novembre 2026 — Phase 2.2 : screening dans l'outil interne
+
+- **Onglet « Screening »** dans `outils/eCardioScope.html` (ouvert par défaut ; « Catalogue » à côté).
+  Même logique qu'e-CardioScope v4, sur une seule page au lieu de trois étapes :
+  - contexte clinique en un clic (la liste se replie ensuite ; plusieurs contextes possibles) ;
+  - seuls les critères utiles s'affichent, et disparaissent quand plus aucune étude possible n'en dépend ;
+  - résultats en direct : critères d'inclusion, pastilles « ✓ vérifié » / « à vérifier », ARC avec DECT,
+    fiche complète ; liste des études écartées avec la raison ;
+  - « Nouveau patient » efface tout ; les valeurs saisies ne sont jamais enregistrées.
+- **Moteur d'éligibilité partagé** (`src/eligibilite.js`), qui servira aussi aux pages pour les libéraux
+  et pour les patients : bornes incluses, requis / exclu / indifférent, question propre à une étude ;
+  une valeur non renseignée n'écarte jamais une étude. Les filtres viennent des paramètres.
+- **Tests** : 121 tests, dont 9 pour le moteur (études fictives et copie de développement).
+
 ## Version 0.7.0 — 19 novembre 2026 — Phase 2.1 : outil interne, catalogue des études
 
 - **Nouvel outil `outils/eCardioScope.html`** (nom affiché tiré des paramètres) : le catalogue des études,

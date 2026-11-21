@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Catalogue des études — outil interne</title>
+<title>Outil interne — screening et catalogue</title>
 <!--@inclure outils-src/bibliotheques/dm-sans/dm-sans-latin.woff2 "DM Sans"-->
 <!--@inclure outils-src/style-commun.css-->
 <style>
@@ -69,6 +69,47 @@
 
   .vide { margin-top: 24px; text-align: center; color: var(--encre-douce); }
 
+  /* Onglets Screening / Catalogue */
+  .onglets { display: flex; gap: 4px; border-bottom: 2px solid var(--trait); margin: 4px 0 12px; }
+  .onglets button { background: transparent; color: var(--encre-douce); border: 0; border-bottom: 4px solid transparent; border-radius: 0; padding: 10px 18px; font-size: 18px; margin-bottom: -2px; }
+  .onglets button[aria-selected="true"] { color: var(--encre); border-bottom-color: var(--turquoise); }
+
+  /* Screening : une seule page (contextes + filtres à gauche, résultats à droite) */
+  .screening { display: grid; grid-template-columns: minmax(320px, 440px) minmax(0, 1fr); gap: 18px; align-items: start; }
+  @media (max-width: 900px) { .screening { grid-template-columns: 1fr; } }
+  .panneau { background: var(--carte); border: 1px solid var(--trait); border-radius: 12px; padding: 12px 14px; }
+  .panneau h3 { margin: 4px 0 8px; font-size: 17px; }
+  .panneau h4 { margin: 10px 0 4px; font-size: 14px; color: var(--encre-douce); font-weight: 600; }
+  .groupe-contextes { display: flex; flex-wrap: wrap; gap: 6px; }
+  .contexte { background: #fff; color: var(--encre); border: 2px solid var(--trait); border-radius: 10px; padding: 6px 10px; font-size: 15px; font-weight: 500; }
+  .contexte[aria-pressed="true"] { border-color: var(--turquoise); background: #e0f6f8; font-weight: 700; }
+  .contexte:disabled { opacity: .4; }
+  .contexte small { color: var(--encre-douce); font-weight: 400; }
+  .champ-num { display: grid; grid-template-columns: 1fr 110px; gap: 8px; align-items: center; margin: 4px 0; }
+  .champ-num label { font-size: 15px; margin: 0; }
+  .champ-num input { font: inherit; width: 100%; padding: 6px 8px; border: 1px solid var(--trait); border-radius: 8px; }
+  .ligne-oui-non { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin: 4px 0; font-size: 15px; }
+  .ligne-oui-non small { display: block; color: var(--encre-douce); font-size: 13px; }
+  .oui-non { display: inline-flex; gap: 4px; }
+  .oui-non button { padding: 4px 12px; font-size: 14px; background: #fff; color: var(--encre); border: 1px solid var(--trait); }
+  .oui-non button[aria-pressed="true"].oui { background: var(--ok-fond); border-color: var(--ok-texte); color: var(--ok-texte); }
+  .oui-non button[aria-pressed="true"].non { background: var(--echec-fond); border-color: var(--echec-texte); color: var(--echec-texte); }
+  .resultats-screening .bandeau-compte { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .bandeau-compte strong { font-size: 22px; }
+  @media (max-width: 900px) { .compte-collant { position: sticky; bottom: 0; z-index: 6; background: var(--encre); color: #fff; padding: 10px 14px; border-radius: 12px 12px 0 0; display: flex; justify-content: space-between; } .compte-collant a { color: #fff; font-weight: 700; } }
+  @media (min-width: 901px) { .compte-collant { display: none; } }
+  .carte-resultat { background: var(--carte); border: 1px solid var(--trait); border-left: 6px solid var(--vert); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+  .carte-resultat h4 { margin: 0; font-size: 19px; }
+  .carte-resultat .them { color: var(--encre-douce); }
+  .carte-resultat ul { margin: 6px 0; padding-left: 20px; font-size: 15px; }
+  .pastilles { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+  .pastille { font-size: 13px; border-radius: 10px; padding: 1px 8px; border: 1px solid var(--trait); background: #f1f4f5; color: var(--encre-douce); }
+  .pastille.ok { background: var(--ok-fond); border-color: #9fdcb0; color: var(--ok-texte); }
+  .carte-resultat .contact { font-size: 15px; margin-top: 6px; }
+  .carte-resultat .actions { margin-top: 8px; }
+  .aide-screening { color: var(--encre-douce); font-size: 15px; }
+  button.petit { padding: 4px 10px; font-size: 14px; }
+
   /* Impression : seule la fiche ouverte, sur une page. */
   @media print {
     body.impression-fiche > *:not(dialog) { display: none !important; }
@@ -100,7 +141,35 @@
     </div>
   </section>
 
-  <div id="catalogue" hidden>
+  <div id="espace" hidden>
+  <div class="onglets" role="tablist" aria-label="Vues">
+    <button type="button" role="tab" id="onglet-screening" aria-controls="screening" aria-selected="true">Screening</button>
+    <button type="button" role="tab" id="onglet-catalogue" aria-controls="catalogue" aria-selected="false">Catalogue</button>
+  </div>
+
+  <div id="screening" role="tabpanel" aria-labelledby="onglet-screening">
+    <div class="screening">
+      <div>
+        <section class="panneau" aria-labelledby="t-contextes">
+          <h3 id="t-contextes">1. Contexte clinique <small class="aide-screening">(un ou plusieurs)</small></h3>
+          <div id="contextes"></div>
+        </section>
+        <section class="panneau" aria-labelledby="t-filtres" id="panneau-filtres" hidden style="margin-top:12px">
+          <h3 id="t-filtres">2. Patient <small class="aide-screening">(seuls les critères utiles s'affichent)</small></h3>
+          <div id="filtres-screening"></div>
+          <p class="note">Les valeurs saisies restent dans cette page : rien n'est enregistré ni envoyé.</p>
+        </section>
+        <div class="rangee"><button type="button" id="bouton-nouveau" class="secondaire">Nouveau patient</button></div>
+      </div>
+      <section class="resultats-screening" id="resultats-screening" aria-live="polite" aria-labelledby="t-resultats">
+        <h3 id="t-resultats" class="visuellement-cache">Études proposées</h3>
+        <p class="aide-screening" id="invite-screening">Choisissez un contexte clinique pour voir les études ouvertes.</p>
+      </section>
+    </div>
+    <div class="compte-collant" id="compte-collant" hidden><span id="compte-collant-texte"></span><a href="#resultats-screening">voir ↓</a></div>
+  </div>
+
+  <div id="catalogue" role="tabpanel" aria-labelledby="onglet-catalogue" hidden>
     <div class="outils-tri">
       <div class="recherche">
         <label class="visuellement-cache" for="texte">Rechercher</label>
@@ -120,8 +189,9 @@
     </div>
     <div id="resultats" aria-live="polite"></div>
   </div>
+  </div>
 
-  <footer class="pied-outil" data-version="@@VERSION_OUTIL@@">Catalogue des études — version @@VERSION_OUTIL@@</footer>
+  <footer class="pied-outil" data-version="@@VERSION_OUTIL@@">Outil interne : screening et catalogue — version @@VERSION_OUTIL@@</footer>
 
 </div>
 
@@ -144,6 +214,7 @@
 <!--@inclure src/lecture.js-->
 <!--@inclure src/memoire-fichier.js-->
 <!--@inclure src/catalogue.js-->
+<!--@inclure src/eligibilite.js-->
 <!--@inclure outils-src/ecardioscope-ui.js-->
 </body>
 </html>
