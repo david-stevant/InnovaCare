@@ -208,14 +208,34 @@ informations internes (critères d'exclusion, DECT, recrutement).
 
 1. Double-clic sur `eCardioScope.html`, puis **« Ouvrir l'Excel des études »** et choisir
    `InnovaCoeur_ETUDES.xlsx` (les fois suivantes : « Recharger »). Chaque médecin le fait une fois dans
-   son propre navigateur.
-2. **Catalogue** : les études « ouvert » s'affichent d'abord ; les puces de statut, les listes (pôle,
-   pathologie, ARC) et la recherche (nom, molécule, critère, ARC… sans se soucier des accents) affinent.
-   « Tableau » donne une vue en lignes, triable en cliquant sur un titre de colonne.
-3. Les études dont « Afficher dans l'outil interne » vaut « non » sont cachées ; la case « inclure les
-   études non affichées » les montre.
-4. Clic sur une étude : **fiche complète** (tous les champs remplis, contacts avec DECT et e-mail).
-   Les informations internes portent la mention « interne ». « Imprimer cette fiche » tient sur une page.
-5. L'outil lit l'Excel au moment où on l'ouvre : après une modification par un ARC, cliquer sur
-   « Recharger ».
+   son propre navigateur. L'outil lit l'Excel au moment où on l'ouvre : après une modification par un
+   ARC, cliquer sur « Recharger ».
 
+### Onglet « Screening » (ouvert par défaut)
+
+1. **Contexte clinique** : cliquer sur une pathologie (le nombre d'études ouvertes est entre
+   parenthèses). La liste se replie aussitôt ; « Ajouter ou changer de contexte » la rouvre pour en
+   choisir plusieurs.
+2. **Patient** : seuls les critères qui comptent pour au moins une étude encore possible s'affichent
+   (âge, FEVG, DFG, IMC, NT-proBNP ; Oui / Non pour les antécédents, les traitements et les questions
+   propres à certaines études). Un critère devenu inutile disparaît au fur et à mesure.
+3. **Résultats en direct**, à droite (sur smartphone : en dessous, bandeau « n études → voir ») :
+   critères d'inclusion principaux, pastilles vertes « ✓ » pour ce qui est vérifié et grises « à
+   vérifier » pour ce qui n'est pas encore renseigné, ARC avec DECT et e-mail, « Fiche complète ».
+   « Études écartées » dit pourquoi chacune l'a été.
+4. **Une valeur non renseignée n'écarte jamais une étude.** Bornes incluses (un âge de 80 ans entre
+   dans « 18 à 80 »).
+5. **« Nouveau patient »** efface tout. Les valeurs saisies ne sont jamais enregistrées : elles
+   disparaissent aussi à la fermeture de la page.
+
+Seules les études au statut « ouvert » et affichées dans l'outil interne sont proposées.
+
+### Onglet « Catalogue »
+
+1. Les études « ouvert » s'affichent d'abord ; les puces de statut, les listes (pôle, pathologie, ARC)
+   et la recherche (nom, molécule, critère, ARC… sans se soucier des accents) affinent.
+   « Tableau » donne une vue en lignes, triable en cliquant sur un titre de colonne.
+2. Les études dont « Afficher dans l'outil interne » vaut « non » sont cachées ; la case « inclure les
+   études non affichées » les montre.
+3. Clic sur une étude : **fiche complète** (tous les champs remplis, contacts avec DECT et e-mail).
+   Les informations internes portent la mention « interne ». « Imprimer cette fiche » tient sur une page.
