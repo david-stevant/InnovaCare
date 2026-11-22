@@ -62,3 +62,61 @@ details.profil summary { cursor: pointer; font-weight: 700; }
 .encart { background: var(--fond); border: 1px solid var(--trait); border-radius: 10px; padding: 10px 14px; margin-top: 10px; }
 .encart p { margin: 4px 0; }
 .message-copie { font-size: 15px; color: #12662a; }
+
+/* --- InnovActeur (phase 4) : patients âgés, smartphone d'abord — grands caractères, gros boutons --- */
+body.patient { font-size: 19px; }
+.heros { background: linear-gradient(135deg, var(--encre), #0f4d57); color: #fff; padding: 22px 0 30px; margin-bottom: 24px; }
+.heros a { color: #fff; }
+.heros h1 { font-size: 40px; margin: 6px 0; }
+.heros-bandeau { color: var(--or); font-weight: 700; margin: 0; }
+.heros-accroche { font-size: 22px; font-weight: 600; margin: 4px 0 10px; }
+.heros-sous-titre { margin: 2px 0; opacity: .92; }
+.grand { font-size: 20px; }
+.benefices { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 18px 0; }
+.benefice { background: #fff; border: 1px solid var(--trait); border-radius: 16px; padding: 16px; }
+.benefice h3 { margin: 6px 0; font-size: 21px; }
+.benefice p { margin: 0; }
+.benefice-emoji { font-size: 34px; }
+.temoignage { background: #fff; border-left: 6px solid var(--rose, #ef4d89); border-radius: 12px; margin: 14px 0; padding: 14px 18px; font-style: italic; }
+.temoignage footer { font-style: normal; font-weight: 700; margin-top: 6px; }
+.appel { text-align: center; background: #fff; border-radius: 18px; border: 2px solid var(--turquoise); padding: 22px 16px; margin: 26px 0; }
+.gros-bouton { display: inline-block; font: inherit; font-size: 21px; font-weight: 700; background: var(--or); color: #1a1a1a; border: 0; border-radius: 40px; padding: 16px 30px; cursor: pointer; text-decoration: none; text-align: center; min-height: 56px; }
+.gros-bouton.secondaire { background: #fff; color: var(--turquoise-fonce); border: 2px solid var(--turquoise-fonce); }
+.gros-bouton:disabled { opacity: .45; cursor: default; }
+.gros-bouton:focus-visible, .vignette:focus-visible, .choix button:focus-visible, .bouton-retour:focus-visible { outline: 4px solid var(--turquoise); outline-offset: 3px; }
+.rangee-etapes { display: flex; align-items: center; justify-content: space-between; margin: 16px 0; }
+.bouton-retour { font: inherit; background: none; border: 0; color: var(--turquoise-fonce); font-weight: 700; padding: 10px 0; cursor: pointer; }
+.points-etapes { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.points-etapes li { width: 34px; height: 34px; border-radius: 50%; background: var(--trait); display: grid; place-items: center; font-weight: 700; }
+.points-etapes li.actif { background: var(--turquoise-fonce); color: #fff; }
+.points-etapes li.fait { background: var(--vert, #23cd4b); color: #fff; }
+.vignettes { display: grid; gap: 12px; margin: 16px 0 22px; }
+.vignette { display: flex; gap: 14px; align-items: flex-start; text-align: left; font: inherit; background: #fff; color: var(--encre); border: 3px solid var(--trait); border-radius: 16px; padding: 16px; cursor: pointer; }
+.vignette[aria-pressed="true"] { border-color: var(--turquoise-fonce); background: #e0f6f8; }
+.vignette-emoji { font-size: 32px; line-height: 1; }
+.vignette small { display: block; color: var(--encre-douce); font-size: 17px; margin-top: 2px; }
+.question { border: 0; background: #fff; border-radius: 16px; padding: 14px 16px; margin: 0 0 14px; }
+.question legend { font-weight: 700; padding: 0; margin-bottom: 8px; float: left; width: 100%; }
+.question legend small { font-weight: 400; color: var(--encre-douce); }
+.ligne-saisie { display: inline-flex; align-items: center; gap: 6px; margin: 4px 12px 4px 0; }
+.ligne-saisie input { font: inherit; width: 110px; padding: 10px; border: 2px solid var(--trait); border-radius: 10px; }
+.imc { display: block; font-weight: 700; color: var(--turquoise-fonce); margin-top: 6px; }
+.choix { display: flex; flex-wrap: wrap; gap: 8px; clear: both; }
+.choix button { font: inherit; background: #fff; color: var(--encre); border: 2px solid var(--trait); border-radius: 12px; padding: 12px 20px; min-height: 52px; cursor: pointer; }
+.choix button[aria-pressed="true"] { background: var(--turquoise-fonce); border-color: var(--turquoise-fonce); color: #fff; }
+.case { display: flex; gap: 10px; align-items: center; padding: 8px 0; clear: both; }
+.case input { width: 26px; height: 26px; }
+.compte-patient { font-size: 22px; text-align: center; }
+.compte-patient strong { font-size: 40px; color: var(--turquoise-fonce); display: block; }
+.resultat-patient { background: #fff; border-radius: 18px; border: 1px solid var(--trait); border-top: 6px solid var(--turquoise); padding: 18px; margin: 14px 0; }
+.resultat-patient h3 { margin: 0 0 8px; font-size: 23px; }
+.en-pratique { background: var(--fond); border-radius: 10px; padding: 10px 12px; }
+.conseil { font-weight: 700; color: var(--encre-douce); margin: 6px 0 0; }
+.aucun { text-align: center; background: #fff; border-radius: 18px; padding: 22px; }
+.grand-emoji { font-size: 48px; }
+dialog.fenetre-message { width: min(640px, calc(100vw - 20px)); border: 0; border-radius: 18px; padding: 18px; }
+dialog.fenetre-message::backdrop { background: rgba(23,49,58,.5); }
+.fenetre-message label { display: block; font-weight: 700; margin: 10px 0 4px; }
+.fenetre-message input, .fenetre-message textarea { font: inherit; font-size: 17px; width: 100%; padding: 10px; border: 2px solid var(--trait); border-radius: 10px; }
+.fenetre-message .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+@media (max-width: 520px) { .heros h1 { font-size: 34px; } .gros-bouton { width: 100%; } }
