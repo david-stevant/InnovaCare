@@ -34,8 +34,7 @@ test('liste blanche : aucun champ verrouillé, aucun nom de personne, aucun DECT
   assert.ok(!/91234|95678|dect/i.test(texte), 'un DECT a fuité');
   assert.ok(!texte.includes('Alice') && !texte.includes('COLLEGUE'), 'ARC et co-investigateurs ne sont pas publiés');
   for (const id of IC.schema.champsJamaisPublics(PARAM)) assert.ok(!(id in contenu.protocoles[0].valeurs), id);
-  // Vérifié avec les paramètres EN LIGNE : ce sont eux qui ont servi à la publication.
-  assert.deepEqual(IC.exportPublic.verifierContenu(contenu, parametresDuSite()), []);
+  assert.deepEqual(IC.exportPublic.verifierContenu(contenu, PARAM), []);
 });
 
 test('liste blanche : même si les paramètres déclarent un champ verrouillé « public », il reste interne', () => {
@@ -147,7 +146,10 @@ function fichiers(dossier) {
 
 test('site/ : protocoles.json respecte la liste blanche', () => {
   const contenu = JSON.parse(readFileSync(join(RACINE, 'site/donnees/protocoles.json'), 'utf8'));
-  assert.deepEqual(IC.exportPublic.verifierContenu(contenu, PARAM), []);
+  // Vérifié avec les réglages EN LIGNE : ce sont eux qui ont servi à la publication (par exemple
+  // « Publier les e-mails des ARC », activé par le porteur le 22/11). Correctif : ce test utilisait
+  // les réglages de test, ce qui bloquait la mise en ligne d'une publication pourtant conforme.
+  assert.deepEqual(IC.exportPublic.verifierContenu(contenu, parametresDuSite()), []);
 });
 
 test('site/ : aucun Excel, aucun contenu interne, aucun DECT, aucune mention de l\'établissement', () => {

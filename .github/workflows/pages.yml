@@ -8,7 +8,9 @@ name: Site public (GitHub Pages)
 on:
   push:
     branches: [main]
-    paths: ['site/**']
+    # site/ (nouvelles données ou pages), et aussi les tests et ce fichier : un correctif des tests
+    # relance ainsi la mise en ligne, sans manipulation.
+    paths: ['site/**', 'tests/**', 'src/**', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
