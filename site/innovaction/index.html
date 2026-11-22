@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Site discret tant que les avis (DRCI, DPO) ne sont pas obtenus : non référencé par les moteurs de recherche. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Études ouvertes — médecins</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div id="bandeau-test" class="bandeau-test" hidden></div>
+  <header class="entete">
+    <div class="page page-large">
+      <p class="fil"><a href="../">← Accueil</a></p>
+      <h1 id="titre">Études cliniques</h1>
+      <p id="sous-titre"></p>
+    </div>
+  </header>
+  <main class="page page-large">
+    <p id="etat" class="note" aria-live="polite">Chargement…</p>
+    <div id="contenu" hidden>
+      <div class="barre-recherche">
+        <label class="note" for="recherche">Rechercher une étude (nom, molécule, critère, investigateur…)</label>
+        <input type="search" id="recherche" autocomplete="off">
+      </div>
+      <section class="tuiles" aria-labelledby="t-tuiles">
+        <h2 id="t-tuiles" class="pole">Par pathologie</h2>
+        <div id="tuiles"></div>
+      </section>
+      <details class="profil" id="profil">
+        <summary>Profil du patient (facultatif) : n'afficher que les études compatibles</summary>
+        <p class="note">Seuls les critères utiles s'affichent. Une valeur non renseignée n'écarte jamais une étude.
+           Rien n'est enregistré ni envoyé : tout s'efface à la fermeture de la page.</p>
+        <div id="filtres"></div>
+        <button type="button" class="bouton" id="effacer-profil">Effacer le profil</button>
+      </details>
+      <p class="compte" id="compte" aria-live="polite"></p>
+      <div id="liste"></div>
+    </div>
+  </main>
+  <footer class="page page-large pied">
+    <p id="avertissement"></p>
+    <p id="genere" class="note"></p>
+  </footer>
+  <script src="../js/commun/texte.js"></script>
+  <script src="../js/commun/eligibilite.js"></script>
+  <script src="../js/commun/public.js"></script>
+  <script src="../js/innovaction.js"></script>
+</body>
+</html>

@@ -13,7 +13,7 @@
 (function (racine) {
   'use strict';
   const InnovaCare = racine.InnovaCare || (racine.InnovaCare = {});
-  const N = InnovaCare.normalisation;
+  const N = InnovaCare.texte; // src/texte.js (aussi copié dans le site public)
 
   const PREFIXE_QUESTION = 'question:';
   const nombre = (v) => (typeof v === 'number' ? v : (typeof v === 'string' && v.trim() !== '' && !isNaN(Number(v.replace(',', '.'))) ? Number(v.replace(',', '.')) : null));

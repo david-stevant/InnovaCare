@@ -34,6 +34,7 @@ Sommaire
 8. Gestes courants dans l'Excel
 9. Ce qui est publié, et ce qui ne l'est jamais
 10. Consulter les études : l'outil interne (eCardioScope)
+11. Le site public : accueil et page des médecins libéraux (InnovAction)
 
 ---
 
@@ -257,3 +258,27 @@ Le texte vient de l'Excel tel quel (nom, thématique, intervention vs comparateu
 d'inclusion principaux, ARC n° 1). Seuls les seuils chiffrés sont mis en gras automatiquement, et le
 tiret tapé en début de critère est retiré (la liste a déjà ses puces). Pour améliorer une phrase du
 mémo, on la corrige dans l'Excel.
+
+## 11. Le site public : accueil et page des médecins libéraux (InnovAction)
+
+Adresse : `https://david-stevant.github.io/InnovaCare/` (site encore **discret** : bandeau de test,
+non référencé ; ne pas diffuser avant l'avis de la DRCI).
+
+- **Accueil** : deux entrées, « Je suis médecin » (InnovAction) et « Je suis patient » (InnovActeur,
+  « bientôt disponible »). L'outil interne n'y est jamais lié.
+- **InnovAction** (`…/innovaction/`) : les études publiées pour les libéraux (« Afficher aux médecins
+  libéraux » = oui dans l'Excel) et au statut « ouvert ».
+  - tuiles par pathologie, recherche plein texte ;
+  - « Profil du patient (facultatif) » : le même moteur que le screening interne, limité aux critères
+    marqués « médecins libéraux » dans les réglages ; rien n'est enregistré ;
+  - fiche détaillée (seulement des informations publiques) ;
+  - **« Adresser un patient »** : n'apparaît que si l'adresse MSSanté de l'investigateur principal est
+    publiée, c'est-à-dire « MSSanté vérifiée » = oui dans l'Annuaire. Boutons « Ouvrir ma messagerie »,
+    « Copier l'adresse » et, si un message type est rédigé, « Copier le message ».
+
+**À faire pour que l'adressage fonctionne** :
+1. Annuaire de l'Excel : vérifier l'adresse MSSanté de chaque investigateur, puis « MSSanté vérifiée » = oui.
+2. Outil Paramètres → « Messages types » → « Adressage (libéraux) : corps » : rédiger le message
+   (`{protocole}` est remplacé par le nom de l'étude). Facultatif : « Publication » → avertissement de la
+   page des médecins.
+3. « Enregistrer dans l'Excel », puis Publieur → « Publier ».

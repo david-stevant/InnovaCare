@@ -97,6 +97,21 @@ export function listerGabarits() {
   return readdirSync(DOSSIER_SOURCES).filter((nom) => nom.endsWith('.html')).sort();
 }
 
+// Code partagé avec le site public : seul le dossier site/ est publié, on y place donc une
+// COPIE de ces fichiers de src/ (avec une ligne d'avertissement). Un test vérifie qu'elle est à jour.
+const COPIES_SITE = ['src/texte.js', 'src/eligibilite.js', 'src/public.js'];
+const DOSSIER_COPIES = 'site/js/commun';
+
+/** Copies pour le site : { "site/js/commun/x.js": contenu }. */
+export function copiesSite() {
+  const resultat = {};
+  for (const chemin of COPIES_SITE) {
+    resultat[DOSSIER_COPIES + '/' + basename(chemin)] =
+      '// Copie automatique de ' + chemin + ' (outils-src/construire.mjs) : ne pas modifier ici.\n' + readFileSync(join(RACINE, chemin), 'utf8');
+  }
+  return resultat;
+}
+
 /** Construit tous les outils. Renvoie { nomDuFichier: contenu }. */
 export function construireTout() {
   const resultats = {};
@@ -117,4 +132,9 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   }
   writeFileSync(join(DOSSIER_SORTIE, 'versions.json'), JSON.stringify(versions, null, 2) + '\n');
   console.log('✔ outils/versions.json');
+  mkdirSync(join(RACINE, DOSSIER_COPIES), { recursive: true });
+  for (const [chemin, contenu] of Object.entries(copiesSite())) {
+    writeFileSync(join(RACINE, chemin), contenu);
+    console.log('✔ ' + chemin + ' (copie pour le site public)');
+  }
 }

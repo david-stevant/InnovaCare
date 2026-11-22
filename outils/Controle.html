@@ -200,7 +200,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     </section>
   </div>
 
-  <footer class="pied-outil" data-version="c4b70ef1">Contrôle de l'Excel actuel — version c4b70ef1</footer>
+  <footer class="pied-outil" data-version="c2125bcc">Contrôle de l'Excel actuel — version c2125bcc</footer>
 
 </div>
 <script type="application/json" id="donnees-parametres">
@@ -1750,23 +1750,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 //# sourceMappingURL=exceljs.min.js.map</script>
 <script>
 // =============================================================================
-// normalisation.js — petites fonctions de nettoyage des valeurs de l'Excel
+// texte.js — fonctions de base sur les textes et les cellules
 // =============================================================================
-// Chaque fonction prend une valeur telle qu'elle est écrite dans une cellule et
-// renvoie une version « comprise » par l'outil, SANS RIEN DEVINER : quand une
-// valeur n'est pas reconnue avec certitude, la fonction le dit (ok: false) et
-// garde le texte d'origine. Ces fonctions ne connaissent rien à la cardiologie :
-// les listes de mots (mentions de statut, noms commerciaux…) leur sont données
-// en paramètre.
-//
-// Une cellule lue dans l'Excel vaut : null (vide), un texte, un nombre, ou une
-// date écrite sous la forme { date: "AAAA-MM-JJ" }.
+// Partagées par les outils locaux ET par le site public (une copie automatique est
+// placée dans site/js/commun/ par outils-src/construire.mjs). Elles ne connaissent
+// rien à la spécialité.
+// Une cellule vaut : null (vide), un texte, un nombre, ou { date: "AAAA-MM-JJ" }.
 // =============================================================================
 (function (racine) {
   'use strict';
   const InnovaCare = racine.InnovaCare || (racine.InnovaCare = {});
-
-  // --- Outils de base -----------------------------------------------------------
 
   /** Vrai si la cellule est une date ({ date: "AAAA-MM-JJ" }). */
   function estDate(valeur) {
@@ -1806,6 +1799,31 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function identifiant(nom) {
     return texteSimple(nom).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   }
+
+  InnovaCare.texte = { estDate, estVide, enTexte, texteSimple, identifiant };
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+<script>
+// =============================================================================
+// normalisation.js — petites fonctions de nettoyage des valeurs de l'Excel
+// =============================================================================
+// Chaque fonction prend une valeur telle qu'elle est écrite dans une cellule et
+// renvoie une version « comprise » par l'outil, SANS RIEN DEVINER : quand une
+// valeur n'est pas reconnue avec certitude, la fonction le dit (ok: false) et
+// garde le texte d'origine. Ces fonctions ne connaissent rien à la cardiologie :
+// les listes de mots (mentions de statut, noms commerciaux…) leur sont données
+// en paramètre.
+//
+// Une cellule lue dans l'Excel vaut : null (vide), un texte, un nombre, ou une
+// date écrite sous la forme { date: "AAAA-MM-JJ" }.
+// =============================================================================
+(function (racine) {
+  'use strict';
+  const InnovaCare = racine.InnovaCare || (racine.InnovaCare = {});
+
+  // --- Outils de base (src/texte.js, partagé avec le site public) -------------------
+
+  const { estDate, estVide, enTexte, texteSimple, identifiant } = InnovaCare.texte;
 
   /** Lit un nombre écrit à la française (« 1,5 ») ou à l'anglaise (« 1.5 »). */
   function lireNombre(texte) {
