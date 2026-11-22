@@ -256,7 +256,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     <p id="message-fichier" class="note" aria-live="polite"></p>
   </details>
 
-  <footer class="pied-outil" data-version="ceb93c3f">Paramètres de l'instance — version ceb93c3f</footer>
+  <footer class="pied-outil" data-version="31988ea6">Paramètres de l'instance — version 31988ea6</footer>
 
 </div>
 <script type="application/json" id="donnees-parametres">
@@ -2579,10 +2579,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     const echapper = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const morceaux = domaine.split('.')[0].split('-').filter(Boolean);
     if (!morceaux.length) return null;
-    const variantes = [morceaux.map(echapper).join("[\\s-]+(?:de\\s+|d')?")];
-    if (morceaux.length > 1 && morceaux[0].length <= 4) variantes.push('\\b' + echapper(morceaux[0]) + '\\b'); // le sigle seul
+    // « Mot entier » qui tient compte des lettres accentuées : un mot qui finit par les mêmes lettres après
+    // une lettre accentuée n'est pas le sigle (avec \b, une lettre accentuée comptait comme une séparation :
+    // faux positif corrigé le 22/11 ; exemples dans tests/parametres-excel.test.js).
+    const seul = (x) => '(?<![\\p{L}\\p{N}])' + x + '(?![\\p{L}\\p{N}])';
+    const variantes = [seul(morceaux.map(echapper).join("[\\s-]+(?:de\\s+|d')?"))];
+    if (morceaux.length > 1 && morceaux[0].length <= 4) variantes.push(seul(echapper(morceaux[0]))); // le sigle seul
     const domaines = formats.map((f) => echapper(f.split('@')[1]));
-    return { motif: new RegExp(variantes.join('|'), 'i'), adresses: new RegExp('@?(?:' + domaines.join('|') + ')', 'gi') };
+    return { motif: new RegExp(variantes.join('|'), 'iu'), adresses: new RegExp('@?(?:' + domaines.join('|') + ')', 'gi') };
   }
 
   /**
@@ -2591,13 +2595,82 @@ https://github.com/nodeca/pako/blob/main/LICENSE
    * (règle 3 : les adresses e-mail de l'établissement restent permises). Mêmes règles que le
    * test automatique du dossier site/. Renvoie une liste de messages ; vide = publiable.
    */
+  // Noms des rubriques de l'outil Paramètres, pour dire OÙ se trouve un texte à corriger.
+  const RUBRIQUES = {
+    'textes.patient': 'Textes patient', 'textes.patient.benefices': 'Bénéfices (page patient)',
+    'textes.patient.temoignages': 'Témoignages (page patient)', 'textes.email_patient': 'Messages types › E-mail patient',
+    'textes.adressage': 'Messages types › Adressage (libéraux)', 'textes.mentions': 'Page Mentions',
+    'textes.site': 'Publication', 'memos': 'Mémos', 'memos.sections': 'Sections des mémos', 'newsletter': 'Newsletter',
+    'champs': 'Messages d\'aide des lignes de l\'Excel', 'specialite': 'Identité', 'modules': 'Identité',
+    'poles': 'Pôles', 'groupes_pathologies': 'Groupes de pathologies', 'pathologies': 'Pathologies',
+    'vignettes': 'Vignettes patient', 'filtres': 'Filtres d\'éligibilité et traitements', 'listes': 'Listes de valeurs',
+    'annuaire': 'Annuaire (formats d\'adresse)', 'publication': 'Publication',
+  };
+
+  // Libellés des champs, tels qu'affichés dans l'outil Paramètres.
+  const LIBELLES = {
+    question_patient: 'Question posée au patient', libelle_patient: 'Libellé patient (traitement)', libelle: 'Libellé',
+    aide_patient: 'Aide (patient)', corps: 'corps', objet: 'objet', texte: 'Texte', titre: 'Titre', nom: 'Nom',
+    synonymes: 'Synonymes', description: 'Description', avertissement_pro: 'Avertissement de la page des médecins',
+  };
+
+  /** Chemin dans les réglages → endroit lisible : « Pathologies › CMD › synonymes », « … › corps, ligne 3 ». */
+  function endroit(p, chemin) {
+    let rubrique = '', depuis = 0;
+    for (let n = chemin.length; n > 0; n--) {
+      const cle = chemin.slice(0, n).join('.');
+      if (RUBRIQUES[cle]) { rubrique = RUBRIQUES[cle]; depuis = n; break; }
+    }
+    const morceaux = rubrique ? [rubrique] : [];
+    let objet = p;
+    for (let i = 0; i < chemin.length; i++) {
+      objet = objet == null ? undefined : objet[chemin[i]];
+      if (i < depuis) continue;
+      const cle = chemin[i];
+      if (/^\d+$/.test(cle)) {
+        const element = objet;
+        const nom = element && typeof element === 'object' ? (element.nom || element.libelle || element.titre || element.auteur || element.id) : null;
+        morceaux.push(nom ? String(nom) : 'ligne ' + (Number(cle) + 1));
+      } else morceaux.push(LIBELLES[cle] || cle);
+    }
+    return morceaux.join(' › ');
+  }
+
+  /** Extrait d'environ 40 caractères autour de la position trouvée. */
+  function extrait(texte, index, longueur) {
+    const debut = Math.max(0, index - 20), fin = Math.min(texte.length, index + longueur + 20);
+    return (debut > 0 ? '…' : '') + texte.slice(debut, fin).replace(/\s+/g, ' ') + (fin < texte.length ? '…' : '');
+  }
+
+  /** Tous les textes des réglages, avec leur chemin : [{ chemin: ['textes', 'adressage', 'corps', '2'], texte }]. */
+  function textes(valeur, chemin, resultat) {
+    if (typeof valeur === 'string') resultat.push({ chemin, texte: valeur });
+    else if (Array.isArray(valeur)) valeur.forEach((v, i) => textes(v, chemin.concat(String(i)), resultat));
+    else if (valeur && typeof valeur === 'object') for (const [k, v] of Object.entries(valeur)) { if (k === 'dect') resultat.push({ chemin: chemin.concat(k), texte: 'dect' }); textes(v, chemin.concat(k), resultat); }
+    return resultat;
+  }
+
+  /**
+   * Contrôles supplémentaires AVANT de publier parametres.json sur le site (dépôt public) :
+   * paramètres cohérents, aucun DECT, aucun contenu interne, aucune mention de l'établissement
+   * (règle 3 : les adresses e-mail de l'établissement restent permises). Mêmes règles que le
+   * test automatique du dossier site/. Renvoie une liste de messages ; vide = publiable.
+   * Chaque message dit OÙ (rubrique de l'outil Paramètres) et montre un extrait du texte en cause.
+   */
   function verifierPourPublication(p) {
     const problemes = verifier(p).map((x) => x.rubrique + ' : ' + x.message);
-    const texte = JSON.stringify(p || {});
-    if (/\[interne/i.test(texte)) problemes.push('Un texte contient « [interne ».');
-    if (/\bDECT\b|"dect"/i.test(texte)) problemes.push('Un texte contient le mot « DECT » : les numéros de poste ne sont jamais publiés.');
     const nom = motifEtablissement(p);
-    if (nom && nom.motif.test(texte.replace(nom.adresses, ''))) problemes.push('Un texte mentionne l\'établissement (règle : aucun nom ni sigle de l\'établissement sur le site).');
+    for (const { chemin, texte } of textes(p || {}, [], [])) {
+      const ou = endroit(p, chemin);
+      const signaler = (raison, m) => problemes.push(ou + ' : ' + raison + ' (« ' + extrait(texte, m.index, m[0].length) + ' »).');
+      let m;
+      if ((m = /\[interne/i.exec(texte))) signaler('contenu interne', m);
+      if ((m = /\bDECT\b/i.exec(texte)) || (chemin[chemin.length - 1] === 'dect' && (m = { index: 0, 0: texte }))) signaler('le mot « DECT » (les numéros de poste ne sont jamais publiés)', m);
+      if (nom) {
+        const sansAdresses = texte.replace(nom.adresses, (x) => ' '.repeat(x.length)); // garde les positions
+        if ((m = nom.motif.exec(sansAdresses))) signaler('nom ou sigle de l\'établissement, interdit sur le site', m);
+      }
+    }
     return problemes;
   }
 

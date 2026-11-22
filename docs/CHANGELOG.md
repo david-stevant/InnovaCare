@@ -2,6 +2,17 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.12.1 — 22 novembre 2026 — Correctif : dire où se trouve le texte refusé
+
+- Avant de publier les réglages, le contrôle de la règle 3 (aucun nom ni sigle de l'établissement) et
+  ceux du DECT et du contenu interne indiquent désormais **l'endroit** (rubrique et champ de l'outil
+  Paramètres, par exemple « Messages types › Adressage (libéraux) › corps › ligne 3 ») et **un extrait**
+  du texte en cause. Les messages apparaissent dans le Publieur et en haut de l'outil Paramètres.
+- **Faux positif corrigé** : un mot dont les dernières lettres suivent une lettre accentuée (« à terme
+  échu », « déchu ») était pris à tort pour le sigle de l'établissement. Le sigle seul, ou suivi de la
+  ville, reste refusé. Même correction dans le test qui analyse le dossier `site/`.
+- **Tests** : 149 tests.
+
 ## Version 0.12.0 — 22 novembre 2026 — Phase 4.1 : page des patients (InnovActeur)
 
 - **Page InnovActeur** (`site/innovacteur/`), base InnovaCoeur v2, textes repris des paramètres :
