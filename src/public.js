@@ -64,5 +64,29 @@
     return { nom: pi.nom, mssante: pi.mssante, objet, corps, mailto: 'mailto:' + pi.mssante + (parametresLien ? '?' + parametresLien : '') };
   }
 
-  InnovaCare.public = { preparer, rechercher, adressage, dateFr };
+  // --- Nouveautés (cahier des charges § 6.3) -----------------------------------------------
+
+  const JOURS_NOUVEAUTE = 30;
+
+  /** « 2025-03-01 » ou « 2025-03 » (1er du mois) → nombre de jours depuis 1970, ou null. */
+  function jour(iso) {
+    const m = /^(\d{4})-(\d{2})(?:-(\d{2}))?$/.exec(String(iso || ''));
+    return m ? Math.round(Date.UTC(+m[1], +m[2] - 1, m[3] ? +m[3] : 1) / 86400000) : null;
+  }
+
+  /**
+   * Études récemment ouvertes (début d'inclusion dans les 30 derniers jours, la plus récente d'abord)
+   * et fins de recrutement annoncées (date future, la plus proche d'abord). Une étude sans date ne
+   * figure dans aucune liste : rien n'est deviné. aujourdhui : « AAAA-MM-JJ ».
+   */
+  function nouveautes(etudes, aujourdhui) {
+    const j = jour(aujourdhui);
+    const recentes = etudes.filter((e) => { const d = jour(e.valeurs.debut_inclusion); return d !== null && d <= j && j - d <= JOURS_NOUVEAUTE; })
+      .sort((a, b) => jour(b.valeurs.debut_inclusion) - jour(a.valeurs.debut_inclusion));
+    const fins = etudes.filter((e) => { const d = jour(e.valeurs.fin_recrutement); return d !== null && d >= j; })
+      .sort((a, b) => jour(a.valeurs.fin_recrutement) - jour(b.valeurs.fin_recrutement));
+    return { recentes, fins, jours: JOURS_NOUVEAUTE };
+  }
+
+  InnovaCare.public = { preparer, rechercher, adressage, dateFr, nouveautes };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

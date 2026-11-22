@@ -123,7 +123,7 @@
   function carte(e, evaluation) {
     const v = e.valeurs;
     const textes = (P.textes && P.textes.site) || {};
-    const article = el('article', { className: 'etude' });
+    const article = el('article', { className: 'etude', id: 'etude-' + e.id });
     article.appendChild(el('h3', null, e.nom));
     if (e.thematique) article.appendChild(el('p', { className: 'thematique' }, e.thematique));
     const meta = [T.enTexte(v.phase) ? 'Phase : ' + T.enTexte(v.phase) : '', T.enTexte(v.promoteur), e.poleNom].filter(Boolean).join(' · ');
@@ -235,6 +235,14 @@
       let minuterie = null;
       $('recherche').addEventListener('input', (ev) => { clearTimeout(minuterie); minuterie = setTimeout(() => { choix.texte = ev.target.value; dessinerFiltres(); mettreAJour(); }, 150); });
       $('effacer-profil').addEventListener('click', () => { choix.reponses = {}; dessinerFiltres(); mettreAJour(); });
+      // Lien direct vers une étude (depuis « Nouveautés ») : …/innovaction/#etude-identifiant
+      const cible = decodeURIComponent((location.hash || '').replace(/^#etude-/, ''));
+      if (cible && etudes.some((x) => x.id === cible)) {
+        ouvertes.add('fiche-' + cible);
+        mettreAJour();
+        const noeud = document.getElementById('etude-' + cible);
+        if (noeud) noeud.scrollIntoView();
+      }
     } catch (erreur) {
       $('etat').textContent = 'Les données n\'ont pas pu être chargées (' + erreur.message + ').';
     }

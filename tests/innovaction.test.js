@@ -70,3 +70,42 @@ test('site/ : les pages publiques ne nomment ni ne lient jamais l\'outil interne
     assert.ok(!texte.includes(interne) && !/ecardioscope|href="[^"]*outils\//i.test(texte), relative(RACINE, chemin));
   }
 });
+
+// --- Phase 3.2 : « Nouveautés » et « Mentions » --------------------------------------------
+
+const avec = (nom, valeurs) => ({ nom, valeurs });
+
+test('nouveautés : ouvertes depuis 30 jours au plus (la plus récente d\'abord), dates futures exclues', () => {
+  const etudes = [
+    avec('IL-Y-A-30-JOURS', { debut_inclusion: '2026-10-23' }),
+    avec('IL-Y-A-31-JOURS', { debut_inclusion: '2026-10-22' }),
+    avec('HIER', { debut_inclusion: '2026-11-21' }),
+    avec('DANS-UNE-SEMAINE', { debut_inclusion: '2026-11-29' }),
+    avec('MOIS-SEUL', { debut_inclusion: '2026-11' }),
+    avec('SANS-DATE', {}),
+  ];
+  const n = PU.nouveautes(etudes, '2026-11-22');
+  assert.deepEqual(n.recentes.map((e) => e.nom), ['HIER', 'MOIS-SEUL', 'IL-Y-A-30-JOURS']);
+  assert.equal(n.jours, 30);
+});
+
+test('nouveautés : fins de recrutement à venir, la plus proche d\'abord ; passées et absentes exclues', () => {
+  const etudes = [
+    avec('LOIN', { fin_recrutement: '2027-06-30' }),
+    avec('AUJOURDHUI', { fin_recrutement: '2026-11-22' }),
+    avec('PASSEE', { fin_recrutement: '2026-11-21' }),
+    avec('BIENTOT', { fin_recrutement: '2026-12-15' }),
+    avec('SANS', {}),
+  ];
+  assert.deepEqual(PU.nouveautes(etudes, '2026-11-22').fins.map((e) => e.nom), ['AUJOURDHUI', 'BIENTOT', 'LOIN']);
+});
+
+test('mentions : texte tiré des paramètres, texte de départ avec les parties à compléter signalées', () => {
+  const code = readFileSync(join(RACINE, 'site/js/mentions.js'), 'utf8');
+  assert.match(code, /textes\)?\s*\|\|\s*\{\}\)\.mentions|textes\.mentions/);
+  assert.match(code, /\[à compléter\]/);
+  assert.match(code, /\[à confirmer\]/);
+  for (const page of ['site/index.html', 'site/innovaction/index.html', 'site/innovaction/nouveautes.html']) {
+    assert.match(readFileSync(join(RACINE, page), 'utf8'), /href="(\.\.\/)?mentions\.html"/, page + ' : lien vers les mentions');
+  }
+});
