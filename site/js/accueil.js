@@ -31,6 +31,7 @@
       $('nom-patient').textContent = modules.patient || '';
       const ouvertes = (donnees.protocoles || []).filter((p) => (p.modules || []).includes('professionnel') && String((p.valeurs || {}).statut || '').toLowerCase() === 'ouvert');
       $('texte-pro').textContent = ouvertes.length + ' étude' + (ouvertes.length > 1 ? 's' : '') + ' ouverte' + (ouvertes.length > 1 ? 's' : '') + ' : critères, contact, adressage.';
+      $('texte-patient').textContent = (((parametres.textes || {}).patient || {}).appel_texte) || '';
       $('avertissement').textContent = ((parametres.textes || {}).patient || {}).avertissement || '';
       $('genere').textContent = donnees.genere_le ? 'Données publiées le ' + enDate(donnees.genere_le) + '.' : '';
       $('etat').textContent = '';

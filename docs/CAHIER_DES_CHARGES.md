@@ -289,6 +289,17 @@ Six phases successives, chacune livrée, testée et validée par le porteur avan
 
 &#91;embedded content: Feuille de route · 6 phases et leurs critères de passage\]
 
+> Le graphique d'origine n'a pas été conservé lors de la conversion en texte. Feuille de route
+> **validée par le porteur le 22/11/2026** :
+>
+> 1. **Socle de données** : Excel harmonisé, migration, paramètres, Publieur, site minimal.
+> 2. **eCardioScope** (outil interne) : screening, catalogue, mémos avec DECT.
+> 3. **InnovAction** (médecins libéraux) : accueil public, études, profil du patient, fiche, adressage,
+>    Nouveautés, Mentions.
+> 4. **InnovActeur** (patients) : parcours complet (4.1), puis design et mascotte (4.2).
+> 5. **Mémos publics, newsletter du lundi, mesure d'audience** (GoatCounter).
+> 6. **Duplication** pour une autre spécialité : dépôt modèle, tutoriel (§ 8.2).
+
 Le socle (phase 1) conditionne tout le reste. eCardioScope vient ensuite, car il ne publie rien et peut être utilisé en interne sans aucun avis institutionnel.
 
 **Méthode dans chaque phase** : proposition de plan et de maquette, validation par le porteur, développement, tests automatiques, démonstration en local, corrections ciblées, puis publication. Fable explique chaque choix technique en termes simples et met à jour `CHANGELOG.md`.

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Site discret tant que les avis (DRCI, DPO) ne sont pas obtenus : non référencé par les moteurs de recherche. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Recherche clinique — patients</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body class="patient">
+  <div id="bandeau-test" class="bandeau-test" hidden></div>
+  <p id="etat" class="page note" aria-live="polite">Chargement…</p>
+
+  <!-- Page éditoriale -->
+  <div id="edito" hidden>
+    <header class="heros">
+      <div class="page">
+        <p class="fil"><a href="../">← Accueil</a></p>
+        <p class="heros-bandeau" id="p-bandeau"></p>
+        <h1 id="p-titre"></h1>
+        <p class="heros-accroche" id="p-accroche"></p>
+        <div id="p-sous-titre"></div>
+      </div>
+    </header>
+    <main class="page">
+      <h2 id="p-edito-titre"></h2>
+      <p id="p-edito-texte" class="grand"></p>
+      <div class="benefices" id="p-benefices"></div>
+      <div id="p-temoignages"></div>
+      <section class="appel">
+        <h2 id="p-appel-titre"></h2>
+        <p id="p-appel-texte" class="grand"></p>
+        <button type="button" class="gros-bouton" id="bouton-test"></button>
+      </section>
+    </main>
+  </div>
+
+  <!-- Test en 3 étapes -->
+  <main class="page" id="test" hidden>
+    <div class="rangee-etapes">
+      <button type="button" class="bouton-retour" id="bouton-retour">← Retour</button>
+      <ol class="points-etapes" aria-label="Étapes"><li id="pt-1">1</li><li id="pt-2">2</li><li id="pt-3">3</li></ol>
+    </div>
+
+    <section id="etape-1">
+      <h2 id="p-etape1-titre"></h2>
+      <p class="grand" id="p-etape1-texte"></p>
+      <div class="vignettes" id="vignettes" role="group"></div>
+      <button type="button" class="gros-bouton" id="vers-2" disabled>Continuer →</button>
+    </section>
+
+    <section id="etape-2" hidden>
+      <h2 id="p-etape2-titre"></h2>
+      <p class="grand" id="p-etape2-texte"></p>
+      <div id="questions"></div>
+      <button type="button" class="gros-bouton" id="vers-3"></button>
+    </section>
+
+    <section id="etape-3" hidden>
+      <div id="resultats" aria-live="polite"></div>
+      <button type="button" class="gros-bouton secondaire" id="recommencer"></button>
+    </section>
+  </main>
+
+  <footer class="page pied">
+    <p id="avertissement"></p>
+    <p class="note"><a href="../mentions.html">Mentions</a></p>
+  </footer>
+
+  <dialog class="fenetre-message" id="fenetre" aria-labelledby="fenetre-titre">
+    <h2 id="fenetre-titre"></h2>
+    <p class="note">Facultatif : votre nom et votre date de naissance complètent le message. Ils restent sur votre appareil ; rien n'est envoyé par ce site.</p>
+    <label for="m-nom">Nom et prénom</label>
+    <input type="text" id="m-nom" autocomplete="name">
+    <label for="m-naissance">Date de naissance</label>
+    <input type="date" id="m-naissance">
+    <label for="m-texte">Votre message</label>
+    <textarea id="m-texte" rows="12" readonly></textarea>
+    <div class="actions">
+      <a class="gros-bouton" id="m-messagerie" href="#"></a>
+      <button type="button" class="gros-bouton secondaire" id="m-copier"></button>
+      <button type="button" class="gros-bouton secondaire" id="m-fermer">Fermer</button>
+    </div>
+    <p id="m-etat" class="note" aria-live="polite"></p>
+  </dialog>
+
+  <script src="../js/commun/texte.js"></script>
+  <script src="../js/commun/eligibilite.js"></script>
+  <script src="../js/commun/public.js"></script>
+  <script src="../js/innovacteur.js"></script>
+</body>
+</html>

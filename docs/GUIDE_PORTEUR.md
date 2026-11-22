@@ -35,6 +35,7 @@ Sommaire
 9. Ce qui est publié, et ce qui ne l'est jamais
 10. Consulter les études : l'outil interne (eCardioScope)
 11. Le site public : accueil et page des médecins libéraux (InnovAction)
+12. La page des patients (InnovActeur)
 
 ---
 
@@ -297,3 +298,25 @@ de l'Annuaire (elle est prioritaire).
    (`{protocole}` est remplacé par le nom de l'étude). Facultatif : « Publication » → avertissement de la
    page des médecins.
 3. « Enregistrer dans l'Excel », puis Publieur → « Publier ».
+
+## 12. La page des patients (InnovActeur)
+
+Adresse : `…/innovacteur/` (entrée « Je suis patient » de l'accueil). Pensée pour le smartphone et les
+patients âgés : grands caractères, gros boutons.
+
+1. **Page d'accueil** : textes de la v2 (titre, bénéfices, témoignages), réglables dans l'outil
+   Paramètres (« Textes patient », « Bénéfices », « Témoignages »). Bouton « Faites le test ».
+2. **Étape 1** : les **vignettes patient** (outil Paramètres → « Vignettes patient ») qui ont au moins une
+   étude affichée aux patients (lignes « Vignette patient » de l'Excel).
+3. **Étape 2** : seulement les questions **rédigées pour les patients** (« Question posée au patient »
+   des filtres) et utiles pour les études restantes ; taille et poids donnent l'IMC automatiquement ;
+   les traitements se cochent (une case non cochée n'écarte jamais une étude). Le NT-proBNP et les
+   questions propres aux études (rédigées pour les professionnels) ne sont jamais posés aux patients.
+4. **Étape 3** : la **phrase patient** et les **détails pratiques** de l'Excel, mot pour mot ;
+   « Contacter l'équipe de recherche » ouvre le message type (outil Paramètres → « Messages types » →
+   « E-mail patient ») adressé à l'**ARC n° 1** — seulement si « Publier les e-mails des ARC » est activé.
+   Le patient peut y ajouter son nom et sa date de naissance ; **rien n'est envoyé par le site** : il
+   envoie le message lui-même depuis sa messagerie.
+
+Rien de ce que le patient saisit n'est gardé : tout disparaît à la fermeture de la page.
+Vos tâches en attente sont listées dans `docs/A_FAIRE_PORTEUR.md`.

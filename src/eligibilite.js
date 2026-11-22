@@ -17,7 +17,7 @@
 
   const PREFIXE_QUESTION = 'question:';
   const nombre = (v) => (typeof v === 'number' ? v : (typeof v === 'string' && v.trim() !== '' && !isNaN(Number(v.replace(',', '.'))) ? Number(v.replace(',', '.')) : null));
-  const repondu = (r) => r !== null && r !== undefined && r !== '';
+  const repondu = (r) => r !== null && r !== undefined && r !== '' && !(typeof r === 'object' && !Object.keys(r).length);
   const formater = (n) => String(n).replace('.', ',');
 
   /** Filtres des paramètres posés dans un module (« interne », « professionnel », « patient »). */
@@ -41,6 +41,15 @@
       const unite = filtre.unite ? ' ' + filtre.unite : '';
       const seuil = min !== null && max !== null ? formater(min) + ' à ' + formater(max) + unite
         : min !== null ? '≥ ' + formater(min) + unite : '≤ ' + formater(max) + unite;
+      // Réponse en fourchette (ex. côté patient : « force de contraction normale » = au moins le seuil) :
+      // { min, max } ; exclue seulement si aucune valeur de la fourchette ne convient à l'étude.
+      if (r && typeof r === 'object' && ('min' in r || 'max' in r)) {
+        const a = r.min === undefined || r.min === null ? -Infinity : r.min;
+        const b = r.max === undefined || r.max === null ? Infinity : r.max;
+        const lo = min === null ? -Infinity : min, hi = max === null ? Infinity : max;
+        if (b < lo || a > hi) return { statut: 'exclu', seuil };
+        return { statut: a >= lo && b <= hi ? 'ok' : 'a_verifier', seuil };
+      }
       const v = nombre(r);
       if (v === null) return { statut: 'a_verifier', seuil };
       const dedans = (min === null || v >= min) && (max === null || v <= max);

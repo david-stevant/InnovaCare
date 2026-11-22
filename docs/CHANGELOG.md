@@ -2,6 +2,22 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.12.0 — 22 novembre 2026 — Phase 4.1 : page des patients (InnovActeur)
+
+- **Page InnovActeur** (`site/innovacteur/`), base InnovaCoeur v2, textes repris des paramètres :
+  page d'accueil (bénéfices, témoignages), puis test en 3 étapes — vignettes, précisions (seulement les
+  questions rédigées pour les patients et utiles ; IMC calculé à partir de la taille et du poids ;
+  traitements à cocher), résultats (phrase patient et détails pratiques mot pour mot).
+- **« Contacter l'équipe de recherche »** : message type des paramètres, nom et date de naissance
+  facultatifs (ils remplissent les blancs du modèle), « Ouvrir ma messagerie » vers l'ARC n° 1 et
+  « Copier ». Visible seulement si les e-mails des ARC sont publiés. Rien n'est envoyé par le site.
+- **Moteur d'éligibilité** : accepte une réponse en fourchette (« force de contraction normale » = au
+  moins le seuil) ; une étude n'est écartée que si sa fourchette ne peut pas convenir.
+- Accueil : l'entrée « Je suis patient » est active.
+- **Cahier des charges § 10** : feuille de route validée (phases 1 à 6) ; **`docs/A_FAIRE_PORTEUR.md`** :
+  vos tâches en attente.
+- **Tests** : 147 tests.
+
 ## Version 0.11.0 — 22 novembre 2026 — Phase 3.2 : « Nouveautés » et « Mentions »
 
 - **Page « Nouveautés »** des médecins libéraux : études ouvertes depuis moins de 30 jours (début
