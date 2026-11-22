@@ -191,3 +191,18 @@ test('brouillon illisible ou stockage refusé : ignoré sans erreur', () => {
 test('nom daté du parametres.json téléchargé (plus de « (1) », « (2) »)', () => {
   assert.equal(IC.brouillon.nomDate('parametres', '.json', new Date(2026, 10, 19, 9, 5)), 'parametres_2026-11-19_09h05.json');
 });
+
+test('avant publication : chaque message dit OÙ se trouve le texte en cause et en montre un extrait', () => {
+  const p = copie(PARAM);
+  const sigle = PARAM.annuaire.format_email.split('@')[1].split('.')[0].split('-')[0].toUpperCase();
+  p.textes.adressage.corps = ['Bonjour,', '', 'Merci d\'adresser votre patient au ' + sigle + ' pour un bilan.'];
+  p.textes.mentions = [{ titre: 'Contact', texte: 'Écrire à prenom.nom@' + PARAM.annuaire.format_email.split('@')[1] }];
+  p.filtres.find((f) => f.id === 'fevg').question_patient = 'Question fictive avec DECT 91234 ?';
+  const messages = IC.parametres.verifierPourPublication(p);
+  assert.equal(messages.length, 2, 'l\'adresse e-mail des Mentions reste permise');
+  const adressage = messages.find((m) => m.startsWith('Messages types'));
+  assert.match(adressage, /^Messages types › Adressage \(libéraux\) › corps › ligne 3 : nom ou sigle de l'établissement/);
+  assert.ok(/« …[^»]*patient au /.test(adressage) && adressage.includes(sigle + ' pour un bilan. »'), adressage);
+  assert.ok(messages.some((m) => /^Filtres d'éligibilité et traitements › FEVG › Question posée au patient : le mot « DECT »/.test(m)));
+  assert.deepEqual(IC.parametres.verifierPourPublication(PARAM), []);
+});
