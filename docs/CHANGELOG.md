@@ -2,6 +2,22 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.10.0 — 22 novembre 2026 — Phase 3.1 : accueil public et InnovAction (médecins libéraux)
+
+- **Accueil du site** : deux entrées, « Je suis médecin » (InnovAction) et « Je suis patient » (InnovActeur,
+  bientôt). Noms des modules tirés des paramètres ; l'outil interne n'est jamais lié.
+- **Page InnovAction** (`site/innovaction/`) : études publiées pour les libéraux et ouvertes ; tuiles par
+  pathologie, recherche, profil du patient facultatif (même moteur que le screening interne, critères du
+  module « médecins libéraux »), fiche détaillée, **« Adresser un patient »** vers la MSSanté vérifiée de
+  l'investigateur principal (« Ouvrir ma messagerie », « Copier l'adresse », « Copier le message »).
+  Le corps du message vient des paramètres ; tant qu'il n'est pas rédigé, seul l'objet est prérempli.
+- **Code partagé avec le site** : `src/texte.js` (fonctions de base, séparées de `normalisation.js`),
+  `src/eligibilite.js` et le nouveau `src/public.js` sont recopiés automatiquement dans `site/js/commun/` ;
+  un test vérifie que les copies sont à jour.
+- **Outil Paramètres** : réglages du site (sous-titre, bandeau, avertissement de la page des médecins).
+- Aucun cookie, aucun formulaire qui envoie, pas de mesure d'audience (site discret).
+- **Tests** : 137 tests.
+
 ## Version 0.9.0 — 21 novembre 2026 — Phase 2.3 : mémos générés par l'outil interne
 
 - **Onglet « Mémos »** dans `outils/eCardioScope.html` : le mémo des études ouvertes, au format des

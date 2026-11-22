@@ -6,7 +6,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assembler, construireTout } from '../outils-src/construire.mjs';
+import { assembler, construireTout, copiesSite } from '../outils-src/construire.mjs';
 
 const RACINE = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -72,5 +72,12 @@ test('chaque script intégré aux outils est du JavaScript valide (erreur de syn
     const scripts = [...html.matchAll(/<script>\n([\s\S]*?)<\/script>/g)].map((m) => m[1]);
     assert.ok(scripts.length > 0, nom);
     scripts.forEach((code, i) => assert.doesNotThrow(() => new vm.Script(code), nom + ' : script n° ' + (i + 1)));
+  }
+});
+
+test('site public : les copies du code partagé (site/js/commun/) sont à jour', () => {
+  for (const [chemin, attendu] of Object.entries(copiesSite())) {
+    assert.ok(existsSync(join(RACINE, chemin)), chemin + ' est absent : lancer « npm run construire »');
+    assert.ok(readFileSync(join(RACINE, chemin), 'utf8') === attendu, chemin + ' est périmé : lancer « npm run construire »');
   }
 });

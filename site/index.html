@@ -18,7 +18,18 @@
   </header>
   <main class="page">
     <p id="etat" class="note" aria-live="polite">Chargement…</p>
-    <div id="liste"></div>
+    <nav class="entrees" aria-label="Choisir son espace">
+      <a class="entree" id="entree-medecin" href="innovaction/">
+        <span class="entree-titre">Je suis médecin</span>
+        <span class="entree-module" id="nom-pro"></span>
+        <span class="entree-texte" id="texte-pro"></span>
+      </a>
+      <div class="entree inactive" id="entree-patient" aria-disabled="true">
+        <span class="entree-titre">Je suis patient</span>
+        <span class="entree-module" id="nom-patient"></span>
+        <span class="entree-texte">Bientôt disponible.</span>
+      </div>
+    </nav>
   </main>
   <footer class="page pied">
     <p id="avertissement"></p>
