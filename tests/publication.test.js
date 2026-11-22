@@ -163,7 +163,8 @@ test('site/ : aucun Excel, aucun contenu interne, aucun DECT, aucune mention de 
     // des ARC sont repris mot pour mot (règle 4) et peuvent dire « suivi au CHU » : le mot seul est toléré.
     // Dans le code et les textes du site, même le mot seul est refusé.
     const donneesPubliees = /protocoles\.json$/.test(chemin);
-    const motif = donneesPubliees ? /CHU\s+de\s+Nantes|CHU\s+Nantes|chu[- ]nantes/i : /CHU\s+de\s+Nantes|CHU\s+Nantes|chu[- ]nantes|\bCHU\b/i;
+    // « Mot entier » sensible aux accents (avec \b, « échu » était pris à tort pour le sigle).
+    const motif = donneesPubliees ? /CHU\s+de\s+Nantes|CHU\s+Nantes|chu[- ]nantes/i : /CHU\s+de\s+Nantes|CHU\s+Nantes|chu[- ]nantes|(?<![\p{L}\p{N}])CHU(?![\p{L}\p{N}])/iu;
     assert.ok(!motif.test(sansAdresses), nom + ' mentionne l\'établissement');
   }
 });

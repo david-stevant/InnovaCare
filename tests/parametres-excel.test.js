@@ -206,3 +206,10 @@ test('avant publication : chaque message dit OÙ se trouve le texte en cause et 
   assert.ok(messages.some((m) => /^Filtres d'éligibilité et traitements › FEVG › Question posée au patient : le mot « DECT »/.test(m)));
   assert.deepEqual(IC.parametres.verifierPourPublication(PARAM), []);
 });
+
+test('règle 3 : pas de faux positif sur les mots accentués (« échu », « déchu »), le sigle reste refusé', () => {
+  const avec = (texte) => { const p = copie(PARAM); p.textes.site.bandeau_test = texte; return IC.parametres.verifierPourPublication(p).length; };
+  const sigle = PARAM.annuaire.format_email.split('@')[1].split('.')[0].split('-')[0];
+  for (const t of ['Paiement à terme échu', 'Un statut déchu', 'Fichu temps']) assert.equal(avec(t), 0, t);
+  for (const t of ['Suivi au ' + sigle.toUpperCase(), '(' + sigle.toUpperCase() + ')', sigle.toUpperCase() + '.', sigle + '-Ville']) assert.equal(avec(t), 1, t);
+});

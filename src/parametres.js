@@ -108,10 +108,14 @@
     const echapper = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const morceaux = domaine.split('.')[0].split('-').filter(Boolean);
     if (!morceaux.length) return null;
-    const variantes = [morceaux.map(echapper).join("[\\s-]+(?:de\\s+|d')?")];
-    if (morceaux.length > 1 && morceaux[0].length <= 4) variantes.push('\\b' + echapper(morceaux[0]) + '\\b'); // le sigle seul
+    // « Mot entier » qui tient compte des lettres accentuées : un mot qui finit par les mêmes lettres après
+    // une lettre accentuée n'est pas le sigle (avec \b, une lettre accentuée comptait comme une séparation :
+    // faux positif corrigé le 22/11 ; exemples dans tests/parametres-excel.test.js).
+    const seul = (x) => '(?<![\\p{L}\\p{N}])' + x + '(?![\\p{L}\\p{N}])';
+    const variantes = [seul(morceaux.map(echapper).join("[\\s-]+(?:de\\s+|d')?"))];
+    if (morceaux.length > 1 && morceaux[0].length <= 4) variantes.push(seul(echapper(morceaux[0]))); // le sigle seul
     const domaines = formats.map((f) => echapper(f.split('@')[1]));
-    return { motif: new RegExp(variantes.join('|'), 'i'), adresses: new RegExp('@?(?:' + domaines.join('|') + ')', 'gi') };
+    return { motif: new RegExp(variantes.join('|'), 'iu'), adresses: new RegExp('@?(?:' + domaines.join('|') + ')', 'gi') };
   }
 
   /**
