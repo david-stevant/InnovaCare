@@ -111,6 +111,9 @@
       { chemin: 'textes.site.bandeau_test', libelle: 'Texte du bandeau de test' },
       { chemin: 'textes.site.avertissement_pro', libelle: 'Avertissement en bas de la page des médecins libéraux', type: 'long', aide: 'Vide = pas d\'avertissement sur cette page (celui des patients reste sur l\'accueil).' },
     ] },
+    { titre: 'Page Mentions (site public)', liste: 'textes.mentions', nomElement: 'rubrique',
+      note: 'Vide = le texte de départ s\'affiche (éditeur et contact « à compléter »). Ajouter une rubrique remplace tout ce texte de départ : reprenez-le en entier.',
+      colonnes: [{ cle: 'titre', libelle: 'Titre' }, { cle: 'texte', libelle: 'Texte', type: 'long' }] },
     { titre: 'Newsletter', champs: [
       { chemin: 'newsletter.jour', libelle: 'Jour du brouillon' },
       { chemin: 'newsletter.nombre_etudes_min', libelle: 'Études mises en lumière (minimum)', type: 'nombre' },

@@ -256,7 +256,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     <p id="message-fichier" class="note" aria-live="polite"></p>
   </details>
 
-  <footer class="pied-outil" data-version="f0bc2a07">Paramètres de l'instance — version f0bc2a07</footer>
+  <footer class="pied-outil" data-version="ceb93c3f">Paramètres de l'instance — version ceb93c3f</footer>
 
 </div>
 <script type="application/json" id="donnees-parametres">
@@ -2880,6 +2880,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       { chemin: 'textes.site.bandeau_test', libelle: 'Texte du bandeau de test' },
       { chemin: 'textes.site.avertissement_pro', libelle: 'Avertissement en bas de la page des médecins libéraux', type: 'long', aide: 'Vide = pas d\'avertissement sur cette page (celui des patients reste sur l\'accueil).' },
     ] },
+    { titre: 'Page Mentions (site public)', liste: 'textes.mentions', nomElement: 'rubrique',
+      note: 'Vide = le texte de départ s\'affiche (éditeur et contact « à compléter »). Ajouter une rubrique remplace tout ce texte de départ : reprenez-le en entier.',
+      colonnes: [{ cle: 'titre', libelle: 'Titre' }, { cle: 'texte', libelle: 'Texte', type: 'long' }] },
     { titre: 'Newsletter', champs: [
       { chemin: 'newsletter.jour', libelle: 'Jour du brouillon' },
       { chemin: 'newsletter.nombre_etudes_min', libelle: 'Études mises en lumière (minimum)', type: 'nombre' },

@@ -2,6 +2,17 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.11.0 — 22 novembre 2026 — Phase 3.2 : « Nouveautés » et « Mentions »
+
+- **Page « Nouveautés »** des médecins libéraux : études ouvertes depuis moins de 30 jours (début
+  d'inclusion) et fins de recrutement annoncées, avec un lien qui ouvre directement la fiche dans
+  InnovAction. Une étude sans date n'y figure pas (rien n'est deviné).
+- **Page « Mentions »** (lien en bas de chaque page) : texte réglable dans l'outil Paramètres (nouvelle
+  rubrique « Page Mentions ») ; tant qu'il est vide, un texte de départ s'affiche, avec l'éditeur et le
+  contact « [à compléter] » et la finalité « [à confirmer] ». Aucune mention de l'établissement.
+- **Guide** : Nouveautés, Mentions, rappel sur « MSSanté vérifiée ».
+- **Tests** : 140 tests.
+
 ## Version 0.10.0 — 22 novembre 2026 — Phase 3.1 : accueil public et InnovAction (médecins libéraux)
 
 - **Accueil du site** : deux entrées, « Je suis médecin » (InnovAction) et « Je suis patient » (InnovActeur,

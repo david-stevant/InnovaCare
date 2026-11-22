@@ -276,6 +276,21 @@ non référencé ; ne pas diffuser avant l'avis de la DRCI).
     publiée, c'est-à-dire « MSSanté vérifiée » = oui dans l'Annuaire. Boutons « Ouvrir ma messagerie »,
     « Copier l'adresse » et, si un message type est rédigé, « Copier le message ».
 
+- **Nouveautés** (`…/innovaction/nouveautes.html`, lien en haut d'InnovAction) : études ouvertes depuis
+  moins de 30 jours (d'après « Début d'inclusion ») et fins de recrutement annoncées (« Fin de recrutement
+  prévue » à venir). Une étude sans ces dates n'y figure pas : les remplir dans l'Excel. « Voir la fiche »
+  ouvre directement l'étude dans InnovAction.
+- **Mentions** (lien en bas de chaque page) : éditeur, finalité, absence de collecte, hébergement,
+  avertissement. Le texte de départ contient des « [à compléter] » (éditeur, contact) et un
+  « [à confirmer] » (finalité). Pour le modifier : outil Paramètres → rubrique « Page Mentions »
+  (ajouter une rubrique remplace tout le texte de départ : le reprendre en entier, puis l'adapter),
+  « Enregistrer dans l'Excel », puis Publier.
+
+**À propos de « MSSanté vérifiée »** : ne mettre « oui » qu'après avoir contrôlé l'adresse dans
+l'annuaire santé. L'adresse publiée est sinon **déduite** du nom (prenom.nom@…mssante.fr) et peut être
+fausse pour un nom composé ou accentué ; une adresse différente se saisit dans la colonne « MSSanté »
+de l'Annuaire (elle est prioritaire).
+
 **À faire pour que l'adressage fonctionne** :
 1. Annuaire de l'Excel : vérifier l'adresse MSSanté de chaque investigateur, puis « MSSanté vérifiée » = oui.
 2. Outil Paramètres → « Messages types » → « Adressage (libéraux) : corps » : rédiger le message

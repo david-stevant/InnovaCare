@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Site discret tant que les avis (DRCI, DPO) ne sont pas obtenus : non référencé par les moteurs de recherche. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Nouveautés — médecins</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div id="bandeau-test" class="bandeau-test" hidden></div>
+  <header class="entete">
+    <div class="page page-large">
+      <p class="fil"><a href="../">← Accueil</a> · <a href="./" id="lien-module">Toutes les études</a></p>
+      <h1 id="titre">Nouveautés</h1>
+    </div>
+  </header>
+  <main class="page page-large">
+    <p id="etat" class="note" aria-live="polite">Chargement…</p>
+    <section aria-labelledby="t-recentes" hidden id="bloc-recentes">
+      <h2 id="t-recentes" class="pole">Récemment ouvertes</h2>
+      <div id="recentes"></div>
+    </section>
+    <section aria-labelledby="t-fins" hidden id="bloc-fins">
+      <h2 id="t-fins" class="pole">Fins de recrutement annoncées</h2>
+      <div id="fins"></div>
+    </section>
+  </main>
+  <footer class="page page-large pied">
+    <p id="genere" class="note"></p>
+    <p class="note"><a href="../mentions.html">Mentions</a></p>
+  </footer>
+  <script src="../js/commun/texte.js"></script>
+  <script src="../js/commun/eligibilite.js"></script>
+  <script src="../js/commun/public.js"></script>
+  <script src="../js/nouveautes.js"></script>
+</body>
+</html>
