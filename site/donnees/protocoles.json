@@ -1,7 +1,7 @@
 {
   "format": 1,
   "instance": "InnovaCoeur",
-  "genere_le": "2026-11-19",
+  "genere_le": "2026-11-22",
   "protocoles": [
     {
       "id": "bonfire",
@@ -11,9 +11,11 @@
       ],
       "valeurs": {
         "nom": "BONFIRE",
+        "phase": "III",
         "statut": "ouvert",
         "pathologie_1": "Insuffisance cardiaque",
         "thematique": "IC FEVG altérée --> normalisée",
+        "intervention": "arrêt des beta-bloquants vs poursuite",
         "design": "étude randomisée en ouvert de non infériorité",
         "inclusion_1": "-Antécédent de FEVG altérée ≤ 45%",
         "inclusion_2": "-FEVG normalisée ≥ 50 %",
@@ -33,8 +35,27 @@
         "ttt_arni": "requis",
         "ttt_gliflozine": "requis"
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "David STEVANT",
+          "mssante": "david.stevant@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Océane SALOMON",
+            "email": "oceane.salomon@chu-nantes.fr"
+          },
+          {
+            "nom": "Patricia CHARPENTIER",
+            "email": "patricia.charpentier@chu-nantes.fr"
+          },
+          {
+            "nom": "Karine MAUGENDRE",
+            "email": "karine.maugendre@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "easi-protkt-boerhinger",
@@ -44,10 +65,12 @@
       ],
       "valeurs": {
         "nom": "EASi PROTKT - BOERHINGER",
+        "phase": "III",
         "statut": "ouvert",
         "pathologie_1": "Risque cardiovasculaire",
         "pathologie_2": "Diabète",
         "thematique": "Diabète type 2 à risque d'ICFEP",
+        "intervention": "vicadrostat vs placebo",
         "design": "Phase 3 :  randomisé double aveugle vicadrostat + empa vs placebo + empa 1:1",
         "inclusion_1": "-HTA traitée >= 1 traitement",
         "inclusion_2": "-Diabète de type 2 traité par >= 1 ttt",
@@ -62,8 +85,27 @@
         "ntprobnp_max": 1200,
         "diabete": "requis"
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "David STEVANT",
+          "mssante": "david.stevant@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Patricia CHARPENTIER",
+            "email": "patricia.charpentier@chu-nantes.fr"
+          },
+          {
+            "nom": "Océane SALOMON",
+            "email": "oceane.salomon@chu-nantes.fr"
+          },
+          {
+            "nom": "Karine MAUGENDRE",
+            "email": "karine.maugendre@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "branch-hf-pfizer",
@@ -73,11 +115,13 @@
       ],
       "valeurs": {
         "nom": "BRANCH-HF - PFIZER",
+        "phase": "II",
         "statut": "ouvert",
         "pathologie_1": "Insuffisance cardiaque",
         "pathologie_2": "Obésité / Surpoids",
         "pathologie_3": "Diabète",
         "thematique": "ICFEP + surpoids ou DT2",
+        "intervention": "PF-07328948 vs placebo",
         "design": "Phase 2 : randomisé 4 groupes 1:2:2:2 (100mg / 200mg / 400mg / placebo)",
         "inclusion_1": "- Diagnostic d'ICFEP depuis plus de 3 mois avec : NYHA 2-3-4 ; FEVG ≥ 40% et jamais d'antériorité de FEVG < 40%",
         "inclusion_2": "- FEVG 40 à 50%;             ou \n - FEVG > 50% avec au moins 1 critère parmi :\n       >  e/e' moy ≥ 11   \n       > Vol OG indexé  ≥ 34mL/m²   \n       >  masse VG ind ≥ 115g/m²  si Homme  ou   95g/m² si Femme",
@@ -98,8 +142,27 @@
         "ntprobnp_min": 150,
         "ttt_gliflozine": "requis"
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "David STEVANT",
+          "mssante": "david.stevant@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Océane SALOMON",
+            "email": "oceane.salomon@chu-nantes.fr"
+          },
+          {
+            "nom": "Patricia CHARPENTIER",
+            "email": "patricia.charpentier@chu-nantes.fr"
+          },
+          {
+            "nom": "Karine MAUGENDRE",
+            "email": "karine.maugendre@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "elevate-hfpef",
@@ -109,9 +172,11 @@
       ],
       "valeurs": {
         "nom": "ELEVATE-HFpEF",
+        "phase": "dispositif médical",
         "statut": "ouvert",
         "pathologie_1": "Insuffisance cardiaque",
         "thematique": "ICFEP",
+        "intervention": "Stimulation à FC physiologique vs VVI back-up",
         "design": "Implantation d'un PM avec stim physiologique chez tous et Rando 1:1 stim FC personnalisée vs VVI back-up",
         "inclusion_1": "FEVG > 50%, > 40 ans",
         "inclusion_2": "1 critère parmi : \n- épisode d'IC documenté < 12 mois        \n OU\n- NYHA ≥ 2 + un critère d'enrichissement (Nt pro BNP> 400, critères ETT simples, diurétiques etc … à détailler)",
@@ -126,8 +191,23 @@
         "dfg_min": 30,
         "ttt_diuretique_anse": "requis"
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Vincent PROBST",
+          "mssante": "vincent.probst@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Bastien OUVRARD",
+            "email": "bastien.ouvrard@chu-nantes.fr"
+          },
+          {
+            "nom": "Anaelle RAOUL",
+            "email": "anaelle.raoul@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "polaris",
@@ -138,10 +218,12 @@
       ],
       "valeurs": {
         "nom": "POLARIS",
+        "phase": "III",
         "statut": "ouvert",
         "pathologie_1": "Insuffisance cardiaque",
         "pathologie_2": "Obésité / Surpoids",
         "thematique": "ICFEP / Obésité",
+        "intervention": "zenagamtide vs placebo",
         "design": "Rando 1:1 vs placebo (phase 3B)",
         "inclusion_1": "NYHA 2-4",
         "inclusion_2": "FEVG > 40% depuis au moins 12 mois (un ATCD de FE < 40% n'est pas un critère d'exclusion) + autre critère (OG dilatée, HVG …)",
@@ -158,7 +240,7 @@
         "ntprobnp_min": 100
       },
       "contacts": {},
-      "maj": "2026-11-19"
+      "maj": "2026-11-22"
     },
     {
       "id": "hf-relief",
@@ -168,11 +250,13 @@
       ],
       "valeurs": {
         "nom": "HF-RELIEF",
+        "phase": "dispositif médical",
         "statut": "ouvert",
         "autre_pole_1": "Rythmologie",
         "pathologie_1": "Insuffisance cardiaque",
         "pathologie_2": "Fibrillation atriale",
         "thematique": "FA permanente / ICFEP",
+        "intervention": "Ablation du NAV + stimulation physiologique vs traitement standard",
         "design": "Bras traitement médical avec contrôle de fréquence versus Ablation du NAV et Pose de PM",
         "inclusion_1": "FA permanente de plus de 6 mois",
         "inclusion_2": "QRS < 130 ms",
@@ -190,8 +274,23 @@
         "dfg_max": 20,
         "imc_max": 40
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Damien MINOIS",
+          "mssante": "damien.minois@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Bastien OUVRARD",
+            "email": "bastien.ouvrard@chu-nantes.fr"
+          },
+          {
+            "nom": "Anaelle RAOUL",
+            "email": "anaelle.raoul@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "fortitude",
@@ -202,9 +301,11 @@
       ],
       "valeurs": {
         "nom": "FORTITUDE",
+        "phase": "II",
         "statut": "ouvert",
         "pathologie_1": "CMH",
         "thematique": "CMH non obstructive",
+        "intervention": "ninerafaxstat vs placebo",
         "design": "Phase 2 Randomisation 1:1   200 mg de Ninerafaxstat ou placebo, 2 fois par jour pendant 12 semaines",
         "inclusion_1": "-CMH non obstructive (gradient < 30mmHg au repos et < 30mmHg Valsalva) symptomatique (diag classique de CMH > 15mm ou > 13mm si apparenté ou mutation)",
         "inclusion_2": "-NYHA 2-3",
@@ -222,8 +323,23 @@
         "imc_max": 35,
         "ntprobnp_min": 125
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Nicolas PIRIOU",
+          "mssante": "nicolas.piriou@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Patricia CHARPENTIER",
+            "email": "patricia.charpentier@chu-nantes.fr"
+          },
+          {
+            "nom": "Karine MAUGENDRE",
+            "email": "karine.maugendre@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "lion-heart",
@@ -233,9 +349,11 @@
       ],
       "valeurs": {
         "nom": "LION-HEART",
+        "phase": "III",
         "statut": "ouvert",
         "pathologie_1": "CMH",
         "thematique": "CMH obstructive",
+        "intervention": "BHB-1893 vs metoprolol",
         "design": "Phase 3 rando 2:1 multicentrique",
         "inclusion_1": "CMH obstructive symptomatique (NYHA 2-3) FEVG > 60 et gradient d'obstruction > 30mmHg au repos et/ou > 50mmHg au Valsalva",
         "inclusion_2": "BMI < 35",
@@ -248,8 +366,23 @@
         "fevg_min": 60,
         "imc_max": 35
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Nicolas PIRIOU",
+          "mssante": "nicolas.piriou@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Patricia CHARPENTIER",
+            "email": "patricia.charpentier@chu-nantes.fr"
+          },
+          {
+            "nom": "Karine MAUGENDRE",
+            "email": "karine.maugendre@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "registre-national-des-amyloses-cardiaques-hear",
@@ -260,9 +393,11 @@
       ],
       "valeurs": {
         "nom": "Registre National des Amyloses Cardiaques (HEAR)",
+        "phase": "registre",
         "statut": "ouvert",
         "pathologie_1": "Amylose cardiaque",
         "thematique": "Amylose cardiaque (ATTRwt, ATTRh, AL)",
+        "intervention": "soin courant",
         "design": "Registre - Soins courant (simple signature d'une non opposition)",
         "inclusion_1": "Diagnostic d'amylose cardiaque (ATTRwt - ATTRv - AL)\n--> Merci d'appeler Sophie CLERO pour essayer d'inclure tous les patients que le diagnostic soit ancien ou récent",
         "duree_suivi": "recueil prospectif sur soin courant",
@@ -270,8 +405,23 @@
         "phrase_patient": "Registre national des patients porteurs d'une amylose cardiaque (simple recueil de données de suivi anonymisées, pas de traitement ou ou examen en dehors du suivi habituel)",
         "details_pratiques": "Aucune modification du suivi habituel"
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Nicolas PIRIOU",
+          "mssante": "nicolas.piriou@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Sophie CLÉRO",
+            "email": "sophie.clero@chu-nantes.fr"
+          },
+          {
+            "nom": "Sandrine POTIRON",
+            "email": "sapotiron@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "triton-aln-ttrsc04",
@@ -281,9 +431,11 @@
       ],
       "valeurs": {
         "nom": "TRITON (ALN-TTRSC04)",
+        "phase": "III",
         "statut": "ouvert",
         "pathologie_1": "Amylose cardiaque",
         "thematique": "Amylose cardiaque",
+        "intervention": "nucrésiran vs placebo",
         "design": "Nucresiran 300mg (1 injection SC / 6 mois)  vs placebo",
         "inclusion_1": "Amylose cardiaque ATTR wt ou héréditaire, patient âgé de ≤ 85 ans",
         "inclusion_2": "Nt pro BNP entre 600 et 3000 pg/mL en RS ( entre 600 et 3000pg/mL en FA)",
@@ -300,8 +452,23 @@
         "ntprobnp_min": 600,
         "ntprobnp_max": 8500
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Nicolas PIRIOU",
+          "mssante": "nicolas.piriou@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Patricia CHARPENTIER",
+            "email": "patricia.charpentier@chu-nantes.fr"
+          },
+          {
+            "nom": "Océane SALOMON",
+            "email": "oceane.salomon@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "cleopattra-novo-nordisk",
@@ -312,9 +479,11 @@
       ],
       "valeurs": {
         "nom": "CLEOPATTRA (Novo Nordisk)",
+        "phase": "III",
         "statut": "ouvert",
         "pathologie_1": "Amylose cardiaque",
         "thematique": "Amylose cardiaque",
+        "intervention": "NNC6019-0001 vs placebo",
         "design": "Randomisé NNC6019-000 intra-veineux / mois, vs placebo",
         "inclusion_1": "Diagnostic d'amylose ATTRwt ou ATTRv - NYHA 1-4 requérant un traitement par diurétique de l'anse avec au moins 1 critère parmi :\n> au moins 1 antécédent de décompensation cardiaquet   OU\n> au moins 1 épisode de congestion clinique (crépitants, OMI ...).",
         "inclusion_2": "NT-proBNP concentration ≥1000 pg/mL at screening.",
@@ -328,8 +497,23 @@
         "details_pratiques": "Traitement = 1 injection intra-veineuse tous les mois au CHU.",
         "ntprobnp_min": 1000
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Nicolas PIRIOU",
+          "mssante": "nicolas.piriou@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Patricia CHARPENTIER",
+            "email": "patricia.charpentier@chu-nantes.fr"
+          },
+          {
+            "nom": "Karine MAUGENDRE",
+            "email": "karine.maugendre@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "brave",
@@ -339,10 +523,12 @@
       ],
       "valeurs": {
         "nom": "BRAVE",
+        "phase": "II",
         "statut": "ouvert",
         "autre_pole_1": "Rythmologie",
         "pathologie_1": "DAVD / CAVD",
         "thematique": "DAVD",
+        "intervention": "Spironolactone vs placebo",
         "design": "Etude prospective, randomisée, multicentrique en\ndouble aveugle",
         "inclusion_1": "Diagnostic de DAVD basé sur les critères de la Task Force",
         "inclusion_2": "FEVG >40%",
@@ -356,8 +542,23 @@
         "age_min": 18,
         "fevg_min": 40
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Vincent PROBST",
+          "mssante": "vincent.probst@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Anaelle RAOUL",
+            "email": "anaelle.raoul@chu-nantes.fr"
+          },
+          {
+            "nom": "Bastien OUVRARD",
+            "email": "bastien.ouvrard@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "remy",
@@ -367,9 +568,11 @@
       ],
       "valeurs": {
         "nom": "REMY",
+        "phase": "registre",
         "statut": "ouvert",
         "pathologie_1": "CMH",
         "thematique": "CMH",
+        "intervention": "soins courant",
         "design": "Registre - Soins courant",
         "inclusion_1": "Toute CMH sarcomérique en principe (mais focus sur les nouvelles thérapeutiques - camten - niferaxastat …)",
         "duree_suivi": "18 mois, 3 ans et 5 ans",
@@ -379,8 +582,19 @@
         "vignette_1": "Cardiomyopathie hypertrophique",
         "ttt_inhib_myosine": "requis"
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Nicolas PIRIOU",
+          "mssante": "nicolas.piriou@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Océane SALOMON",
+            "email": "oceane.salomon@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "la-hcm",
@@ -390,9 +604,11 @@
       ],
       "valeurs": {
         "nom": "LA-HCM",
+        "phase": "II",
         "statut": "ouvert",
         "pathologie_1": "CMH",
         "thematique": "CMH - Strain OG",
+        "intervention": "rivaroxaban vs placebo",
         "design": "randomisation 1;1",
         "inclusion_1": "40 à 80 ans avec diagnostic de CMH sarcomérique (génétique + ou -)",
         "inclusion_2": "50 à 120kg",
@@ -405,8 +621,19 @@
         "age_max": 80,
         "dfg_min": 30
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Nicolas PIRIOU",
+          "mssante": "nicolas.piriou@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Océane SALOMON",
+            "email": "oceane.salomon@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "edearly-af",
@@ -416,9 +643,11 @@
       ],
       "valeurs": {
         "nom": "EDEARLY-AF",
+        "phase": "II",
         "statut": "ouvert",
         "pathologie_1": "Fibrillation atriale",
         "thematique": "FA",
+        "intervention": "Ablation de FA vs traitement médical",
         "design": "Etude prospective contrôlée randomisée, multicentrique nationale, de supériorité, ouverte en 2 groupes parallèles.",
         "inclusion_1": "- FA paroxystique ou FA paroxystique récidivante ou persistante précoce diagnostiquée pour la première fois il y a moins de 12 mois.",
         "inclusion_2": "- Age supérieur ou égal à 75 ans",
@@ -428,8 +657,23 @@
         "dfg_min": 30,
         "imc_min": 30
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Jean-Baptiste GOURRAUD",
+          "mssante": "jean-baptiste.gourraud@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Bastien OUVRARD",
+            "email": "bastien.ouvrard@chu-nantes.fr"
+          },
+          {
+            "nom": "Anaelle RAOUL",
+            "email": "anaelle.raoul@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "resoudre",
@@ -439,9 +683,11 @@
       ],
       "valeurs": {
         "nom": "RESOUDRE",
+        "phase": "registre",
         "statut": "ouvert",
         "pathologie_1": "ACR / Mort subite",
         "thematique": "Mort subite",
+        "intervention": "soin courant",
         "design": "Étude observationnelle prospective nationale multicentrique",
         "inclusion_1": "12 à 35 ans inclus",
         "inclusion_2": "sans pathologie cardiovasculaire connue",
@@ -455,8 +701,19 @@
         "age_min": 12,
         "age_max": 35
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Vincent PROBST",
+          "mssante": "vincent.probst@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Anaelle RAOUL",
+            "email": "anaelle.raoul@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     },
     {
       "id": "zenith",
@@ -466,8 +723,11 @@
       ],
       "valeurs": {
         "nom": "ZENITH",
+        "phase": "III",
         "statut": "ouvert",
         "pathologie_1": "HTA",
+        "thematique": "HTA",
+        "intervention": "zilebesiran vs placebo",
         "design": "Étude de phase III, en double aveugle et randomisé, visant à évaluer l'efficacité et l'innocuité du Zilbesiran (en complément de la PEC standard) pour réduire le risque de survenu d'évènements cardiovasculaires majeurs chez les patients hypertendus (non contrôlés) avec : soit une maladie CV avéré ou soit à haut risque CV",
         "inclusion_1": "Patient ≥ 55 ans à haut risque cardiovasculaire OU patient  ≥ 18 ans avec une maladie cardiovasculaire avérée",
         "inclusion_2": "Haut risque cardiovasculaire définit par la présence de 2 facteurs de risques (ou plus) suivant : \n- âge ≥ 70 ans\n- DFGe < 60 mL/min/1,73 m^2\n- Rapport albumine/créatinine > 300 mg/g\n- Fumeur actif\n- Fibrilation atriale sous traitement\n- score CAC > 100 UA\n- NT pro BNP > 125 pg/mL\n- Diabète de type I ou type II et/ou IMC  ≥ 30 kg/m^2\n\n\nFIN DES INCLUSIONS SUR CES PARAMETRES",
@@ -482,8 +742,23 @@
         "age_min": 18,
         "dfg_min": 30
       },
-      "contacts": {},
-      "maj": "2026-11-19"
+      "contacts": {
+        "investigateur": {
+          "nom": "Guillaume LAMIRAULT",
+          "mssante": "guillaume.lamirault@chu-nantes.mssante.fr"
+        },
+        "arc": [
+          {
+            "nom": "Léa FONTENEAU",
+            "email": "lea.fonteneau@chu-nantes.fr"
+          },
+          {
+            "nom": "Cyndie ROULET",
+            "email": "cyndie.roulet@chu-nantes.fr"
+          }
+        ]
+      },
+      "maj": "2026-11-22"
     }
   ]
 }
