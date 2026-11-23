@@ -1,1 +1,7 @@
-{ "etudes": {} }
+{
+  "etudes": {
+    "bonfire": "2026-11-23",
+    "branch-hf-pfizer": "2026-11-23",
+    "brave": "2026-11-23"
+  }
+}
