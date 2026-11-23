@@ -2,6 +2,14 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.12.2 — 22 novembre 2026 — Correctif urgent : publication bloquée à la mise en ligne
+
+- La publication des études du 22/11 (« 17 modifiée(s) ») n'a pas été mise en ligne : un test vérifiait
+  le fichier publié avec les **réglages de test** (e-mails des ARC non publiés) au lieu des **réglages en
+  ligne** (publication des e-mails des ARC activée le 22/11). Le test utilise désormais les réglages en
+  ligne, comme prévu à l'étape 1.5 ; le test « sentinelle » garde les réglages de test.
+- La mise en ligne se relance aussi quand les tests ou le code partagé changent.
+
 ## Version 0.12.1 — 22 novembre 2026 — Correctif : dire où se trouve le texte refusé
 
 - Avant de publier les réglages, le contrôle de la règle 3 (aucun nom ni sigle de l'établissement) et
