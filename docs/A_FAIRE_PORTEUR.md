@@ -8,6 +8,9 @@ l'**outil Paramètres**, puis « Enregistrer dans l'Excel », puis **Publieur** 
 
 ## En attente
 
+- [ ] **Newsletter** (après fusion de la phase 5.2) : bouton « Watch » du dépôt pour recevoir l'e-mail ;
+      puis l'essayer : Actions → « Brouillon de newsletter » → « Run workflow » (guide, § 14).
+
 - [ ] **Mesure d'audience** (après fusion de la phase 5.1) : créer un compte gratuit sur
       goatcounter.com (choisir un code, ex. « innovacoeur »), puis Paramètres → « Publication » →
       « Code GoatCounter ». **Mettre à jour la rubrique « Mesure d'audience » de vos Mentions**

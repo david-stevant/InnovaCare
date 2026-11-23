@@ -1,6 +1,6 @@
 {
   "name": "innovacare",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "private": true,
   "description": "InnovaCare : outils de recrutement en recherche clinique. ExcelJS sert uniquement aux tests automatiques ; les outils HTML embarquent leur propre copie.",
   "type": "module",

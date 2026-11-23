@@ -37,6 +37,7 @@ Sommaire
 11. Le site public : accueil et page des médecins libéraux (InnovAction)
 12. La page des patients (InnovActeur)
 13. Mémos publics et mesure d'audience
+14. Le brouillon de newsletter du lundi
 
 ---
 
@@ -343,3 +344,26 @@ Vos tâches en attente sont listées dans `docs/A_FAIRE_PORTEUR.md`.
   de chaque page publique, les tests réalisés et les clics sur « Contacter l'équipe » et « Adresser un
   patient ». Jamais rien de ce que le patient saisit. Les chiffres se lisent sur goatcounter.com.
   Rien n'est compté sur les outils locaux.
+
+## 14. Le brouillon de newsletter du lundi
+
+Chaque **lundi vers 7 h** (8 h en heure d'été), GitHub crée tout seul un **ticket** (« issue ») dans le
+dépôt, intitulé « Brouillon de newsletter — semaine du … ». Il contient :
+
+1. **un brouillon prêt à copier-coller** : 2 à 3 études au format des mémos (sans numéro de poste),
+   choisies dans cet ordre : celles « mises en avant » dans l'Excel, puis celles ouvertes depuis moins de
+   30 jours, puis les autres à tour de rôle (la moins récemment présentée d'abord) ;
+2. **le rappel** « Si l'Excel a changé cette semaine, pensez à publier » (outil Paramètres → Newsletter) ;
+3. **des contrôles** : études encore « ouvert » dont la fin de recrutement prévue est dépassée, et études
+   non mises à jour depuis plus de 6 mois.
+
+**Recevoir l'e-mail** : sur github.com, page du dépôt, bouton **« Watch »** (en haut à droite) →
+« All Activity » (ou « Custom » → « Issues »). GitHub envoie alors un e-mail à chaque nouveau ticket.
+La responsable de la newsletter peut faire de même avec un compte GitHub gratuit.
+
+**L'essayer tout de suite** : onglet **Actions** → « Brouillon de newsletter » → bouton **« Run
+workflow »** → « Run workflow ». Le ticket apparaît dans l'onglet **Issues** en moins d'une minute.
+Une fois la newsletter envoyée, fermer le ticket (« Close issue »).
+
+Le ticket ne contient que des données déjà publiques : il peut rester visible. L'historique des études
+présentées est enregistré automatiquement dans `newsletter/historique.json`.
