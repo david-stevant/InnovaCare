@@ -8,6 +8,13 @@ l'**outil Paramètres**, puis « Enregistrer dans l'Excel », puis **Publieur** 
 
 ## En attente
 
+- [ ] **Mesure d'audience** (après fusion de la phase 5.1) : créer un compte gratuit sur
+      goatcounter.com (choisir un code, ex. « innovacoeur »), puis Paramètres → « Publication » →
+      « Code GoatCounter ». **Mettre à jour la rubrique « Mesure d'audience » de vos Mentions**
+      (Paramètres → « Page Mentions ») : elle dit aujourd'hui qu'aucune mesure n'est faite.
+- [ ] **« Mettre en avant »** : il est désormais publié (décision du 23/11) ; republier pour qu'il soit
+      pris en compte (newsletter du lundi, ordre des mémos).
+
 - [ ] **FEVG côté patient en %** (après fusion de la phase 4.2) : Paramètres → « Filtres d'éligibilité et
       traitements » → FEVG → « Réponse du patient (filtres à bornes) » = **« nombre + « Je ne sais pas » »**.
       Vérifier aussi l'aide affichée sous la question (aujourd'hui « valeur FEVG > 40% sur votre dernière

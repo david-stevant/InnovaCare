@@ -138,5 +138,8 @@
     return blocs;
   }
 
-  InnovaCare.catalogue = { preparer, filtrer, trier, compter, fiche, contact, recrutement };
+  /** Numéro de poste d'une personne de l'annuaire, pour les mémos de l'outil interne : « DECT 91234 ». */
+  const numeroPoste = (c) => (c && c.dect ? 'DECT ' + c.dect : '');
+
+  InnovaCare.catalogue = { numeroPoste, preparer, filtrer, trier, compter, fiche, contact, recrutement };
 })(typeof globalThis !== 'undefined' ? globalThis : this);

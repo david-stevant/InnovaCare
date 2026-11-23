@@ -32,7 +32,9 @@ test('chaque champ est complet : bloc, type, visibilité, obligation, aide ≤ 2
 test('règle 2 : tous les champs internes de CLAUDE.md sont verrouillés « jamais public »', () => {
   const verrouilles = S.champsJamaisPublics(PARAM);
   const obligatoires = [
-    'synopsis', 'cjp', 'nsn', 'recrutes', 'objectif', 'remarques', 'dect', 'en_avant',
+    // « en_avant » (mettre en avant) n'est plus verrouillé : publié depuis la décision du porteur du
+    // 23/11/2026 (simple oui / non pour la newsletter, absent de la liste de la règle 2 de CLAUDE.md).
+    'synopsis', 'cjp', 'nsn', 'recrutes', 'objectif', 'remarques', 'dect',
     'afficher_ecardioscope', 'afficher_innovaction', 'afficher_innovacteur',
   ].concat(
     Array.from({ length: 12 }, (_, i) => 'exclusion_' + (i + 1)),
@@ -40,6 +42,12 @@ test('règle 2 : tous les champs internes de CLAUDE.md sont verrouillés « jama
   );
   for (const id of obligatoires) assert.ok(verrouilles.includes(id), id + ' doit être verrouillé');
   for (const c of tous.filter((x) => x.jamaisPublic)) assert.equal(c.visibilite, 'interne', c.id);
+});
+
+test('« mettre en avant » est publié (décision du 23/11/2026), au niveau professionnel', () => {
+  const c = S.champsFiche(PARAM).find((x) => x.id === 'en_avant');
+  assert.ok(!c.jamaisPublic);
+  assert.equal(c.visibilite, 'professionnel');
 });
 
 test('les filtres viennent des paramètres et ne sont jamais verrouillés', () => {

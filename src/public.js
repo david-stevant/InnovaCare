@@ -20,14 +20,14 @@
   }
 
   /**
-   * Études d'un module (« professionnel » ou « patient »), prêtes à afficher et à filtrer.
+   * Études d'un module (« professionnel » ou « patient » ; absent = toutes), prêtes à afficher et à filtrer.
    * Seules celles dont le module figure dans « modules » sont gardées ; le statut est
    * filtré ensuite par eligibilite.candidates (« ouvert » seulement).
    */
   function preparer(donnees, parametres, module) {
     const nomPole = Object.fromEntries((parametres.poles || []).map((p) => [p.id, p.nom]));
     return ((donnees && donnees.protocoles) || [])
-      .filter((p) => (p.modules || []).includes(module))
+      .filter((p) => !module || (p.modules || []).includes(module)) // module absent : toutes les études publiées
       .map((p) => {
         const v = p.valeurs || {};
         const pathologies = [1, 2, 3, 4].map((n) => v['pathologie_' + n]).filter((x) => !T.estVide(x)).map(T.enTexte);
@@ -36,7 +36,7 @@
         return {
           id: p.id, pole: p.pole, poleNom: nomPole[p.pole] || '', nom: T.enTexte(v.nom), statut: T.enTexte(v.statut),
           thematique: T.enTexte(v.thematique), pathologies, vignettes, valeurs: v, contacts: p.contacts || {}, maj: p.maj || '',
-          masquee: false, enAvant: false, recherche,
+          masquee: false, enAvant: T.texteSimple(v.en_avant) === 'oui', recherche,
         };
       })
       .sort((a, b) => a.nom.localeCompare(b.nom, 'fr'));

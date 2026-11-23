@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 export const RACINE = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 // Ordre de chargement : chaque fichier peut utiliser ceux qui le précèdent.
-const ORDRE = ['texte', 'normalisation', 'excel-vers-grille', 'lecture-ancien', 'controles', 'schema', 'gabarit', 'migration', 'lecture', 'parametres', 'export-public', 'publication', 'memoire-fichier', 'brouillon', 'catalogue', 'eligibilite', 'memos', 'public'];
+const ORDRE = ['texte', 'normalisation', 'excel-vers-grille', 'lecture-ancien', 'controles', 'schema', 'gabarit', 'migration', 'lecture', 'parametres', 'export-public', 'publication', 'memoire-fichier', 'brouillon', 'catalogue', 'eligibilite', 'memos', 'public', 'audience'];
 
 export function chargerInnovaCare() {
   if (!globalThis.InnovaCare) {

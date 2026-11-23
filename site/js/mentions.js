@@ -13,11 +13,14 @@
 
   function depart(parametres) {
     const avertissement = ((parametres.textes || {}).patient || {}).avertissement || '';
+    const code = ((parametres.publication || {}).goatcounter || '').trim();
     return [
       { titre: 'Éditeur', texte: '[à compléter]' },
       { titre: 'Finalité', texte: 'Ce site présente les études de recherche clinique ouvertes aux inclusions, pour les faire connaître aux patients et aux médecins. [à confirmer]' },
       { titre: 'Données personnelles', texte: 'Ce site ne collecte aucune donnée personnelle. Il n\'utilise aucun cookie et aucun formulaire n\'envoie d\'information. Ce que vous saisissez (par exemple dans un profil) reste dans votre navigateur et disparaît à la fermeture de la page.' },
-      { titre: 'Mesure d\'audience', texte: 'Aucune mesure d\'audience n\'est réalisée pour le moment.' },
+      code
+        ? { titre: 'Mesure d\'audience', texte: 'La fréquentation des pages est mesurée par GoatCounter, sans cookie et sans aucune donnée personnelle : nombre de visites par page, nombre de tests réalisés et de clics sur « Contacter » et « Adresser ». Rien de ce que vous saisissez n\'est transmis.' }
+        : { titre: 'Mesure d\'audience', texte: 'Aucune mesure d\'audience n\'est réalisée pour le moment.' },
       { titre: 'Hébergement', texte: 'Site hébergé par GitHub Pages (GitHub, Inc.).' },
       avertissement ? { titre: 'Avertissement', texte: avertissement } : null,
       { titre: 'Contact', texte: '[à compléter]' },
@@ -41,6 +44,7 @@
         zone.appendChild(h); zone.appendChild(p);
       }
       $('etat').hidden = true;
+      window.InnovaCare.audience.compter(P);
     } catch (erreur) {
       $('etat').textContent = 'La page n\'a pas pu être chargée (' + erreur.message + ').';
     }

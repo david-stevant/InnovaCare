@@ -46,7 +46,8 @@
       { id: 'phase', libelle: 'Phase', bloc: 'Identification', type: 'liste', liste: 'phase', obligatoire: 'si_public', visibilite: 'professionnel', aide: 'Choisir dans la liste.' },
       { id: 'registre', libelle: 'N° NCT ou EU CT', bloc: 'Identification', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Facultatif. Ex. : NCT01234567' },
       { id: 'statut', libelle: 'Statut', bloc: 'Identification', type: 'liste', liste: 'statut', obligatoire: 'oui', visibilite: 'professionnel', aide: 'Seules les études « ouvert » sont proposées aux médecins et aux patients.' },
-      Object.assign({ id: 'en_avant', libelle: 'Mettre en avant', bloc: 'Identification', type: 'oui_non', obligatoire: 'non', aide: 'Oui = étude prioritaire pour la newsletter.' }, INTERNE),
+      // Publié depuis le 23/11/2026 (décision du porteur) : un simple oui / non, qui sert à la newsletter.
+      { id: 'en_avant', libelle: 'Mettre en avant', bloc: 'Identification', type: 'oui_non', obligatoire: 'non', visibilite: 'professionnel', aide: 'Oui = étude prioritaire pour la newsletter.' },
     ],
     serie(2, (n) => ({ id: 'autre_pole_' + n, libelle: 'Autre pôle concerné ' + n, bloc: 'Identification', type: 'liste', liste: 'poles', obligatoire: 'non', visibilite: 'professionnel', aide: 'Si l\'étude concerne aussi un autre pôle. Ne pas la recopier dans l\'autre onglet.' })),
     // --- Classement ---

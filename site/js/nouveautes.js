@@ -56,6 +56,7 @@
       $('bloc-fins').hidden = !n.fins.length;
       $('etat').textContent = n.recentes.length || n.fins.length ? '' : 'Rien de nouveau pour le moment : aucune étude ouverte récemment, aucune fin de recrutement annoncée.';
       $('etat').hidden = !$('etat').textContent;
+      IC.audience.compter(P);
     } catch (erreur) {
       $('etat').textContent = 'Les données n\'ont pas pu être chargées (' + erreur.message + ').';
     }

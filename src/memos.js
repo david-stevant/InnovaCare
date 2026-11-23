@@ -4,14 +4,16 @@
 // Contenu tiré de l'Excel MOT POUR MOT (règle 4) : nom, thématique, intervention vs
 // comparateur, design, critères d'inclusion principaux, contact de l'ARC n° 1 (annuaire).
 // Seule mise en forme automatique : les seuils chiffrés passent en gras (« ≥ 40 % »).
-// Le DECT est interne : il n'apparaît que dans l'outil local, et peut être retiré
-// (case « Sans DECT ») pour une diffusion hors du service.
+// Le numéro de poste interne n'apparaît que dans l'outil local : il est fourni par
+// src/catalogue.js (fichier de l'outil interne seulement, jamais copié sur le site) et
+// peut être retiré par une case à cocher. Ce fichier est aussi utilisé par le site public,
+// qui n'a donc aucun moyen d'afficher ce numéro.
 // Textes (titre, émojis, sections…) : parametres.memos. Rien n'est envoyé.
 // =============================================================================
 (function (racine) {
   'use strict';
   const InnovaCare = racine.InnovaCare || (racine.InnovaCare = {});
-  const N = InnovaCare.normalisation;
+  const N = InnovaCare.texte; // src/texte.js (aussi copié dans le site public)
 
   // Seuil = comparateur + nombre (+ unité usuelle) : « ≥ 40 % », « > 3 », « < 1,5 cm² », « ≤ 85 ans ».
   const SEUIL = /(?:≥|≤|>=|<=|>|<)\s?\d+(?:[.,]\d+)?(?:\s?(?:%|ans|mois|semaines|jours|mmHg|mL\/min(?:\/1,73\s?m²)?|pg\/mL|ng\/L|ng\/mL|mg\/g|mg\/dL|g\/m²|mL\/m²|kg\/m²|kg|cm²|cm|mm|m|ms|bpm))?(?![\d\w])/g;
@@ -33,7 +35,7 @@
   const seuilsEnGras = (texte) => morceaux(texte).map((m) => (m.gras ? '**' + m.texte + '**' : m.texte)).join('');
 
   /**
-   * Structure du mémo. etudes : résultat de catalogue.preparer(…).etudes.
+   * Structure du mémo. etudes : catalogue.preparer(…).etudes (outil interne) ou public.preparer(…) (site).
    * options : { section: titre d'une section (sinon tout le mémo), avecDect: true par défaut }.
    */
   function construire(etudes, parametres, options) {
@@ -63,8 +65,10 @@
 
   function fiche(e, avecDect) {
     const v = e.valeurs;
-    const arc = e.contacts.arc_1;
-    const contact = arc ? [arc.nom, avecDect && arc.dect ? 'DECT ' + arc.dect : '', arc.email || ''].filter(Boolean) : [];
+    // Outil interne : contacts.arc_1 (annuaire) ; site public : contacts.arc[0] (e-mail publié).
+    const arc = e.contacts.arc_1 || (e.contacts.arc || [])[0];
+    const numero = avecDect && InnovaCare.catalogue && InnovaCare.catalogue.numeroPoste ? InnovaCare.catalogue.numeroPoste(arc || {}) : '';
+    const contact = arc ? [arc.nom, numero, arc.email || ''].filter(Boolean) : [];
     return {
       nom: e.nom,
       thematique: e.thematique,

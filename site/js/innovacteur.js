@@ -225,6 +225,7 @@
     const reponses = PU.reponsesPatient(choix.saisies, P);
     const retenues = etudesChoisies().filter((e) => E.evaluer(e, filtres, reponses).eligible);
     guide(retenues.length ? 'joie' : 'encourage', bulle(retenues.length ? 'resultats' : 'aucun'));
+    IC.audience.compter(P, 'test-termine'); // seulement le fait qu'un test a été fait, rien de ce qui a été saisi
     if (!retenues.length) {
       zone.appendChild(el('div', { className: 'aucun' }, el('div', { className: 'grand-emoji', ariaHidden: 'true' }, '🌟'),
         el('h2', null, TP.aucun_resultat_titre || ''), el('p', { className: 'grand' }, TP.aucun_resultat_texte || ''), el('p', null, TP.aucun_resultat_conseil || '')));
@@ -239,7 +240,7 @@
       const actions = el('div', { className: 'actions' });
       if (PU.messagePatient(e, P).destinataire) {
         const b = el('button', { type: 'button', className: 'gros-bouton' }, '✉️ ' + (TP.resultat_bouton_contact || 'Contacter l\'équipe de recherche'));
-        b.addEventListener('click', () => ouvrirMessage(e));
+        b.addEventListener('click', () => { IC.audience.compter(P, 'contacter-equipe'); ouvrirMessage(e); });
         actions.appendChild(b);
       }
       actions.appendChild(el('p', { className: 'conseil' }, '👨‍⚕️ ' + (TP.resultat_bouton_cardiologue || 'Parlez-en à votre cardiologue')));
@@ -310,6 +311,7 @@
       dessinerVignettes();
       $('etat').hidden = true;
       montrer(0);
+      IC.audience.compter(P); // visite
       $('bouton-test').addEventListener('click', () => montrer(1));
       $('bouton-retour').addEventListener('click', () => {
         const actuelle = [1, 2, 3].find((i) => !$('etape-' + i).hidden);

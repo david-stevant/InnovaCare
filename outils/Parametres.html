@@ -256,7 +256,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     <p id="message-fichier" class="note" aria-live="polite"></p>
   </details>
 
-  <footer class="pied-outil" data-version="af9d5ac8">Paramètres de l'instance — version af9d5ac8</footer>
+  <footer class="pied-outil" data-version="02cf7020">Paramètres de l'instance — version 02cf7020</footer>
 
 </div>
 <script type="application/json" id="donnees-parametres">
@@ -1184,7 +1184,12 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       ],
       "avertissement": "Cet outil est fourni à titre informatif. L'éligibilité définitive sera confirmée par votre cardiologue et l'équipe de recherche.",
       "conclusion": "Devenez InnovActeur !",
-      "conclusion_source": "cahier des charges § 6.4"
+      "conclusion_source": "cahier des charges § 6.4",
+      "mascotte_accueil": "Bonjour, je suis là pour vous guider !",
+      "mascotte_etape1": "Vous vous retrouvez dans une des situations suivantes ?",
+      "mascotte_etape2": "Pour mieux vous connaître (aucune donnée personnelle ne sera sauvegardée)",
+      "mascotte_resultats": "Super ! Des études en cours pourraient vous concerner !",
+      "mascotte_aucun": "Ce n'est pas grave ! Nous resterons vigilants, des protocoles à venir pourraient vous concerner prochainement. Merci d'avoir participé !"
     },
     "email_patient": {
       "objet": "InnovaCoeur — Demande d'information — Protocole {protocole}",
@@ -1831,7 +1836,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       { id: 'phase', libelle: 'Phase', bloc: 'Identification', type: 'liste', liste: 'phase', obligatoire: 'si_public', visibilite: 'professionnel', aide: 'Choisir dans la liste.' },
       { id: 'registre', libelle: 'N° NCT ou EU CT', bloc: 'Identification', type: 'texte', obligatoire: 'non', visibilite: 'professionnel', aide: 'Facultatif. Ex. : NCT01234567' },
       { id: 'statut', libelle: 'Statut', bloc: 'Identification', type: 'liste', liste: 'statut', obligatoire: 'oui', visibilite: 'professionnel', aide: 'Seules les études « ouvert » sont proposées aux médecins et aux patients.' },
-      Object.assign({ id: 'en_avant', libelle: 'Mettre en avant', bloc: 'Identification', type: 'oui_non', obligatoire: 'non', aide: 'Oui = étude prioritaire pour la newsletter.' }, INTERNE),
+      // Publié depuis le 23/11/2026 (décision du porteur) : un simple oui / non, qui sert à la newsletter.
+      { id: 'en_avant', libelle: 'Mettre en avant', bloc: 'Identification', type: 'oui_non', obligatoire: 'non', visibilite: 'professionnel', aide: 'Oui = étude prioritaire pour la newsletter.' },
     ],
     serie(2, (n) => ({ id: 'autre_pole_' + n, libelle: 'Autre pôle concerné ' + n, bloc: 'Identification', type: 'liste', liste: 'poles', obligatoire: 'non', visibilite: 'professionnel', aide: 'Si l\'étude concerne aussi un autre pôle. Ne pas la recopier dans l\'autre onglet.' })),
     // --- Classement ---
@@ -2971,6 +2977,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       { chemin: 'publication.url_site', libelle: 'Adresse du site' },
       { chemin: 'publication.contacts_arc', libelle: 'Publier les e-mails des ARC', type: 'booleen', aide: 'À activer seulement une fois les ARC informés.' },
       { chemin: 'publication.site_discret', libelle: 'Site discret (bandeau de test)', type: 'booleen' },
+      { chemin: 'publication.goatcounter', libelle: 'Code GoatCounter (mesure d\'audience)', aide: 'Le nom de votre compte goatcounter.com, ex. « innovacoeur ». Vide = aucune mesure. Pensez à mettre à jour la rubrique « Mesure d\'audience » des Mentions.' },
       { chemin: 'textes.site.titre_liste', libelle: 'Sous-titre du site' },
       { chemin: 'textes.site.bandeau_test', libelle: 'Texte du bandeau de test' },
       { chemin: 'textes.site.avertissement_pro', libelle: 'Avertissement en bas de la page des médecins libéraux', type: 'long', aide: 'Vide = pas d\'avertissement sur cette page (celui des patients reste sur l\'accueil).' },

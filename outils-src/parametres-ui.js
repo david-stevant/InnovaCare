@@ -119,6 +119,7 @@
       { chemin: 'publication.url_site', libelle: 'Adresse du site' },
       { chemin: 'publication.contacts_arc', libelle: 'Publier les e-mails des ARC', type: 'booleen', aide: 'À activer seulement une fois les ARC informés.' },
       { chemin: 'publication.site_discret', libelle: 'Site discret (bandeau de test)', type: 'booleen' },
+      { chemin: 'publication.goatcounter', libelle: 'Code GoatCounter (mesure d\'audience)', aide: 'Le nom de votre compte goatcounter.com, ex. « innovacoeur ». Vide = aucune mesure. Pensez à mettre à jour la rubrique « Mesure d\'audience » des Mentions.' },
       { chemin: 'textes.site.titre_liste', libelle: 'Sous-titre du site' },
       { chemin: 'textes.site.bandeau_test', libelle: 'Texte du bandeau de test' },
       { chemin: 'textes.site.avertissement_pro', libelle: 'Avertissement en bas de la page des médecins libéraux', type: 'long', aide: 'Vide = pas d\'avertissement sur cette page (celui des patients reste sur l\'accueil).' },
