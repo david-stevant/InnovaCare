@@ -20,12 +20,17 @@
     <p id="etat" class="note" aria-live="polite">Chargement…</p>
     <nav class="entrees" aria-label="Choisir son espace">
       <a class="entree" id="entree-medecin" href="innovaction/">
-        <span class="entree-titre">Je suis médecin</span>
+        <span class="entree-titre" id="titre-liberal">Je suis médecin libéral</span>
         <span class="entree-module" id="nom-pro"></span>
         <span class="entree-texte" id="texte-pro"></span>
       </a>
+      <a class="entree" id="entree-service" href="memos/">
+        <span class="entree-titre" id="titre-service">Je suis médecin du service</span>
+        <span class="entree-module">Mémos des études</span>
+        <span class="entree-texte" id="texte-service"></span>
+      </a>
       <a class="entree" id="entree-patient" href="innovacteur/">
-        <span class="entree-titre">Je suis patient</span>
+        <span class="entree-titre" id="titre-patient">Je suis patient</span>
         <span class="entree-module" id="nom-patient"></span>
         <span class="entree-texte" id="texte-patient"></span>
       </a>
@@ -34,7 +39,7 @@
   <footer class="page pied">
     <p id="avertissement"></p>
     <p id="genere" class="note"></p>
-    <p class="note"><a href="memos/">Mémos des études (médecins)</a> · <a href="mentions.html">Mentions</a></p>
+    <p class="note"><a href="mentions.html">Mentions</a></p>
   </footer>
   <script src="js/commun/audience.js"></script>
   <script src="js/accueil.js"></script>

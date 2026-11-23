@@ -109,3 +109,11 @@ test('mentions : texte tiré des paramètres, texte de départ avec les parties 
     assert.match(readFileSync(join(RACINE, page), 'utf8'), /href="(\.\.\/)?mentions\.html"/, page + ' : lien vers les mentions');
   }
 });
+
+test('accueil : trois entrées (libéraux, service, patients), libellés réglables, aucun mot propre à la spécialité', () => {
+  const html = readFileSync(join(RACINE, 'site/index.html'), 'utf8');
+  for (const lien of ['href="innovaction/"', 'href="memos/"', 'href="innovacteur/"']) assert.ok(html.includes(lien), lien);
+  const code = readFileSync(join(RACINE, 'site/js/accueil.js'), 'utf8').replace(/\/\/.*$/gm, '');
+  for (const cle of ['entree_liberal', 'entree_service', 'entree_patient']) assert.ok(code.includes(cle), cle);
+  assert.ok(!/cardio/i.test(html + code), 'règle 5 : les libellés propres à la spécialité viennent des paramètres');
+});

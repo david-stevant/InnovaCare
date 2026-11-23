@@ -8,6 +8,13 @@ l'**outil Paramètres**, puis « Enregistrer dans l'Excel », puis **Publieur** 
 
 ## En attente
 
+- [ ] **Libellés des entrées de l'accueil** (après fusion des optimisations du 23/11) : Paramètres →
+      « Publication » → « Accueil : entrée… » (ex. « Je suis cardiologue libéral », « Je suis cardiologue
+      du service hospitalier »). Vides = « Je suis médecin libéral », « Je suis médecin du service ».
+- [ ] **Grosse vérification de l'Excel** : outil interne → Catalogue → vue Tableau, statut « Tous », case
+      « inclure les études non affichées » ; onglet Mémos → « À compléter dans l'Excel » (désormais aussi
+      les études sans « Intervention vs comparateur ») ; Publieur → avertissements ; newsletter → Contrôles.
+
 - [ ] **Newsletter** (après fusion de la phase 5.2) : bouton « Watch » du dépôt pour recevoir l'e-mail ;
       puis l'essayer : Actions → « Brouillon de newsletter » → « Run workflow » (guide, § 14).
 
@@ -22,8 +29,6 @@ l'**outil Paramètres**, puis « Enregistrer dans l'Excel », puis **Publieur** 
       traitements » → FEVG → « Réponse du patient (filtres à bornes) » = **« nombre + « Je ne sais pas » »**.
       Vérifier aussi l'aide affichée sous la question (aujourd'hui « valeur FEVG > 40% sur votre dernière
       échographie »), qui ne correspond plus à une saisie en %.
-- [ ] **Bulles de la mascotte** : relire les textes de départ (Paramètres → « Mascotte et conclusion »)
-      et les remplacer si besoin `[à confirmer]`.
 - [ ] **Vérifier les adresses MSSanté** des investigateurs dans l'annuaire santé ; une adresse qui ne suit
       pas le format prenom.nom@… se saisit dans la colonne « MSSanté » de l'Annuaire.
 - [ ] Dans l'Excel, pour chaque étude affichée aux patients : **phrase patient**, **détails pratiques**
@@ -32,6 +37,8 @@ l'**outil Paramètres**, puis « Enregistrer dans l'Excel », puis **Publieur** 
 - [ ] Avant de rendre le site non discret : avis de la DRCI, information du DPO.
 
 ## Fait
+
+- [x] Bulles de la mascotte personnalisées (vues en ligne le 23/11).
 
 - [x] Questions patients PM / DAI et hospitalisation, libellé IEC / ARA2.
 - [x] Publication des e-mails des ARC activée (22/11).

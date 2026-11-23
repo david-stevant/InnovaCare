@@ -2,6 +2,17 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.15.1 — 23 novembre 2026 — Optimisations après les premiers essais
+
+- **Page patients** : en haut, le titre puis, juste dessous, l'accroche en sous-titre ; la mascotte passe
+  à droite, avec une **bulle de BD** dont l'encoche pointe vers elle (accueil, étapes, conclusion).
+- **Mémos** (outil interne, site, newsletter) : la ligne 📌 n'affiche plus que « Intervention vs
+  comparateur » (le design la répétait souvent) ; une étude sans intervention est signalée dans
+  « À compléter dans l'Excel ».
+- **Accueil** : trois entrées — médecins libéraux, médecins du service (mémos), patients ; libellés
+  réglables dans l'outil Paramètres (règle 5 : « cardiologue » s'écrit dans les paramètres).
+- **Tests** : 163 tests.
+
 ## Version 0.15.0 — 23 novembre 2026 — Phase 5.2 : brouillon de newsletter du lundi
 
 - **Chaque lundi matin**, GitHub crée un ticket « Brouillon de newsletter — semaine du … » (et envoie un

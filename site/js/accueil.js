@@ -30,6 +30,12 @@
       $('nom-pro').textContent = modules.professionnel || '';
       $('nom-patient').textContent = modules.patient || '';
       const ouvertes = (donnees.protocoles || []).filter((p) => (p.modules || []).includes('professionnel') && String((p.valeurs || {}).statut || '').toLowerCase() === 'ouvert');
+      // Libellés des entrées : outil Paramètres → Publication (ex. « Je suis cardiologue libéral »).
+      for (const [id, cle] of [['titre-liberal', 'entree_liberal'], ['titre-service', 'entree_service'], ['titre-patient', 'entree_patient']]) {
+        if (textes[cle]) $(id).textContent = textes[cle];
+      }
+      const toutes = (donnees.protocoles || []).filter((p) => String((p.valeurs || {}).statut || '').toLowerCase() === 'ouvert');
+      $('texte-service').textContent = toutes.length + ' étude' + (toutes.length > 1 ? 's' : '') + ' ouverte' + (toutes.length > 1 ? 's' : '') + ' : mémos à copier dans un mail ou à consulter.';
       $('texte-pro').textContent = ouvertes.length + ' étude' + (ouvertes.length > 1 ? 's' : '') + ' ouverte' + (ouvertes.length > 1 ? 's' : '') + ' : critères, contact, adressage.';
       $('texte-patient').textContent = (((parametres.textes || {}).patient || {}).appel_texte) || '';
       $('avertissement').textContent = ((parametres.textes || {}).patient || {}).avertissement || '';

@@ -156,3 +156,18 @@ dialog.fenetre-message::backdrop { background: rgba(23,49,58,.5); }
 .mascotte-boite[data-humeur="encourage"] .bouche { d: path("M47 70 Q60 74 73 70"); }
 /* Le titre reçoit le focus à chaque étape (lecteurs d'écran) : pas de cadre visible pour autant. */
 body.patient [tabindex="-1"]:focus { outline: none; }
+
+/* --- Optimisations du 23/11 : haut de la page patients, bulle de BD (encoche vers la mascotte) --- */
+.visuellement-cache { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.heros-haut { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 380px); gap: 20px; align-items: center; }
+.heros-texte h1 { margin: 2px 0 0; }
+.heros-texte .heros-accroche { font-size: 23px; font-weight: 600; margin: 2px 0 12px; color: var(--or); }
+.heros-sous-titres .heros-sous-titre { font-size: 17px; opacity: .8; margin: 0; }
+.guide-heros { margin: 0; }
+@media (max-width: 720px) { .heros-haut { grid-template-columns: 1fr; } .heros-texte .heros-accroche { font-size: 20px; } }
+/* Bulle à gauche, mascotte à droite ; l'encoche (petit triangle) pointe vers la mascotte. */
+.guide { display: flex; align-items: center; gap: 16px; }
+.guide .bulle { flex: 1; position: relative; }
+.guide .bulle::after { content: ""; position: absolute; right: -14px; top: 50%; transform: translateY(-50%); border-width: 10px 0 10px 16px; border-style: solid; border-color: transparent transparent transparent #fff; filter: drop-shadow(2px 0 1px rgba(0,0,0,.05)); }
+.conclusion .bulle { font-size: 24px; font-weight: 800; text-align: center; }
+.entrees { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
