@@ -17,8 +17,14 @@
     <header class="heros">
       <div class="page">
         <p class="fil"><a href="../">← Accueil</a></p>
-        <p class="heros-bandeau" id="p-bandeau"></p>
-        <h1 id="p-titre"></h1>
+        <div class="heros-haut">
+          <div class="mascotte-boite" id="mascotte-edito" aria-hidden="true"></div>
+          <div>
+            <p class="heros-bandeau" id="p-bandeau"></p>
+            <h1 id="p-titre"></h1>
+          </div>
+        </div>
+        <p class="bulle bulle-heros" id="bulle-edito"></p>
         <p class="heros-accroche" id="p-accroche"></p>
         <div id="p-sous-titre"></div>
       </div>
@@ -33,6 +39,9 @@
         <p id="p-appel-texte" class="grand"></p>
         <button type="button" class="gros-bouton" id="bouton-test"></button>
       </section>
+      <!-- Emplacement prévu pour une courte vidéo de vulgarisation (phase ultérieure) : un fichier vidéo
+           déposé dans site/, jamais une vidéo hébergée ailleurs (cookies interdits, règle n° 1). -->
+      <section class="video" id="video" hidden></section>
     </main>
   </div>
 
@@ -40,21 +49,26 @@
   <main class="page" id="test" hidden>
     <div class="rangee-etapes">
       <button type="button" class="bouton-retour" id="bouton-retour">← Retour</button>
-      <ol class="points-etapes" aria-label="Étapes"><li id="pt-1">1</li><li id="pt-2">2</li><li id="pt-3">3</li></ol>
+      <p class="etape-texte" id="etape-texte" aria-live="polite"></p>
+      <ol class="points-etapes" aria-hidden="true"><li id="pt-1">1</li><li id="pt-2">2</li><li id="pt-3">3</li></ol>
+    </div>
+    <div class="guide">
+      <div class="mascotte-boite petite" id="mascotte-test" aria-hidden="true"></div>
+      <p class="bulle" id="bulle-test" aria-live="polite"></p>
     </div>
 
     <section id="etape-1">
       <h2 id="p-etape1-titre"></h2>
       <p class="grand" id="p-etape1-texte"></p>
       <div class="vignettes" id="vignettes" role="group"></div>
-      <button type="button" class="gros-bouton" id="vers-2" disabled>Continuer →</button>
+      <div class="barre-continuer"><button type="button" class="gros-bouton" id="vers-2" disabled>Continuer →</button></div>
     </section>
 
     <section id="etape-2" hidden>
       <h2 id="p-etape2-titre"></h2>
       <p class="grand" id="p-etape2-texte"></p>
       <div id="questions"></div>
-      <button type="button" class="gros-bouton" id="vers-3"></button>
+      <div class="barre-continuer"><button type="button" class="gros-bouton" id="vers-3"></button></div>
     </section>
 
     <section id="etape-3" hidden>

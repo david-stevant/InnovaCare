@@ -19,6 +19,50 @@
   const choix = { vignettes: new Set(), saisies: {} };
   let etudeMessage = null;
 
+  // --- Mascotte : un petit cœur souriant, dessiné ici (aucune image extérieure) ------------------
+  // Ses phrases viennent des paramètres (textes.patient.mascotte_*) ; à défaut, ces textes de départ
+  // s'affichent [à confirmer par le porteur du projet].
+  const BULLES_DEPART = {
+    accueil: 'Bonjour ! Je vous accompagne pendant le test. Il ne prend qu\'une minute.',
+    etape1: 'Quelle est votre situation ? Vous pouvez en choisir plusieurs.',
+    etape2: 'Encore quelques questions. Toutes sont facultatives.',
+    resultats: 'Bonne nouvelle : des études pourraient vous correspondre !',
+    aucun: 'Pas d\'étude pour le moment, mais la recherche avance vite !',
+  };
+  const bulle = (cle) => TP['mascotte_' + cle] || BULLES_DEPART[cle];
+
+  function creerMascotte() {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 120 120');
+    svg.setAttribute('class', 'mascotte');
+    svg.setAttribute('focusable', 'false');
+    // Deux moitiés de cœur aux couleurs des paramètres (comme le logo d'InnovaCoeur v2), un visage.
+    svg.innerHTML = '<g class="mascotte-corps">'
+      + '<path d="M60 104 C60 104 13 74 13 40 C13 23 26 12 40 12 C50 12 57 18 60 27" fill="var(--turquoise)"/>'
+      + '<path d="M60 104 C60 104 107 74 107 40 C107 23 94 12 80 12 C70 12 63 18 60 27" fill="var(--rose, #ef4d89)"/>'
+      + '<circle class="oeil" cx="45" cy="50" r="6" fill="#17313a"/><circle class="oeil" cx="75" cy="50" r="6" fill="#17313a"/>'
+      + '<circle cx="47" cy="48" r="2" fill="#fff"/><circle cx="77" cy="48" r="2" fill="#fff"/>'
+      + '<circle cx="36" cy="64" r="5" fill="#fff" opacity=".35"/><circle cx="84" cy="64" r="5" fill="#fff" opacity=".35"/>'
+      + '<path class="bouche" d="M47 66 Q60 78 73 66" stroke="#17313a" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      + '</g>';
+    return svg;
+  }
+
+  /** Change l'humeur de la mascotte (salue, ecoute, joie, encourage) et sa bulle. */
+  function guide(humeur, texteBulle) {
+    for (const id of ['mascotte-edito', 'mascotte-test']) $(id).dataset.humeur = humeur;
+    if (texteBulle !== undefined) $('bulle-test').textContent = texteBulle;
+  }
+
+  /** Petit sursaut de la mascotte quand le patient répond. */
+  function reagir() {
+    const boite = $('mascotte-test');
+    boite.classList.remove('reagit');
+    void boite.offsetWidth; // relance l'animation
+    boite.classList.add('reagit');
+  }
+
   function el(balise, proprietes, ...enfants) {
     const noeud = document.createElement(balise);
     Object.assign(noeud, proprietes || {});
@@ -39,6 +83,7 @@
     texte('p-bandeau', TP.bandeau);
     texte('p-titre', TP.titre);
     texte('p-accroche', TP.accroche);
+    texte('bulle-edito', bulle('accueil'));
     for (const ligne of [].concat(TP.sous_titre || [])) $('p-sous-titre').appendChild(el('p', { className: 'heros-sous-titre' }, ligne));
     texte('p-edito-titre', TP.edito_titre);
     texte('p-edito-texte', TP.edito_texte);
@@ -58,6 +103,15 @@
       $('etape-' + i).hidden = i !== n;
       $('pt-' + i).className = i === n ? 'actif' : i < n ? 'fait' : '';
     }
+    // Transition douce (désactivée en CSS si le téléphone demande de réduire les animations).
+    const visible = n === 0 ? $('edito') : $('etape-' + n);
+    visible.classList.remove('apparition');
+    void visible.offsetWidth;
+    visible.classList.add('apparition');
+    if (n) $('etape-texte').textContent = 'Étape ' + n + ' sur 3';
+    if (n === 0) guide('salue');
+    if (n === 1) guide('salue', bulle('etape1'));
+    if (n === 2) guide('ecoute', bulle('etape2'));
     window.scrollTo(0, 0);
     const titre = n === 0 ? $('p-titre') : $('etape-' + n).querySelector('h2');
     if (titre) { titre.tabIndex = -1; titre.focus({ preventScroll: true }); }
@@ -79,6 +133,7 @@
         if (choix.vignettes.has(v.nom)) choix.vignettes.delete(v.nom); else choix.vignettes.add(v.nom);
         b.setAttribute('aria-pressed', String(choix.vignettes.has(v.nom)));
         $('vers-2').disabled = !choix.vignettes.size;
+        reagir();
       });
       zone.appendChild(b);
     }
@@ -103,7 +158,21 @@
       if (!utiles.has(f.id)) continue;
       if (forme === 'case') { cases.push(f); continue; }
       const bloc = el('fieldset', { className: 'question' }, el('legend', null, (f.emoji ? f.emoji + ' ' : '') + f.question_patient, f.aide_patient ? el('small', null, ' (' + f.aide_patient + ')') : null));
-      if (forme === 'nombre') {
+      if (forme === 'nombre_nsp') {
+        // Le patient tape sa valeur s'il la connaît, sinon « Je ne sais pas » (n'écarte aucune étude).
+        const champ = el('input', { type: 'number', inputMode: 'decimal', id: 'q-' + f.id, value: choix.saisies[f.id] && choix.saisies[f.id] !== 'nsp' ? choix.saisies[f.id] : '' });
+        const nsp = el('button', { type: 'button', className: 'bouton-nsp' }, 'Je ne sais pas');
+        nsp.setAttribute('aria-pressed', String(choix.saisies[f.id] === 'nsp'));
+        champ.addEventListener('input', () => { choix.saisies[f.id] = champ.value; nsp.setAttribute('aria-pressed', 'false'); });
+        nsp.addEventListener('click', () => {
+          const actif = choix.saisies[f.id] !== 'nsp';
+          choix.saisies[f.id] = actif ? 'nsp' : '';
+          if (actif) champ.value = '';
+          nsp.setAttribute('aria-pressed', String(actif));
+          reagir();
+        });
+        bloc.appendChild(el('div', { className: 'choix' }, el('label', { className: 'ligne-saisie', htmlFor: 'q-' + f.id }, champ, ' ' + (f.unite_patient || f.unite || '')), nsp));
+      } else if (forme === 'nombre') {
         const champ = el('input', { type: 'number', inputMode: 'numeric', id: 'q-' + f.id, value: choix.saisies[f.id] || '' });
         champ.addEventListener('input', () => { choix.saisies[f.id] = champ.value; });
         bloc.appendChild(el('label', { className: 'ligne-saisie', htmlFor: 'q-' + f.id }, champ, ' ' + (f.unite_patient || f.unite || '')));
@@ -126,6 +195,7 @@
           b.addEventListener('click', () => {
             choix.saisies[f.id] = choix.saisies[f.id] === r.valeur ? null : r.valeur;
             for (const x of groupe.children) x.setAttribute('aria-pressed', String(choix.saisies[f.id] === x.value));
+            reagir();
           });
           groupe.appendChild(b);
         }
@@ -137,7 +207,7 @@
       const bloc = el('fieldset', { className: 'question' }, el('legend', null, '💊 Traitements actuels', el('small', null, ' (cochez ceux que vous prenez)')));
       for (const f of cases) {
         const c = el('input', { type: 'checkbox', checked: choix.saisies[f.id] === true });
-        c.addEventListener('change', () => { choix.saisies[f.id] = c.checked; });
+        c.addEventListener('change', () => { choix.saisies[f.id] = c.checked; reagir(); });
         bloc.appendChild(el('label', { className: 'case' }, c, ' ' + f.libelle_patient));
       }
       zone.appendChild(bloc);
@@ -154,6 +224,7 @@
     const filtres = PU.questionsPatient(P).map((q) => q.filtre);
     const reponses = PU.reponsesPatient(choix.saisies, P);
     const retenues = etudesChoisies().filter((e) => E.evaluer(e, filtres, reponses).eligible);
+    guide(retenues.length ? 'joie' : 'encourage', bulle(retenues.length ? 'resultats' : 'aucun'));
     if (!retenues.length) {
       zone.appendChild(el('div', { className: 'aucun' }, el('div', { className: 'grand-emoji', ariaHidden: 'true' }, '🌟'),
         el('h2', null, TP.aucun_resultat_titre || ''), el('p', { className: 'grand' }, TP.aucun_resultat_texte || ''), el('p', null, TP.aucun_resultat_conseil || '')));
@@ -174,6 +245,11 @@
       actions.appendChild(el('p', { className: 'conseil' }, '👨‍⚕️ ' + (TP.resultat_bouton_cardiologue || 'Parlez-en à votre cardiologue')));
       carte.appendChild(actions);
       zone.appendChild(carte);
+    }
+    if (TP.conclusion) {
+      const boite = el('div', { className: 'mascotte-boite', ariaHidden: 'true' }, creerMascotte());
+      boite.dataset.humeur = 'joie';
+      zone.appendChild(el('section', { className: 'conclusion apparition' }, boite, el('p', null, TP.conclusion)));
     }
   }
 
@@ -228,6 +304,8 @@
       if (P.publication && P.publication.site_discret) { $('bandeau-test').hidden = false; $('bandeau-test').textContent = textesSite.bandeau_test || 'Version de test'; }
       texte('avertissement', TP.avertissement);
       etudes = E.candidates(PU.preparer(donnees, P, 'patient'));
+      $('mascotte-edito').appendChild(creerMascotte());
+      $('mascotte-test').appendChild(creerMascotte());
       dessinerEdito();
       dessinerVignettes();
       $('etat').hidden = true;

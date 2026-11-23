@@ -85,3 +85,27 @@ test('règle n° 1 : la page patients ne garde rien et n\'envoie rien', () => {
   assert.ok([...code.matchAll(/lireJson\('([^']+)'\)/g)].every((m) => /^\.\.\/donnees\/(parametres|protocoles)\.json$/.test(m[1])));
   assert.ok(!/<form/i.test(readFileSync(join(RACINE, 'site/innovacteur/index.html'), 'utf8')), 'aucun formulaire');
 });
+
+// --- Phase 4.2 : FEVG saisie en % avec « Je ne sais pas » ; mascotte -------------------------
+
+test('mode « nombre + Je ne sais pas » : la valeur saisie compte, « Je ne sais pas » n\'écarte rien', () => {
+  const p = JSON.parse(JSON.stringify(PARAM));
+  p.filtres.find((f) => f.id === 'fevg').saisie_patient = 'nombre';
+  assert.equal(PU.questionsPatient(p).find((q) => q.filtre.id === 'fevg').forme, 'nombre_nsp');
+  const ok = (saisies) => etudes.filter((e) => E.evaluer(e, PU.questionsPatient(p).map((q) => q.filtre), PU.reponsesPatient(saisies, p)).eligible).map((e) => e.nom);
+  assert.deepEqual(ok({ fevg: String(SEUIL - 5) }), ['BETA'], 'sous le seuil : l\'étude « FEVG ≥ seuil » est écartée');
+  assert.deepEqual(ok({ fevg: String(SEUIL) }), ['ALPHA'], 'bornes incluses');
+  assert.deepEqual(ok({ fevg: 'nsp' }), ['ALPHA', 'BETA']);
+  assert.deepEqual(ok({ fevg: '' }), ['ALPHA', 'BETA']);
+  assert.ok(PU.lignesReponses({ fevg: '35' }, p).includes('FEVG : 35 %'));
+  assert.ok(PU.lignesReponses({ fevg: 'nsp' }, p).includes('FEVG : ne sait pas'));
+});
+
+test('mascotte : dessinée dans la page (aucune image extérieure), animations coupées si « réduire les animations »', () => {
+  const code = readFileSync(join(RACINE, 'site/js/innovacteur.js'), 'utf8');
+  const css = readFileSync(join(RACINE, 'site/style.css'), 'utf8');
+  assert.match(code, /createElementNS\(ns, 'svg'\)/);
+  assert.ok(!/https?:\/\/(?!www\.w3\.org\/2000\/svg)/.test(code), 'aucune adresse extérieure');
+  const avant = css.slice(0, css.indexOf('@media (prefers-reduced-motion: no-preference)'));
+  assert.ok(!/animation\s*:/.test(avant.slice(avant.indexOf('InnovActeur 4.2'))), 'les animations ne sont définies que si le mouvement est permis');
+});

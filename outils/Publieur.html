@@ -660,7 +660,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
         "professionnel",
         "patient"
       ],
-      "question_patient": "Votre force de contraction cardiaque est-elle normale (FEVG > 50%) ?",
+      "question_patient": "Connaissez vous la force de contraction de votre cœur (FEVG) (en pourcentage) ?",
       "emoji": "🫀",
       "aide_patient": "valeur FEVG > 40% sur votre dernière échographie",
       "seuil_patient": 40,
@@ -1141,16 +1141,12 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       "objet": "InnovaCoeur — Demande d'information — Protocole {protocole}",
       "corps": [
         "Bonjour,",
-        "",
-        "Je suis Monsieur / Madame ____________, né(e) le ___/___/______.",
-        "",
-        "J'ai appris l'existence du protocole {protocole} via l'outil InnovaCoeur et j'aimerais en savoir davantage.",
-        "",
-        "--- Informations renseignées ---",
-        "Situation(s) clinique(s) : {situations}",
-        "{reponses}",
-        "",
-        "Cordialement"
+        "Je suis  Monsieur / Madame ____________, né(e) le ___/___/______.",
+        "J'ai appris l'existence du protocole {protocole} via l'outil InnovaCoeur qui pourrait me concerner. Pourriez-vous s'il vous plait me recontacter pour me donner des renseignements complémentaires ?",
+        "Mes coordonnées :",
+        "numéro de téléphone :",
+        "adresse e-mail :",
+        "Bien cordialement."
       ],
       "titre_fenetre": "Texte à copier-coller dans votre e-mail",
       "bouton_copier": "Copier",
@@ -1159,7 +1155,14 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     "adressage": {
       "objet": "Adressage protocole {protocole}",
       "objet_source": "cahier des charges § 6.3",
-      "corps": [],
+      "corps": [
+        "Bonjour,",
+        "Je suis en consultation Monsieur / Madame ____________, né(e) le ___/___/______.",
+        "J'ai appris l'existence du protocole {protocole} via l'outil InnovaCoeur qui pourrait le concerner. N'hésitez pas à le contacter si vous pensez qu'il pourrait être éligible et intéressé par ce protocole.",
+        "Bien cordialement.",
+        "--- Informations renseignées ---",
+        "Coordonnées du patient :"
+      ],
       "a_rediger": true
     },
     "site": {
@@ -1167,8 +1170,15 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       "titre_liste": "Études ouvertes aux inclusions",
       "aucune_etude": "Aucune étude publiée pour le moment.",
       "mise_a_jour": "Mise à jour",
-      "contact": "Contact (messagerie sécurisée de santé)"
-    }
+      "contact": "Contact (messagerie sécurisée de santé)",
+      "avertissement_pro": "Le site est encore en phase de construction/test. Veuillez nous excuser en cas d'erreurs."
+    },
+    "mentions": [
+      {
+        "titre": "Contact",
+        "texte": "Editeur : Dr David STEVANT. Pour toute remarque : david.stevant@chu-nantes.fr"
+      }
+    ]
   },
   "memos": {
     "titre": "Mémos Études Cliniques — Cardiologie",
@@ -1228,7 +1238,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     "branche": "main",
     "chemin": "site/donnees/protocoles.json",
     "url_site": "https://david-stevant.github.io/InnovaCare/",
-    "contacts_arc": false,
+    "contacts_arc": true,
     "site_discret": true,
     "a_lire": "contacts_arc = false : aucune donnée d'ARC publiée (décision du 19/11/2026, en attendant l'information des intéressés). Seuls le nom de l'investigateur principal et son adresse MSSanté sont publiés, si elle est marquée vérifiée dans l'annuaire. site_discret = true : pages non référencées par les moteurs de recherche, bandeau « version de test »."
   }

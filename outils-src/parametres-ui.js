@@ -62,7 +62,11 @@
         { cle: 'unite', libelle: 'Unité' }, { cle: 'valeur_min', libelle: 'Valeur la plus basse acceptée', type: 'nombre' }, { cle: 'valeur_max', libelle: 'Valeur la plus haute acceptée', type: 'nombre' },
         { cle: 'visibilite', libelle: 'Publié jusqu\'au niveau', type: 'choix', options: () => [{ valeur: 'professionnel', libelle: 'professionnel' }, { valeur: 'patient', libelle: 'patient' }] },
         { cle: 'modules', libelle: 'Posé dans', type: 'cases', options: () => MODULES },
-        { cle: 'question_patient', libelle: 'Question posée au patient', type: 'long' }, { cle: 'libelle_patient', libelle: 'Libellé patient (traitement)', type: 'long' },
+        { cle: 'question_patient', libelle: 'Question posée au patient', type: 'long' },
+        { cle: 'saisie_patient', libelle: 'Réponse du patient (filtres à bornes)', type: 'choix', options: () => [
+          { valeur: '', libelle: 'nombre seul (ou Oui / Non / Je ne sais pas si un seuil patient est réglé)' },
+          { valeur: 'nombre', libelle: 'nombre + « Je ne sais pas »' },
+          { valeur: 'taille_poids', libelle: 'taille et poids (IMC calculé)' }] }, { cle: 'libelle_patient', libelle: 'Libellé patient (traitement)', type: 'long' },
         { cle: 'dci', libelle: 'DCI', type: 'lignes' }, { cle: 'noms_commerciaux', libelle: 'Noms commerciaux', type: 'lignes' }, { cle: 'synonymes', libelle: 'Autres façons de l\'écrire', type: 'lignes' }] },
     { titre: 'Listes de valeurs (listes déroulantes)', champs: [
       { chemin: 'listes.phase', libelle: 'Phases', type: 'lignes' },
@@ -70,6 +74,14 @@
       { chemin: 'listes.fonction', libelle: 'Fonctions (annuaire)', type: 'lignes' },
       { chemin: 'annuaire.format_email', libelle: 'Format des e-mails' },
       { chemin: 'annuaire.format_mssante', libelle: 'Format des adresses MSSanté' },
+    ] },
+    { titre: 'Mascotte et conclusion (page patient)', champs: [
+      { chemin: 'textes.patient.mascotte_accueil', libelle: 'Bulle de la mascotte : accueil', type: 'long', aide: 'Vide = texte de départ proposé.' },
+      { chemin: 'textes.patient.mascotte_etape1', libelle: 'Bulle : étape 1 (situation)', type: 'long' },
+      { chemin: 'textes.patient.mascotte_etape2', libelle: 'Bulle : étape 2 (questions)', type: 'long' },
+      { chemin: 'textes.patient.mascotte_resultats', libelle: 'Bulle : des études correspondent', type: 'long' },
+      { chemin: 'textes.patient.mascotte_aucun', libelle: 'Bulle : aucune étude', type: 'long' },
+      { chemin: 'textes.patient.conclusion', libelle: 'Conclusion des résultats', aide: 'Ex. « Devenez InnovActeur ! ». Vide = pas de conclusion.' },
     ] },
     { titre: 'Textes patient', champs: [
       { chemin: 'textes.patient.titre', libelle: 'Titre' }, { chemin: 'textes.patient.accroche', libelle: 'Accroche', type: 'long' },
@@ -181,7 +193,7 @@
     } else if (type === 'choix') {
       saisie = el('select', { id });
       const options = desc.options();
-      if (!options.some((o) => o.valeur === valeur)) saisie.appendChild(el('option', { value: valeur || '', textContent: valeur ? valeur + ' (inconnu)' : '—' }));
+      if (!options.some((o) => o.valeur === (valeur || ''))) saisie.appendChild(el('option', { value: valeur || '', textContent: valeur ? valeur + ' (inconnu)' : '—' }));
       for (const o of options) saisie.appendChild(el('option', { value: o.valeur, textContent: o.libelle }));
       saisie.value = valeur || '';
       saisie.addEventListener('change', () => changer(saisie.value));
