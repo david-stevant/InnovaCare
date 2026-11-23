@@ -1,0 +1,34 @@
+# Brouillon de newsletter : chaque lundi matin, GitHub crée un ticket (« issue ») avec 2 à 3 études
+# à mettre en lumière, un rappel et des contrôles (cahier des charges § 7.2). GitHub envoie un e-mail
+# de notification à chaque personne qui suit le dépôt (bouton « Watch »).
+# Seules les données PUBLIQUES du site sont utilisées : le ticket peut rester visible.
+# Pour tester : onglet Actions → « Brouillon de newsletter » → « Run workflow ».
+name: Brouillon de newsletter
+
+on:
+  schedule:
+    - cron: '43 5 * * 1'   # lundi 5 h 43 UTC, soit vers 7 h (heure d'hiver) ou 8 h (heure d'été) à Paris
+  workflow_dispatch:
+
+permissions:
+  contents: write   # enregistrer l'historique des études déjà présentées
+  issues: write     # créer le ticket
+
+jobs:
+  brouillon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Créer le ticket du brouillon
+        run: node outils-src/newsletter.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Enregistrer l'historique des études présentées
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898+github-actions[bot]@users.noreply.github.com"
+          git add newsletter/historique.json
+          git diff --cached --quiet || (git commit -m "Newsletter : historique des études présentées" && git push)

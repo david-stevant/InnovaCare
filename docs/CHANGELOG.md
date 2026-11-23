@@ -2,6 +2,16 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.15.0 — 23 novembre 2026 — Phase 5.2 : brouillon de newsletter du lundi
+
+- **Chaque lundi matin**, GitHub crée un ticket « Brouillon de newsletter — semaine du … » (et envoie un
+  e-mail à ceux qui suivent le dépôt) : 2 à 3 études au format des mémos (mises en avant, puis
+  nouvellement ouvertes, puis rotation), le rappel de publication, et des contrôles (fin de recrutement
+  dépassée mais toujours « ouvert », étude non mise à jour depuis plus de 6 mois).
+- Uniquement des données publiques ; le code de l'outil interne n'est pas chargé. Historique des études
+  présentées : `newsletter/historique.json`. Lancement manuel possible (« Run workflow »).
+- **Tests** : 162 tests.
+
 ## Version 0.14.0 — 23 novembre 2026 — Phase 5.1 : mémos publics, mise en avant, mesure d'audience
 
 - **Mémos publics** (`site/memos/`) : toutes les études publiées et ouvertes (décision du 23/11), au format
