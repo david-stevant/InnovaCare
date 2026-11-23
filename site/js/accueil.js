@@ -36,6 +36,7 @@
       $('genere').textContent = donnees.genere_le ? 'Données publiées le ' + enDate(donnees.genere_le) + '.' : '';
       $('etat').textContent = '';
       $('etat').hidden = true;
+      window.InnovaCare.audience.compter(parametres); // visite (rien si aucun compte n'est réglé)
     } catch (erreur) {
       $('etat').textContent = 'Les données n\'ont pas pu être chargées (' + erreur.message + ').';
     }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Site discret tant que les avis (DRCI, DPO) ne sont pas obtenus : non référencé par les moteurs de recherche. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Mémos des études</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div id="bandeau-test" class="bandeau-test" hidden></div>
+  <header class="entete">
+    <div class="page page-large">
+      <p class="fil"><a href="../">← Accueil</a> · <a href="../innovaction/">Études (médecins)</a></p>
+      <h1 id="titre">Mémos des études</h1>
+      <p id="sous-titre" class="note"></p>
+    </div>
+  </header>
+  <main class="page page-large">
+    <p id="etat" class="note" aria-live="polite">Chargement…</p>
+    <div id="contenu" hidden>
+      <div class="actions">
+        <label class="note" for="section">Contenu :</label>
+        <select id="section" class="bouton"><option value="">Tout le mémo</option></select>
+        <button type="button" class="bouton principal" id="copier-mail">Copier pour un mail</button>
+        <button type="button" class="bouton" id="copier-brut">Copier en texte brut</button>
+        <span id="message" class="message-copie" aria-live="polite"></span>
+      </div>
+      <div class="etude" id="apercu"></div>
+    </div>
+  </main>
+  <footer class="page page-large pied">
+    <p id="genere" class="note"></p>
+    <p class="note"><a href="../mentions.html">Mentions</a></p>
+  </footer>
+  <script src="../js/commun/texte.js"></script>
+  <script src="../js/commun/eligibilite.js"></script>
+  <script src="../js/commun/public.js"></script>
+  <script src="../js/commun/memos.js"></script>
+  <script src="../js/commun/audience.js"></script>
+  <script src="../js/memos.js"></script>
+</body>
+</html>

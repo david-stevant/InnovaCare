@@ -2,6 +2,19 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.14.0 — 23 novembre 2026 — Phase 5.1 : mémos publics, mise en avant, mesure d'audience
+
+- **Mémos publics** (`site/memos/`) : toutes les études publiées et ouvertes (décision du 23/11), au format
+  des mémos, sans numéro de poste, contact = e-mail de l'ARC ; copie pour un mail ou en texte brut.
+  Le code des mémos est partagé avec l'outil interne ; la partie « numéro de poste » reste dans le code de
+  l'outil interne, jamais copié sur le site.
+- **« Mettre en avant » publié** (oui / non, décision du 23/11) : en tête des mémos et, bientôt, de la
+  newsletter. Les autres champs internes restent verrouillés.
+- **Mesure d'audience GoatCounter** sans cookie ni script extérieur : visites des pages publiques, tests
+  réalisés, clics « Contacter l'équipe » et « Adresser un patient » ; seulement des noms d'événements fixes.
+  Inactive tant que le code du compte n'est pas saisi (outil Paramètres → Publication).
+- **Tests** : 157 tests.
+
 ## Version 0.13.0 — 23 novembre 2026 — Phase 4.2 : InnovActeur, mascotte et FEVG en %
 
 - **Mascotte** : un petit cœur souriant dessiné dans la page (aucune image extérieure), aux couleurs des

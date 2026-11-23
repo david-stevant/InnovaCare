@@ -150,7 +150,7 @@
     if (adr) {
       const boutonAdr = el('button', { type: 'button', className: 'bouton principal' }, 'Adresser un patient');
       boutonAdr.setAttribute('aria-expanded', String(ouvertes.has('adr-' + e.id)));
-      boutonAdr.addEventListener('click', () => { basculer('adr-' + e.id); });
+      boutonAdr.addEventListener('click', () => { if (!ouvertes.has('adr-' + e.id)) IC.audience.compter(P, 'adresser-patient'); basculer('adr-' + e.id); });
       actions.appendChild(boutonAdr);
     }
     article.appendChild(actions);
@@ -232,6 +232,7 @@
       dessinerTuiles();
       dessinerFiltres();
       mettreAJour();
+      IC.audience.compter(P);
       let minuterie = null;
       $('recherche').addEventListener('input', (ev) => { clearTimeout(minuterie); minuterie = setTimeout(() => { choix.texte = ev.target.value; dessinerFiltres(); mettreAJour(); }, 150); });
       $('effacer-profil').addEventListener('click', () => { choix.reponses = {}; dessinerFiltres(); mettreAJour(); });

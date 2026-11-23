@@ -36,6 +36,7 @@ Sommaire
 10. Consulter les études : l'outil interne (eCardioScope)
 11. Le site public : accueil et page des médecins libéraux (InnovAction)
 12. La page des patients (InnovActeur)
+13. Mémos publics et mesure d'audience
 
 ---
 
@@ -200,7 +201,8 @@ Je n'ai plus besoin d'intervenir pour ces changements.
   des intéressés ; réglage « Publier les e-mails des ARC » dans l'outil Paramètres).
 - **Jamais publié**, quels que soient les réglages : synopsis, critères d'exclusion, autres critères
   d'inclusion, critère de jugement principal, NSN, nombre de centres, recrutés et objectif, remarques,
-  mise en avant, DECT, co-investigateurs. Un test automatique le vérifie avant chaque mise en ligne.
+  DECT, co-investigateurs (« Mettre en avant » est publié depuis le 23/11 : un simple oui / non, pour la
+  newsletter). Un test automatique le vérifie avant chaque mise en ligne.
 
 ## 10. Consulter les études : l'outil interne (eCardioScope)
 
@@ -327,3 +329,17 @@ patients âgés : grands caractères, gros boutons.
 
 Rien de ce que le patient saisit n'est gardé : tout disparaît à la fermeture de la page.
 Vos tâches en attente sont listées dans `docs/A_FAIRE_PORTEUR.md`.
+
+## 13. Mémos publics et mesure d'audience
+
+- **Mémos publics** (`…/memos/`, liens depuis l'accueil et la page des médecins) : toutes les études
+  publiées et ouvertes, au format des mémos, **sans numéro de poste** (le site n'en a pas) ; contact =
+  e-mail de l'ARC. « Copier pour un mail » ou « Copier en texte brut », pour tout le mémo ou une section.
+  La version avec DECT reste dans l'outil interne (onglet « Mémos »).
+- **Mise en avant** : la ligne « Mettre en avant » de l'Excel est publiée (oui / non) ; ces études
+  viennent en tête des mémos et de la newsletter.
+- **Mesure d'audience (GoatCounter)** : gratuite, sans cookie, sans donnée personnelle. Une fois le code
+  du compte saisi (Paramètres → « Publication » → « Code GoatCounter ») et publié, on compte les visites
+  de chaque page publique, les tests réalisés et les clics sur « Contacter l'équipe » et « Adresser un
+  patient ». Jamais rien de ce que le patient saisit. Les chiffres se lisent sur goatcounter.com.
+  Rien n'est compté sur les outils locaux.

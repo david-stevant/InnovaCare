@@ -99,7 +99,7 @@ export function listerGabarits() {
 
 // Code partagé avec le site public : seul le dossier site/ est publié, on y place donc une
 // COPIE de ces fichiers de src/ (avec une ligne d'avertissement). Un test vérifie qu'elle est à jour.
-const COPIES_SITE = ['src/texte.js', 'src/eligibilite.js', 'src/public.js'];
+const COPIES_SITE = ['src/texte.js', 'src/eligibilite.js', 'src/public.js', 'src/memos.js', 'src/audience.js'];
 const DOSSIER_COPIES = 'site/js/commun';
 
 /** Copies pour le site : { "site/js/commun/x.js": contenu }. */
