@@ -2,6 +2,21 @@
 
 Les changements sont décrits en langage simple, du plus récent au plus ancien.
 
+## Version 0.13.0 — 23 novembre 2026 — Phase 4.2 : InnovActeur, mascotte et FEVG en %
+
+- **Mascotte** : un petit cœur souriant dessiné dans la page (aucune image extérieure), aux couleurs des
+  paramètres, qui accompagne chaque écran d'une bulle (textes réglables, textes de départ à confirmer),
+  salue, réagit aux réponses, se réjouit des résultats ou encourage s'il n'y en a pas.
+- **Conclusion** « Devenez InnovActeur ! » en bas des résultats ; **transitions douces** entre les étapes ;
+  animations coupées si le téléphone demande de réduire les animations.
+- **Confort sur smartphone** : « Étape n sur 3 », bouton « Continuer » toujours visible, zones tactiles
+  d'au moins 48 px. Emplacement prévu (caché) pour une vidéo, à déposer dans le site (pas de vidéo
+  hébergée ailleurs : cookies).
+- **FEVG saisie en %** : nouveau mode de réponse « nombre + « Je ne sais pas » » pour les filtres à bornes
+  (outil Paramètres, colonne « Réponse du patient ») ; « Je ne sais pas » n'écarte aucune étude.
+- **Outil Paramètres** : rubrique « Mascotte et conclusion », colonne « Réponse du patient ».
+- `docs/A_FAIRE_PORTEUR.md` mis à jour. **Tests** : 151 tests.
+
 ## Version 0.12.2 — 22 novembre 2026 — Correctif urgent : publication bloquée à la mise en ligne
 
 - La publication des études du 22/11 (« 17 modifiée(s) ») n'a pas été mise en ligne : un test vérifiait

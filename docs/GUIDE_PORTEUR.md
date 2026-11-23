@@ -318,5 +318,12 @@ patients âgés : grands caractères, gros boutons.
    Le patient peut y ajouter son nom et sa date de naissance ; **rien n'est envoyé par le site** : il
    envoie le message lui-même depuis sa messagerie.
 
+- **Mascotte** : un petit cœur qui accompagne chaque écran avec une bulle (textes réglables : outil
+  Paramètres → « Mascotte et conclusion » ; vides = textes de départ). Elle salue, réagit aux réponses, se
+  réjouit quand des études correspondent. Les animations s'arrêtent si le téléphone demande de réduire
+  les animations. En bas des résultats : la conclusion (« Devenez InnovActeur ! »).
+- **Réponse en chiffre** : pour un filtre à bornes (ex. FEVG), « Réponse du patient » = « nombre +
+  « Je ne sais pas » » affiche un champ chiffré et un bouton « Je ne sais pas » (qui n'écarte aucune étude).
+
 Rien de ce que le patient saisit n'est gardé : tout disparaît à la fermeture de la page.
 Vos tâches en attente sont listées dans `docs/A_FAIRE_PORTEUR.md`.

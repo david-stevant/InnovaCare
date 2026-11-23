@@ -116,14 +116,19 @@
   /**
    * Questions posées aux patients : filtres du module « patient » qui ont une question rédigée
    * (question_patient), ou un traitement avec son libellé patient (case à cocher). Rien d'autre.
-   * Renvoie [{ filtre, forme: 'nombre' | 'taille_poids' | 'choix' | 'oui_non' | 'case' }].
+   * Renvoie [{ filtre, forme: 'nombre' | 'nombre_nsp' | 'taille_poids' | 'choix' | 'oui_non' | 'case' }].
    */
   function questionsPatient(parametres) {
     const filtres = ((parametres && parametres.filtres) || []).filter((f) => (f.modules || []).includes('patient'));
     const questions = [];
     for (const f of filtres) {
       if (f.question_patient) {
-        const forme = f.type === 'bornes' ? (f.saisie_patient === 'taille_poids' ? 'taille_poids' : (Array.isArray(f.reponses_patient) && f.seuil_patient !== undefined ? 'choix' : 'nombre')) : 'oui_non';
+        // Bornes : taille et poids (IMC calculé), nombre + « Je ne sais pas », choix autour d'un seuil
+        // (Oui / Non / Je ne sais pas), ou nombre seul. Sinon (requis / exclu) : Oui / Non.
+        const forme = f.type !== 'bornes' ? 'oui_non'
+          : f.saisie_patient === 'taille_poids' ? 'taille_poids'
+          : f.saisie_patient === 'nombre' ? 'nombre_nsp'
+          : (Array.isArray(f.reponses_patient) && f.seuil_patient !== undefined ? 'choix' : 'nombre');
         questions.push({ filtre: f, forme });
       } else if (f.type !== 'bornes' && f.famille === 'traitement' && f.libelle_patient) {
         questions.push({ filtre: f, forme: 'case' });
@@ -134,7 +139,7 @@
 
   /**
    * Traduit les saisies du patient en réponses pour le moteur d'éligibilité.
-   *   nombre : { age: 65 } ; taille_poids : { imc_taille, imc_poids } → IMC calculé ;
+   *   nombre : { age: 65 } ; nombre_nsp : { fevg: 35 } ou { fevg: 'nsp' } (n'écarte rien) ; taille_poids : { imc_taille, imc_poids } → IMC calculé ;
    *   choix (FEVG) : « oui » = au moins le seuil, « non » = en dessous, « nsp » = rien ;
    *   oui_non : « oui » / « non » ; case cochée = « oui » (non cochée = pas de réponse, jamais « non »).
    */
@@ -142,7 +147,7 @@
     const s = saisies || {};
     const r = {};
     for (const { filtre: f, forme } of questionsPatient(parametres)) {
-      if (forme === 'nombre' && s[f.id] !== undefined && s[f.id] !== null && s[f.id] !== '') r[f.id] = Number(s[f.id]);
+      if ((forme === 'nombre' || forme === 'nombre_nsp') && s[f.id] !== undefined && s[f.id] !== null && s[f.id] !== '' && s[f.id] !== 'nsp' && !isNaN(Number(s[f.id]))) r[f.id] = Number(s[f.id]);
       else if (forme === 'taille_poids') { const imc = calculerImc(s[f.id + '_taille'], s[f.id + '_poids']); if (imc !== null) r[f.id] = imc; }
       else if (forme === 'choix') {
         if (s[f.id] === 'oui') r[f.id] = { min: f.seuil_patient };
@@ -160,7 +165,8 @@
     const cochés = [];
     for (const { filtre: f, forme } of questionsPatient(parametres)) {
       const unite = f.unite_patient || f.unite || '';
-      if (forme === 'nombre' && s[f.id] !== undefined && s[f.id] !== null && s[f.id] !== '') lignes.push(f.libelle + ' : ' + s[f.id] + (unite ? ' ' + unite : ''));
+      if (forme === 'nombre_nsp' && s[f.id] === 'nsp') lignes.push(f.libelle + ' : ne sait pas');
+      else if ((forme === 'nombre' || forme === 'nombre_nsp') && s[f.id] !== undefined && s[f.id] !== null && s[f.id] !== '') lignes.push(f.libelle + ' : ' + s[f.id] + (unite ? ' ' + unite : ''));
       else if (forme === 'taille_poids') {
         const imc = calculerImc(s[f.id + '_taille'], s[f.id + '_poids']);
         if (imc !== null) lignes.push(f.libelle + ' : ' + String(imc).replace('.', ',') + ' (' + s[f.id + '_taille'] + ' cm, ' + s[f.id + '_poids'] + ' kg)');
