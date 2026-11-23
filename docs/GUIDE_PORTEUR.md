@@ -268,8 +268,9 @@ mémo, on la corrige dans l'Excel.
 Adresse : `https://david-stevant.github.io/InnovaCare/` (site encore **discret** : bandeau de test,
 non référencé ; ne pas diffuser avant l'avis de la DRCI).
 
-- **Accueil** : deux entrées, « Je suis médecin » (InnovAction) et « Je suis patient » (InnovActeur,
-  « bientôt disponible »). L'outil interne n'y est jamais lié.
+- **Accueil** : trois entrées — médecins libéraux (InnovAction), médecins du service (mémos des études)
+  et patients (InnovActeur). Libellés réglables : outil Paramètres → « Publication » → « Accueil :
+  entrée… ». L'outil interne n'y est jamais lié.
 - **InnovAction** (`…/innovaction/`) : les études publiées pour les libéraux (« Afficher aux médecins
   libéraux » = oui dans l'Excel) et au statut « ouvert ».
   - tuiles par pathologie, recherche plein texte ;

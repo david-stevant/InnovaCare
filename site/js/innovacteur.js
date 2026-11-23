@@ -52,7 +52,14 @@
   /** Change l'humeur de la mascotte (salue, ecoute, joie, encourage) et sa bulle. */
   function guide(humeur, texteBulle) {
     for (const id of ['mascotte-edito', 'mascotte-test']) $(id).dataset.humeur = humeur;
-    if (texteBulle !== undefined) $('bulle-test').textContent = texteBulle;
+    if (texteBulle !== undefined) bulleTexte($('bulle-test'), texteBulle);
+  }
+
+  /** Texte d'une bulle, précédé pour les lecteurs d'écran de « La mascotte dit : ». */
+  function bulleTexte(noeud, valeur) {
+    noeud.textContent = '';
+    noeud.appendChild(el('span', { className: 'visuellement-cache' }, 'La mascotte dit : '));
+    noeud.appendChild(document.createTextNode(valeur || ''));
   }
 
   /** Petit sursaut de la mascotte quand le patient répond. */
@@ -83,7 +90,7 @@
     texte('p-bandeau', TP.bandeau);
     texte('p-titre', TP.titre);
     texte('p-accroche', TP.accroche);
-    texte('bulle-edito', bulle('accueil'));
+    bulleTexte($('bulle-edito'), bulle('accueil'));
     for (const ligne of [].concat(TP.sous_titre || [])) $('p-sous-titre').appendChild(el('p', { className: 'heros-sous-titre' }, ligne));
     texte('p-edito-titre', TP.edito_titre);
     texte('p-edito-texte', TP.edito_texte);
@@ -250,7 +257,7 @@
     if (TP.conclusion) {
       const boite = el('div', { className: 'mascotte-boite', ariaHidden: 'true' }, creerMascotte());
       boite.dataset.humeur = 'joie';
-      zone.appendChild(el('section', { className: 'conclusion apparition' }, boite, el('p', null, TP.conclusion)));
+      zone.appendChild(el('section', { className: 'guide conclusion apparition' }, el('p', { className: 'bulle' }, el('span', { className: 'visuellement-cache' }, 'La mascotte dit : '), TP.conclusion), boite));
     }
   }
 

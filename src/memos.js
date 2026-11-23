@@ -72,7 +72,8 @@
     return {
       nom: e.nom,
       thematique: e.thematique,
-      science: [N.enTexte(v.intervention), N.enTexte(v.design)].filter(Boolean).join(' — '),
+      // Intervention seule (décision du 23/11) : le design répétait souvent « X vs placebo ».
+      science: N.enTexte(v.intervention),
       // Le tiret ou la puce que l'ARC a tapé en début de critère est retiré : la liste a déjà ses puces.
       criteres: [1, 2, 3, 4, 5].map((n) => sansPuce(N.enTexte(v['inclusion_' + n]))).filter(Boolean),
       contact,
@@ -85,7 +86,7 @@
     const manques = [];
     for (const s of memo.sections) {
       for (const e of s.etudes) {
-        const quoi = [!e.criteres.length ? 'critère d\'inclusion principal' : '', e.sansArc ? 'ARC n° 1' : ''].filter(Boolean);
+        const quoi = [!e.science ? 'intervention vs comparateur' : '', !e.criteres.length ? 'critère d\'inclusion principal' : '', e.sansArc ? 'ARC n° 1' : ''].filter(Boolean);
         if (quoi.length) manques.push({ nom: e.nom, section: s.titre, manque: quoi });
       }
     }

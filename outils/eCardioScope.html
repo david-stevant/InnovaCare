@@ -342,7 +342,7 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
   </div>
   </div>
 
-  <footer class="pied-outil" data-version="d24a0e01">Outil interne : screening, catalogue et mémos — version d24a0e01</footer>
+  <footer class="pied-outil" data-version="3b1db729">Outil interne : screening, catalogue et mémos — version 3b1db729</footer>
 
 </div>
 
@@ -1322,12 +1322,16 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
       "aucune_etude": "Aucune étude publiée pour le moment.",
       "mise_a_jour": "Mise à jour",
       "contact": "Contact (messagerie sécurisée de santé)",
-      "avertissement_pro": "Le site est encore en phase de construction/test. Veuillez nous excuser en cas d'erreurs."
+      "avertissement_pro": "Le site est encore en phase de construction/test. Veuillez nous excuser en cas d'erreur(s)."
     },
     "mentions": [
       {
         "titre": "Contact",
         "texte": "Editeur : Dr David STEVANT. Pour toute remarque : david.stevant@chu-nantes.fr"
+      },
+      {
+        "titre": "Mesure d'audience",
+        "texte": "Mesure d'audience réalisée via goatcounter sans aucun élément d'identification"
       }
     ]
   },
@@ -1391,7 +1395,8 @@ footer.pied-outil { margin: 32px 0 8px; font-size: 14px; color: var(--encre-douc
     "url_site": "https://david-stevant.github.io/InnovaCare/",
     "contacts_arc": true,
     "site_discret": true,
-    "a_lire": "contacts_arc = false : aucune donnée d'ARC publiée (décision du 19/11/2026, en attendant l'information des intéressés). Seuls le nom de l'investigateur principal et son adresse MSSanté sont publiés, si elle est marquée vérifiée dans l'annuaire. site_discret = true : pages non référencées par les moteurs de recherche, bandeau « version de test »."
+    "a_lire": "contacts_arc = false : aucune donnée d'ARC publiée (décision du 19/11/2026, en attendant l'information des intéressés). Seuls le nom de l'investigateur principal et son adresse MSSanté sont publiés, si elle est marquée vérifiée dans l'annuaire. site_discret = true : pages non référencées par les moteurs de recherche, bandeau « version de test ».",
+    "goatcounter": "innovacoeur"
   }
 }
 </script>
@@ -3051,7 +3056,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     return {
       nom: e.nom,
       thematique: e.thematique,
-      science: [N.enTexte(v.intervention), N.enTexte(v.design)].filter(Boolean).join(' — '),
+      // Intervention seule (décision du 23/11) : le design répétait souvent « X vs placebo ».
+      science: N.enTexte(v.intervention),
       // Le tiret ou la puce que l'ARC a tapé en début de critère est retiré : la liste a déjà ses puces.
       criteres: [1, 2, 3, 4, 5].map((n) => sansPuce(N.enTexte(v['inclusion_' + n]))).filter(Boolean),
       contact,
@@ -3064,7 +3070,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     const manques = [];
     for (const s of memo.sections) {
       for (const e of s.etudes) {
-        const quoi = [!e.criteres.length ? 'critère d\'inclusion principal' : '', e.sansArc ? 'ARC n° 1' : ''].filter(Boolean);
+        const quoi = [!e.science ? 'intervention vs comparateur' : '', !e.criteres.length ? 'critère d\'inclusion principal' : '', e.sansArc ? 'ARC n° 1' : ''].filter(Boolean);
         if (quoi.length) manques.push({ nom: e.nom, section: s.titre, manque: quoi });
       }
     }

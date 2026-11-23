@@ -71,7 +71,7 @@ test('Markdown au format v3, champ vide = ligne absente', () => {
     '# 📋 ' + em.titre, em.hashtags, '', '---', '',
     '## ' + S1.emoji + ' ' + S1.titre.toUpperCase(), '', '---', '',
     '### ' + em.emoji_etude + ' PREMIERE — Thématique fictive', '',
-    em.emoji_design + ' Molécule X vs placebo — randomisé 1:1', '',
+    em.emoji_design + ' Molécule X vs placebo', '',
     em.emoji_criteres + ' **' + em.libelle_criteres + '**',
     '- FEVG **≥ 40 %**', '- NYHA II à IV', '',
     em.emoji_contact + ' Alice FICTIVE — DECT 91234 — alice.fictive@exemple.fr', '', '---', '',
@@ -90,7 +90,8 @@ test('HTML : texte de l\'Excel échappé (pas de balise injectée), seuils en gr
 });
 
 test('à compléter : études sans critère principal ou sans ARC', () => {
-  assert.deepEqual(M.aCompleter(memo), [{ nom: 'MISE-EN-AVANT', section: S1.titre, manque: ['ARC n° 1'] }]);
+  assert.deepEqual(M.aCompleter(memo).map((x) => [x.nom, x.manque]), [['MISE-EN-AVANT', ['intervention vs comparateur', 'ARC n° 1']], ['AUTRE-SECTION', ['intervention vs comparateur']]]);
+  assert.ok(!M.versMarkdown(memo).includes('randomisé 1:1'), 'le design n\'apparaît plus dans les mémos');
 });
 
 test('copie de dev migrée : toutes les études ouvertes affichées, chacune une seule fois', async () => {
