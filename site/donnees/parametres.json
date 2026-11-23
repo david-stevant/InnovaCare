@@ -922,7 +922,12 @@
       ],
       "avertissement": "Cet outil est fourni à titre informatif. L'éligibilité définitive sera confirmée par votre cardiologue et l'équipe de recherche.",
       "conclusion": "Devenez InnovActeur !",
-      "conclusion_source": "cahier des charges § 6.4"
+      "conclusion_source": "cahier des charges § 6.4",
+      "mascotte_accueil": "Bonjour, je suis là pour vous guider !",
+      "mascotte_etape1": "Vous vous retrouvez dans une des situations suivantes ?",
+      "mascotte_etape2": "Pour mieux vous connaître (aucune donnée personnelle ne sera sauvegardée)",
+      "mascotte_resultats": "Super ! Des études en cours pourraient vous concerner !",
+      "mascotte_aucun": "Ce n'est pas grave ! Nous resterons vigilants, des protocoles à venir pourraient vous concerner prochainement. Merci d'avoir participé !"
     },
     "email_patient": {
       "objet": "InnovaCoeur — Demande d'information — Protocole {protocole}",
